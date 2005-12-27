@@ -4,7 +4,7 @@
 
 Name:           python-setuptools
 Version:        0.6a8
-Release:        1
+Release:        1%{?dist}
 Summary:        Download, build, install, upgrade, and uninstall Python packages
 
 Group:          Development/Languages
