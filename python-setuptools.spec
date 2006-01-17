@@ -3,7 +3,7 @@
 %{!?pyver: %define pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Name:           python-setuptools
-Version:        0.6a8
+Version:        0.6a9
 Release:        1%{?dist}
 Summary:        Download, build, install, upgrade, and uninstall Python packages
 
@@ -33,7 +33,6 @@ CFLAGS="$RPM_OPT_FLAGS" %{__python} setup.py build
 rm -rf $RPM_BUILD_ROOT
 %{__python} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
 find $RPM_BUILD_ROOT%{python_sitelib} -name \*.py -exec grep -q '^#!' {} \; -print | while read file ; do sed -i '1d' $file ; done
-#find $RPM_BUILD_ROOT%{python_sitelib} -name \*.py -exec grep -q '^#!' {} \; | while read file ; do grep -q '^#!' $file && sed -i '1d' $file ; done
 echo "setuptools-%{version}-py%{pyver}.egg" > $RPM_BUILD_ROOT%{python_sitelib}/setuptools.pth
 
 %clean
@@ -47,5 +46,8 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/setuptools-%{version}-py%{pyver}.egg
 
 %changelog
+* Mon Jan 16 2006 Ignacio Vazquez-Abrams <ivazquez@ivazquez.net> 0.6a9-1
+- Upstream update
+
 * Sat Dec 24 2005 Ignacio Vazquez-Abrams <ivazquez@ivazquez.net> 0.6a8-1
 - Initial RPM release
