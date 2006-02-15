@@ -3,7 +3,7 @@
 %{!?pyver: %define pyver %(%{__python} -c "import sys ; print sys.version[:3]")}
 
 Name:           python-setuptools
-Version:        0.6a9
+Version:        0.6a10
 Release:        1%{?dist}
 Summary:        Download, build, install, upgrade, and uninstall Python packages
 
@@ -31,9 +31,8 @@ CFLAGS="$RPM_OPT_FLAGS" %{__python} setup.py build
 
 %install
 rm -rf $RPM_BUILD_ROOT
-%{__python} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT
+%{__python} setup.py install -O1 --skip-build --root $RPM_BUILD_ROOT --single-version-externally-managed
 find $RPM_BUILD_ROOT%{python_sitelib} -name \*.py -exec grep -q '^#!' {} \; -print | while read file ; do sed -i '1d' $file ; done
-echo "setuptools-%{version}-py%{pyver}.egg" > $RPM_BUILD_ROOT%{python_sitelib}/setuptools.pth
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -42,10 +41,12 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %doc api_tests.txt EasyInstall.txt pkg_resources.txt setuptools.txt
 %{_bindir}/*
-%{python_sitelib}/setuptools.pth
-%{python_sitelib}/setuptools-%{version}-py%{pyver}.egg
+%{python_sitelib}/*
 
 %changelog
+* Wed Feb 15 2006 Ignacio Vazquez-Abrams <ivazquez@ivazquez.net> 0.6a10-1
+- Upstream update
+
 * Mon Jan 16 2006 Ignacio Vazquez-Abrams <ivazquez@ivazquez.net> 0.6a9-1
 - Upstream update
 
