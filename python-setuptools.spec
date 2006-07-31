@@ -2,7 +2,7 @@
 
 Name:           python-setuptools
 Version:        0.6c1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Download, build, install, upgrade, and uninstall Python packages
 
 Group:          Development/Languages
@@ -36,7 +36,7 @@ rm -rf $RPM_BUILD_ROOT
 %{__python} setup.py install -O1 --skip-build \
 	--root $RPM_BUILD_ROOT \
 	--single-version-externally-managed
-cp -a %{SOURCE1} %{SOURCE2} .
+install -p -m 0644 %{SOURCE1} %{SOURCE2} .
 find $RPM_BUILD_ROOT%{python_sitelib} -name '*.exe' | xargs rm -f
 
 
@@ -64,6 +64,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Jul 31 2006 Konstantin Ryabitsev <icon@fedoraproject.org> - 0.6c1-2
+- Set perms on license files (#200768)
+
 * Sat Jul 22 2006 Konstantin Ryabitsev <icon@fedoraproject.org> - 0.6c1-1
 - Version 0.6c1
 
