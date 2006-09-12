@@ -1,16 +1,16 @@
 %{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           python-setuptools
-Version:        0.6c1
-Release:        2%{?dist}
+Version:        0.6c2
+Release:        1%{?dist}
 Summary:        Download, build, install, upgrade, and uninstall Python packages
 
 Group:          Development/Languages
 License:        PSFL/ZPL
 URL:            http://peak.telecommunity.com/DevCenter/setuptools
 Source0:        http://cheeseshop.python.org/packages/source/s/setuptools/setuptools-%{version}.zip
-Source1:		psfl.txt
-Source2:		zpl.txt
+Source1:        psfl.txt
+Source2:        zpl.txt
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -34,8 +34,8 @@ CFLAGS="$RPM_OPT_FLAGS" %{__python} setup.py build
 %install
 rm -rf $RPM_BUILD_ROOT
 %{__python} setup.py install -O1 --skip-build \
-	--root $RPM_BUILD_ROOT \
-	--single-version-externally-managed
+    --root $RPM_BUILD_ROOT \
+    --single-version-externally-managed
 install -p -m 0644 %{SOURCE1} %{SOURCE2} .
 find $RPM_BUILD_ROOT%{python_sitelib} -name '*.exe' | xargs rm -f
 
@@ -48,22 +48,14 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %doc *.txt
 %{_bindir}/*
-%{python_sitelib}/*.egg-info
-%dir %{python_sitelib}/setuptools
-%dir %{python_sitelib}/setuptools/command
-%dir %{python_sitelib}/setuptools/tests
-%{python_sitelib}/*.py
-%{python_sitelib}/*/*.py
-%{python_sitelib}/*/*/*.py
-%{python_sitelib}/*.pyc
-%{python_sitelib}/*/*.pyc
-%{python_sitelib}/*/*/*.pyc
-%ghost %{python_sitelib}/*.pyo
-%ghost %{python_sitelib}/*/*.pyo
-%ghost %{python_sitelib}/*/*/*.pyo
+%{python_sitelib}/*
 
 
 %changelog
+* Tue Sep 12 2006 Konstantin Ryabitsev <icon@fedoraproject.org> - 0.6c2-1
+- Upstream 0.6c2
+- Ghostbusting
+
 * Mon Jul 31 2006 Konstantin Ryabitsev <icon@fedoraproject.org> - 0.6c1-2
 - Set perms on license files (#200768)
 
