@@ -1,14 +1,14 @@
 %{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           python-setuptools
-Version:        0.6c2
+Version:        0.6c3
 Release:        1%{?dist}
 Summary:        Download, build, install, upgrade, and uninstall Python packages
 
 Group:          Development/Languages
 License:        PSFL/ZPL
 URL:            http://peak.telecommunity.com/DevCenter/setuptools
-Source0:        http://cheeseshop.python.org/packages/source/s/setuptools/setuptools-%{version}.zip
+Source0:        http://cheeseshop.python.org/packages/source/s/setuptools/setuptools-%{version}.tar.gz
 Source1:        psfl.txt
 Source2:        zpl.txt
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -24,6 +24,7 @@ have dependencies on other packages.
 
 %prep
 %setup -q -n setuptools-%{version}
+chmod -x *.txt
 find -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python}|'
 
 
@@ -38,6 +39,8 @@ rm -rf $RPM_BUILD_ROOT
     --single-version-externally-managed
 install -p -m 0644 %{SOURCE1} %{SOURCE2} .
 find $RPM_BUILD_ROOT%{python_sitelib} -name '*.exe' | xargs rm -f
+find $RPM_BUILD_ROOT%{python_sitelib} -name '*.txt' | xargs chmod -x
+chmod +x $RPM_BUILD_ROOT%{python_sitelib}/setuptools/command/easy_install.py
 
 
 %clean
@@ -52,6 +55,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Dec 05 2006 Konstantin Ryabitsev <icon@fedoraproject.org> - 0.6c3-1
+- Upstream 0.6c3 (#218540, thanks to Michel Alexandre Salim for the patch)
+
 * Tue Sep 12 2006 Konstantin Ryabitsev <icon@fedoraproject.org> - 0.6c2-1
 - Upstream 0.6c2
 - Ghostbusting
