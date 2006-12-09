@@ -2,7 +2,7 @@
 
 Name:           python-setuptools
 Version:        0.6c3
-Release:        1%{?dist}
+Release:        1.1%{?dist}
 Summary:        Download, build, install, upgrade, and uninstall Python packages
 
 Group:          Development/Languages
@@ -55,6 +55,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Dec 09 2006 Konstantin Ryabitsev <icon@fedoraproject.org> - 0.6c3-1.1
+- Rebuild for python-2.5
+
 * Tue Dec 05 2006 Konstantin Ryabitsev <icon@fedoraproject.org> - 0.6c3-1
 - Upstream 0.6c3 (#218540, thanks to Michel Alexandre Salim for the patch)
 
