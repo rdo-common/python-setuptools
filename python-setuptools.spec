@@ -1,8 +1,8 @@
 %{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           python-setuptools
-Version:        0.6c6
-Release:        2%{?dist}
+Version:        0.6c7
+Release:        1%{?dist}
 Summary:        Download, build, install, upgrade, and uninstall Python packages
 
 Group:          Applications/System
@@ -74,17 +74,24 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %doc psfl.txt zpl.txt pkg_resources.txt
-%{python_sitelib}/pkg_resources.py*
+%{python_sitelib}/*
+%exclude %{python_sitelib}/easy_install*
+%exclude %{python_sitelib}/setuptools/command
 
 %files devel
 %defattr(-,root,root,-)
 %doc psfl.txt zpl.txt EasyInstall.txt README.txt api_tests.txt setuptools.txt
-%{python_sitelib}/*
-%exclude %{python_sitelib}/pkg_resources.py*
+%{python_sitelib}/easy_install*
+%{python_sitelib}/setuptools/command
 %{_bindir}/*
 
 
 %changelog
+* Fri Sep 14 2007 Konstantin Ryabitsev <icon@fedoraproject.org> - 0.6c7-1
+- Upstream 0.6c7
+- Move some things from devel into runtime, in order to not break other
+  projects.
+
 * Sat Aug 18 2007 Konstantin Ryabitsev <icon@fedoraproject.org> - 0.6c6-2
 - Make license tag conform to the new Licensing Guidelines
 - Move everything except pkg_resources.py into a separate -devel package
