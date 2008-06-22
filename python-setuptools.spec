@@ -1,14 +1,14 @@
 %{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           python-setuptools
-Version:        0.6c7
-Release:        2%{?dist}
+Version:        0.6c8
+Release:        1%{?dist}
 Summary:        Download, build, install, upgrade, and uninstall Python packages
 
 Group:          Applications/System
 License:        Python or ZPLv2.0
 URL:            http://peak.telecommunity.com/DevCenter/setuptools
-Source0:        http://cheeseshop.python.org/packages/source/s/setuptools/setuptools-%{version}.tar.gz
+Source0:        http://pypi.python.org/packages/source/s/setuptools/setuptools-%{version}.tar.gz
 Source1:        psfl.txt
 Source2:        zpl.txt
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -41,7 +41,7 @@ requiring setuptools.
 
 %prep
 %setup -q -n setuptools-%{version}
-chmod -x *.txt
+find -name '*.txt' | xargs chmod -x
 find -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python}|'
 
 
@@ -50,8 +50,7 @@ CFLAGS="$RPM_OPT_FLAGS" %{__python} setup.py build
 
 
 %check
-# We expect one failure with the current setup
-%{__python} setup.py test || :
+%{__python} setup.py test
 
 
 %install
@@ -64,7 +63,6 @@ rm -rf $RPM_BUILD_ROOT%{python_sitelib}/setuptools/tests
 
 install -p -m 0644 %{SOURCE1} %{SOURCE2} .
 find $RPM_BUILD_ROOT%{python_sitelib} -name '*.exe' | xargs rm -f
-find $RPM_BUILD_ROOT%{python_sitelib} -name '*.txt' | xargs chmod -x
 chmod +x $RPM_BUILD_ROOT%{python_sitelib}/setuptools/command/easy_install.py
 
 
@@ -86,6 +84,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Jun 21 2008 Konstantin Ryabitsev <icon@fedoraproject.org> - 0.6c8-1
+- Update to 0.6c8
+- Accept small tweaks from Gareth Armstrong
+
 * Mon Sep 24 2007 Konstantin Ryabitsev <icon@fedoraproject.org> - 0.6c7-2
 - Move pretty much everything back into runtime in order to avoid more
   brokenness than we're trying to address with these fixes.
