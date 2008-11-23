@@ -1,13 +1,13 @@
 %{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
 
 Name:           python-setuptools
-Version:        0.6c8
+Version:        0.6c9
 Release:        1%{?dist}
-Summary:        Download, build, install, upgrade, and uninstall Python packages
+Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
 License:        Python or ZPLv2.0
-URL:            http://peak.telecommunity.com/DevCenter/setuptools
+URL:            http://pypi.python.org/pypi/setuptools
 Source0:        http://pypi.python.org/packages/source/s/setuptools/setuptools-%{version}.tar.gz
 Source1:        psfl.txt
 Source2:        zpl.txt
@@ -17,7 +17,7 @@ BuildArch:      noarch
 BuildRequires:  python-devel
 
 %description
-setuptools is a collection of enhancements to the Python distutils that allow
+Setuptools is a collection of enhancements to the Python distutils that allow
 you to more easily build and distribute Python packages, especially ones that
 have dependencies on other packages.
 
@@ -84,6 +84,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Nov 23 2008 Konstantin Ryabitsev <icon@fedoraproject.org> - 0.6c9-1
+- Update to 0.6c9
+- Small fixes to URL, summary and description
+
 * Sat Jun 21 2008 Konstantin Ryabitsev <icon@fedoraproject.org> - 0.6c8-1
 - Update to 0.6c8
 - Accept small tweaks from Gareth Armstrong
