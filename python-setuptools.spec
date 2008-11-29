@@ -2,7 +2,7 @@
 
 Name:           python-setuptools
 Version:        0.6c9
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -84,6 +84,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Nov 28 2008 Ignacio Vazquez-Abrams <ivazqueznet+rpm@gmail.com> - 0.6c9-2
+- Rebuild for Python 2.6
+
 * Sun Nov 23 2008 Konstantin Ryabitsev <icon@fedoraproject.org> - 0.6c9-1
 - Update to 0.6c9
 - Small fixes to URL, summary and description
