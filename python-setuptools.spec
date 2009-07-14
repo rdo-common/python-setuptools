@@ -2,7 +2,7 @@
 
 Name:           python-setuptools
 Version:        0.6c9
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -11,6 +11,7 @@ URL:            http://pypi.python.org/pypi/setuptools
 Source0:        http://pypi.python.org/packages/source/s/setuptools/setuptools-%{version}.tar.gz
 Source1:        psfl.txt
 Source2:        zpl.txt
+Patch0:         http://bugs.python.org/setuptools/file55/svn_versioning_4.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -41,6 +42,7 @@ requiring setuptools.
 
 %prep
 %setup -q -n setuptools-%{version}
+%patch0 -p0 -b .svn16
 find -name '*.txt' | xargs chmod -x
 find -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python}|'
 
@@ -84,6 +86,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Jul 14 2009 Konstantin Ryabitsev <icon@fedoraproject.org> - 0.6c9-4
+- Apply SVN-1.6 versioning patch (rhbz #511021)
+
 * Thu Feb 26 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.6c9-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
 
