@@ -1,17 +1,21 @@
-%{!?python_sitelib: %define python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
+%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
+
+%global srcname distribute
 
 Name:           python-setuptools
-Version:        0.6c9
-Release:        5%{?dist}
+Version:        0.6.4
+Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
 License:        Python or ZPLv2.0
-URL:            http://pypi.python.org/pypi/setuptools
-Source0:        http://pypi.python.org/packages/source/s/setuptools/setuptools-%{version}.tar.gz
+URL:            http://pypi.python.org/pypi/%{srcname}
+Source0:        http://pypi.python.org/packages/source/d/%{srcname}/%{srcname}-%{version}.tar.gz
 Source1:        psfl.txt
 Source2:        zpl.txt
-Patch0:         http://bugs.python.org/setuptools/file55/svn_versioning_4.patch
+# Upstream has chosen to improve this incrementally for now by whitelisting the
+# new svn version.
+#Patch0:         http://bugs.python.org/setuptools/file55/svn_versioning_4.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -41,8 +45,7 @@ requiring setuptools.
 
 
 %prep
-%setup -q -n setuptools-%{version}
-%patch0 -p0 -b .svn16
+%setup -q -n %{srcname}-%{version}
 find -name '*.txt' | xargs chmod -x
 find -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python}|'
 
@@ -57,9 +60,7 @@ CFLAGS="$RPM_OPT_FLAGS" %{__python} setup.py build
 
 %install
 rm -rf $RPM_BUILD_ROOT
-%{__python} setup.py install -O1 --skip-build \
-    --root $RPM_BUILD_ROOT \
-    --single-version-externally-managed
+%{__python} setup.py install --skip-build --root $RPM_BUILD_ROOT
 
 rm -rf $RPM_BUILD_ROOT%{python_sitelib}/setuptools/tests
 
@@ -74,18 +75,21 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%doc psfl.txt zpl.txt pkg_resources.txt setuptools.txt
+%doc psfl.txt zpl.txt docs
 %{python_sitelib}/*
 %exclude %{python_sitelib}/easy_install*
 
 %files devel
 %defattr(-,root,root,-)
-%doc psfl.txt zpl.txt EasyInstall.txt README.txt api_tests.txt
 %{python_sitelib}/easy_install*
 %{_bindir}/*
 
 
 %changelog
+* Mon Oct 12 2009 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.4-1
+- First build from the distribute codebase -- distribute-0.6.4.
+- Remove svn patch as upstream has chosen to go with an easier change for now.
+
 * Sun Jul 26 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.6c9-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
 
