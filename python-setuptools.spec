@@ -3,7 +3,7 @@
 %global srcname distribute
 
 Name:           python-setuptools
-Version:        0.6.4
+Version:        0.6.6
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -86,6 +86,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Oct 16 2009 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.6-1
+- Upstream bugfix release.
+
 * Mon Oct 12 2009 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.4-1
 - First build from the distribute codebase -- distribute-0.6.4.
 - Remove svn patch as upstream has chosen to go with an easier change for now.
@@ -158,6 +161,3 @@ rm -rf $RPM_BUILD_ROOT
 
 * Mon Jan 16 2006 Ignacio Vazquez-Abrams <ivazquez@ivazquez.net> 0.6a9-1
 - Upstream update
-
-* Sat Dec 24 2005 Ignacio Vazquez-Abrams <ivazquez@ivazquez.net> 0.6a8-1
-- Initial RPM release
