@@ -1,9 +1,9 @@
-%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()")}
+%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print (get_python_lib())")}
 
 %global srcname distribute
 
 Name:           python-setuptools
-Version:        0.6.6
+Version:        0.6.7
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -21,6 +21,11 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:      noarch
 BuildRequires:  python-devel
 
+# Legacy: We removed this subpackage once easy_install no longer depended on
+# python-devel
+Provides: python-setuptools-devel = %{version}-%{release}
+Obsoletes: python-setuptools-devel < %{version}-%{release}
+
 %description
 Setuptools is a collection of enhancements to the Python distutils that allow
 you to more easily build and distribute Python packages, especially ones that
@@ -28,21 +33,6 @@ have dependencies on other packages.
 
 This package contains the runtime components of setuptools, necessary to
 execute the software that requires pkg_resources.py.
-
-%package devel
-Summary:        Download, install, upgrade, and uninstall Python packages
-Group:          Development/Languages
-Requires:       python-devel
-Requires:       %{name} = %{version}-%{release}
-
-%description devel
-setuptools is a collection of enhancements to the Python distutils that allow
-you to more easily build and distribute Python packages, especially ones that
-have dependencies on other packages.
-
-This package contains the components necessary to build and install software
-requiring setuptools.
-
 
 %prep
 %setup -q -n %{srcname}-%{version}
@@ -77,15 +67,16 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %doc psfl.txt zpl.txt docs
 %{python_sitelib}/*
-%exclude %{python_sitelib}/easy_install*
-
-%files devel
-%defattr(-,root,root,-)
 %{python_sitelib}/easy_install*
 %{_bindir}/*
 
 
 %changelog
+* Tue Nov 3 2009 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.7-1
+- Move easy_install back into the main package as the needed files have been
+  moved from python-devel to the main python package.
+- Update to 0.6.7 bugfix.
+
 * Fri Oct 16 2009 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.6-1
 - Upstream bugfix release.
 
