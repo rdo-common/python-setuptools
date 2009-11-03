@@ -4,7 +4,7 @@
 
 Name:           python-setuptools
 Version:        0.6.7
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -24,7 +24,7 @@ BuildRequires:  python-devel
 # Legacy: We removed this subpackage once easy_install no longer depended on
 # python-devel
 Provides: python-setuptools-devel = %{version}-%{release}
-Obsoletes: python-setuptools-devel < %{version}-%{release}
+Obsoletes: python-setuptools-devel < 0.6.7-1
 
 %description
 Setuptools is a collection of enhancements to the Python distutils that allow
@@ -67,11 +67,14 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %doc psfl.txt zpl.txt docs
 %{python_sitelib}/*
-%{python_sitelib}/easy_install*
 %{_bindir}/*
 
 
 %changelog
+* Tue Nov 3 2009 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.7-2
+- Fix duplicate inclusion of files.
+- Only Obsolete old versions of python-setuptools-devel
+
 * Tue Nov 3 2009 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.7-1
 - Move easy_install back into the main package as the needed files have been
   moved from python-devel to the main python package.
