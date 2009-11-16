@@ -3,8 +3,8 @@
 %global srcname distribute
 
 Name:           python-setuptools
-Version:        0.6.7
-Release:        2%{?dist}
+Version:        0.6.8
+Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -58,6 +58,13 @@ install -p -m 0644 %{SOURCE1} %{SOURCE2} .
 find $RPM_BUILD_ROOT%{python_sitelib} -name '*.exe' | xargs rm -f
 chmod +x $RPM_BUILD_ROOT%{python_sitelib}/setuptools/command/easy_install.py
 
+%pre
+if [ $1 -gt 0 ] ; then
+    OLDDIR="%{python_sitelib}/setuptools-0.6c9-py2.6.egg-info"
+    if [ -d $OLDDIR ] ; then
+        rm -rf $OLDDIR
+    fi
+fi
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -71,6 +78,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Nov 16 2009 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.8-1
+- Update to 0.6.8.
+- Fix directory => file transition when updating from setuptools-0.6c9.
+
 * Tue Nov 3 2009 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.7-2
 - Fix duplicate inclusion of files.
 - Only Obsolete old versions of python-setuptools-devel
