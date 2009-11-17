@@ -59,7 +59,7 @@ find $RPM_BUILD_ROOT%{python_sitelib} -name '*.exe' | xargs rm -f
 chmod +x $RPM_BUILD_ROOT%{python_sitelib}/setuptools/command/easy_install.py
 
 %pre
-if [ $1 -gt 0 ] ; then
+if [ $1 == 2 ] ; then
     OLDDIR="%{python_sitelib}/setuptools-0.6c9-py2.6.egg-info"
     if [ -d $OLDDIR ] ; then
         rm -rf $OLDDIR
