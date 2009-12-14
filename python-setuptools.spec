@@ -4,7 +4,7 @@
 
 Name:           python-setuptools
 Version:        0.6.8
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -78,6 +78,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Dec 13 2009 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.8-2
+- Test rebuild
+
 * Mon Nov 16 2009 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.8-1
 - Update to 0.6.8.
 - Fix directory => file transition when updating from setuptools-0.6c9.
