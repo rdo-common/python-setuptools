@@ -3,8 +3,8 @@
 %global srcname distribute
 
 Name:           python-setuptools
-Version:        0.6.8
-Release:        2%{?dist}
+Version:        0.6.9
+Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -78,6 +78,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Dec 14 2009 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.9-1
+- New upstream bugfix release.
+
 * Sun Dec 13 2009 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.8-2
 - Test rebuild
 
