@@ -9,7 +9,7 @@
 
 Name:           python-setuptools
 Version:        0.6.10
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -22,7 +22,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
 BuildRequires:  python-devel
-%if with_python3
+%if 0%{?with_python3}
 BuildRequires:  python3-devel
 %endif # if with_python3
 
@@ -39,7 +39,7 @@ have dependencies on other packages.
 This package contains the runtime components of setuptools, necessary to
 execute the software that requires pkg_resources.py.
 
-%if with_python3
+%if 0%{?with_python3}
 %package -n python3-setuptools
 Summary:        Easily build and distribute Python 3 packages
 Group:          Applications/System
@@ -57,7 +57,7 @@ execute the software that requires pkg_resources.py.
 %setup -q -n %{srcname}-%{version}
 find -name '*.txt' | xargs chmod -x
 
-%if with_python3
+%if 0%{?with_python3}
 cp -a . %{py3dir}
 find %{py3dir} -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python3}|'
 %endif # with_python3
@@ -67,7 +67,7 @@ find -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python}|'
 %build
 CFLAGS="$RPM_OPT_FLAGS" %{__python} setup.py build
 
-%if with_python3
+%if 0%{?with_python3}
 pushd %{py3dir}
 CFLAGS="$RPM_OPT_FLAGS" %{__python3} setup.py build
 popd
@@ -79,7 +79,7 @@ rm -rf %{buildroot}
 # Must do the python3 install first because the scripts in /usr/bin are
 # overwritten with every setup.py install (and we want the python2 version
 # to be the default for now).
-%if with_python3
+%if 0%{?with_python3}
 pushd %{py3dir}
 %{__python3} setup.py install --skip-build --root $RPM_BUILD_ROOT
 
@@ -102,7 +102,7 @@ chmod +x %{buildroot}%{python_sitelib}/setuptools/command/easy_install.py
 %check
 %{__python} setup.py test
 
-%if with_python3
+%if 0%{?with_python3}
 pushd %{py3dir}
 %{__python3} setup.py test
 popd
@@ -119,7 +119,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/easy_install
 %{_bindir}/easy_install-2.6
 
-%if with_python3
+%if 0%{?with_python3}
 %files -n python3-setuptools
 %defattr(-,root,root,-)
 %doc psfl.txt zpl.txt docs
@@ -128,6 +128,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif # with_python3
 
 %changelog
+* Thu Jan 29 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.10-2
+- Really disable the python3 portion
+
 * Thu Jan 29 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.10-1
 - Update the python3 portions but disable for now.
 - Update to 0.6.10
