@@ -1,9 +1,14 @@
+%if 0%{?fedora} > 12 || 0%{?rhel} > 6
+# Disable until the guidelines are approved.
+#global with_python3 1
+%else
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print (get_python_lib())")}
+%endif
 
 %global srcname distribute
 
 Name:           python-setuptools
-Version:        0.6.9
+Version:        0.6.10
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -13,13 +18,13 @@ URL:            http://pypi.python.org/pypi/%{srcname}
 Source0:        http://pypi.python.org/packages/source/d/%{srcname}/%{srcname}-%{version}.tar.gz
 Source1:        psfl.txt
 Source2:        zpl.txt
-# Upstream has chosen to improve this incrementally for now by whitelisting the
-# new svn version.
-#Patch0:         http://bugs.python.org/setuptools/file55/svn_versioning_4.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
 BuildRequires:  python-devel
+%if with_python3
+BuildRequires:  python3-devel
+%endif # if with_python3
 
 # Legacy: We removed this subpackage once easy_install no longer depended on
 # python-devel
@@ -34,37 +39,74 @@ have dependencies on other packages.
 This package contains the runtime components of setuptools, necessary to
 execute the software that requires pkg_resources.py.
 
+%if with_python3
+%package -n python3-setuptools
+Summary:        Easily build and distribute Python 3 packages
+Group:          Applications/System
+
+%description -n python3-setuptools
+Setuptools is a collection of enhancements to the Python 3 distutils that allow
+you to more easily build and distribute Python 3 packages, especially ones that
+have dependencies on other packages.
+
+This package contains the runtime components of setuptools, necessary to
+execute the software that requires pkg_resources.py.
+%endif # with_python3
+
 %prep
 %setup -q -n %{srcname}-%{version}
 find -name '*.txt' | xargs chmod -x
-find -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python}|'
 
+%if with_python3
+cp -a . %{py3dir}
+find %{py3dir} -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python3}|'
+%endif # with_python3
+
+find -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python}|'
 
 %build
 CFLAGS="$RPM_OPT_FLAGS" %{__python} setup.py build
 
+%if with_python3
+pushd %{py3dir}
+CFLAGS="$RPM_OPT_FLAGS" %{__python3} setup.py build
+popd
+%endif # with_python3
+
+%install
+rm -rf %{buildroot}
+
+# Must do the python3 install first because the scripts in /usr/bin are
+# overwritten with every setup.py install (and we want the python2 version
+# to be the default for now).
+%if with_python3
+pushd %{py3dir}
+%{__python3} setup.py install --skip-build --root $RPM_BUILD_ROOT
+
+rm -rf %{buildroot}%{python3_sitelib}/setuptools/tests
+
+install -p -m 0644 %{SOURCE1} %{SOURCE2} %{py3dir}
+find %{buildroot}%{python3_sitelib} -name '*.exe' | xargs rm -f
+chmod +x %{buildroot}%{python3_sitelib}/setuptools/command/easy_install.py
+popd
+%endif # with_python3
+
+%{__python} setup.py install --skip-build --root $RPM_BUILD_ROOT
+
+rm -rf ${buildroot}%{python_sitelib}/setuptools/tests
+
+install -p -m 0644 %{SOURCE1} %{SOURCE2} .
+find %{buildroot}%{python_sitelib} -name '*.exe' | xargs rm -f
+chmod +x %{buildroot}%{python_sitelib}/setuptools/command/easy_install.py
 
 %check
 %{__python} setup.py test
 
-
-%install
-rm -rf $RPM_BUILD_ROOT
-%{__python} setup.py install --skip-build --root $RPM_BUILD_ROOT
-
-rm -rf $RPM_BUILD_ROOT%{python_sitelib}/setuptools/tests
-
-install -p -m 0644 %{SOURCE1} %{SOURCE2} .
-find $RPM_BUILD_ROOT%{python_sitelib} -name '*.exe' | xargs rm -f
-chmod +x $RPM_BUILD_ROOT%{python_sitelib}/setuptools/command/easy_install.py
-
-%pre
-if [ $1 == 2 ] ; then
-    OLDDIR="%{python_sitelib}/setuptools-0.6c9-py2.6.egg-info"
-    if [ -d $OLDDIR ] ; then
-        rm -rf $OLDDIR
-    fi
-fi
+%if with_python3
+pushd %{py3dir}
+%{__python3} setup.py test
+popd
+%endif # with_python3
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -74,10 +116,32 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root,-)
 %doc psfl.txt zpl.txt docs
 %{python_sitelib}/*
-%{_bindir}/*
+%{_bindir}/easy_install
+%{_bindir}/easy_install-2.6
 
+%if with_python3
+%files -n python3-setuptools
+%defattr(-,root,root,-)
+%doc psfl.txt zpl.txt docs
+%{python3_sitelib}/*
+%{_bindir}/easy_install-3.1
+%endif # with_python3
 
 %changelog
+* Thu Jan 29 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.10-1
+- Update the python3 portions but disable for now.
+- Update to 0.6.10
+- Remove %%pre scriptlet as the file has a different name than the old
+  package's directory
+
+* Tue Jan 26 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.9-4
+- Fix install to make /usr/bin/easy_install the py2 version
+- Don't need python3-tools since the library is now in the python3 package
+- Few other changes to cleanup style
+
+* Thu Jan 22 2010 David Malcolm <dmalcolm@redhat.com> - 0.6.9-2
+- add python3 subpackage
+
 * Mon Dec 14 2009 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.9-1
 - New upstream bugfix release.
 
