@@ -58,6 +58,7 @@ execute the software that requires pkg_resources.py.
 find -name '*.txt' | xargs chmod -x
 
 %if 0%{?with_python3}
+rm -rf %{pyver}
 cp -a . %{py3dir}
 find %{py3dir} -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python3}|'
 %endif # with_python3
