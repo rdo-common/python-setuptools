@@ -1,6 +1,5 @@
 %if 0%{?fedora} > 12 || 0%{?rhel} > 6
-# Disable until the guidelines are approved.
-#global with_python3 1
+global with_python3 1
 %else
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print (get_python_lib())")}
 %endif
@@ -9,7 +8,7 @@
 
 Name:           python-setuptools
 Version:        0.6.10
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -129,6 +128,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif # with_python3
 
 %changelog
+* Thu Feb 04 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.10-3
+- First build with python3 support enabled.
+  
 * Thu Jan 29 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.10-2
 - Really disable the python3 portion
 
