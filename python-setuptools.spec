@@ -8,7 +8,7 @@
 
 Name:           python-setuptools
 Version:        0.6.13
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -17,6 +17,7 @@ URL:            http://pypi.python.org/pypi/%{srcname}
 Source0:        http://pypi.python.org/packages/source/d/%{srcname}/%{srcname}-%{version}.tar.gz
 Source1:        psfl.txt
 Source2:        zpl.txt
+Patch0:         distribute-0.6.13-tests.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -54,6 +55,8 @@ execute the software that requires pkg_resources.py.
 
 %prep
 %setup -q -n %{srcname}-%{version}
+%patch0 -p1
+
 find -name '*.txt' | xargs chmod -x
 
 %if 0%{?with_python3}
@@ -128,6 +131,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif # with_python3
 
 %changelog
+* Thu Jun 10 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.13-2
+- Include data that's needed for running tests
+
 * Thu Jun 10 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.13-1
 - Update to upstream 0.6.13
 - Minor specfile formatting fixes

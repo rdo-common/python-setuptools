@@ -1,0 +1,25 @@
+diff -uNr distribute-0.6.13.pristine/MANIFEST.in distribute-0.6.13/MANIFEST.in
+--- distribute-0.6.13.pristine/MANIFEST.in	2009-12-28 13:44:40.000000000 -0500
++++ distribute-0.6.13/MANIFEST.in	2010-06-10 19:43:39.508527227 -0400
+@@ -1,5 +1,6 @@
+ recursive-include setuptools *.py *.txt *.exe
+ recursive-include tests *.py *.c *.pyx *.txt
++recursive-include setuptools/tests *.html
+ recursive-include docs *.py *.txt *.conf *.css *.css_t Makefile indexsidebar.html
+ include *.py
+ include *.txt
+diff -uNr distribute-0.6.13.pristine/setuptools/tests/indexes/test_links_priority/external.html distribute-0.6.13/setuptools/tests/indexes/test_links_priority/external.html
+--- distribute-0.6.13.pristine/setuptools/tests/indexes/test_links_priority/external.html	1969-12-31 19:00:00.000000000 -0500
++++ distribute-0.6.13/setuptools/tests/indexes/test_links_priority/external.html	2010-06-10 19:40:53.190527048 -0400
+@@ -0,0 +1,3 @@
++<html><body>
++<a href="/foobar-0.1.tar.gz#md5=1__bad_md5___">bad old link</a>
++</body></html>
+diff -uNr distribute-0.6.13.pristine/setuptools/tests/indexes/test_links_priority/simple/foobar/index.html distribute-0.6.13/setuptools/tests/indexes/test_links_priority/simple/foobar/index.html
+--- distribute-0.6.13.pristine/setuptools/tests/indexes/test_links_priority/simple/foobar/index.html	1969-12-31 19:00:00.000000000 -0500
++++ distribute-0.6.13/setuptools/tests/indexes/test_links_priority/simple/foobar/index.html	2010-06-10 19:40:53.187526243 -0400
+@@ -0,0 +1,4 @@
++<html><body>
++<a href="/foobar-0.1.tar.gz#md5=0_correct_md5">foobar-0.1.tar.gz</a><br/>
++<a href="../../external.html" rel="homepage">external homepage</a><br/>
++</body></html>
