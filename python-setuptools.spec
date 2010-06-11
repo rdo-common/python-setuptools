@@ -8,7 +8,7 @@
 
 Name:           python-setuptools
 Version:        0.6.13
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -96,7 +96,7 @@ popd
 
 %{__python} setup.py install --skip-build --root %{buildroot}
 
-rm -rf ${buildroot}%{python_sitelib}/setuptools/tests
+rm -rf %{buildroot}%{python_sitelib}/setuptools/tests
 
 install -p -m 0644 %{SOURCE1} %{SOURCE2} .
 find %{buildroot}%{python_sitelib} -name '*.exe' | xargs rm -f
@@ -112,7 +112,7 @@ popd
 %endif # with_python3
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 
 %files
@@ -131,6 +131,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif # with_python3
 
 %changelog
+* Thu Jun 10 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.13-3
+- Fix few more buildroot macros
+
 * Thu Jun 10 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.13-2
 - Include data that's needed for running tests
 
