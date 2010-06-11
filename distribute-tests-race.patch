@@ -1,0 +1,23 @@
+# HG changeset patch
+# User Toshio Kuratomi <toshio@fedoraproject.org>
+# Date 1276227950 14400
+# Branch 0.6-maintenance
+# Node ID ce279b5609b90c55c365043db02bfaa3b305d1ce
+# Parent  99b0b605bfbd00f0752da34cfa15bb2eddfbf302
+Fix race condition with the http server used in unittests
+
+diff -r 99b0b605bfbd -r ce279b5609b9 setuptools/tests/server.py
+--- a/setuptools/tests/server.py	Thu Jun 10 19:47:48 2010 -0400
++++ b/setuptools/tests/server.py	Thu Jun 10 23:45:50 2010 -0400
+@@ -32,7 +32,10 @@
+     def stop(self):
+         """self.shutdown is not supported on python < 2.6"""
+         self._run = False
+-        urllib2.urlopen('http://127.0.0.1:%s/' % self.server_port)
++        try:
++            urllib2.urlopen('http://127.0.0.1:%s/' % self.server_port, None, 5)
++        except urllib2.URLError:
++            pass
+         self.thread.join()
+ 
+     def base_url(self):
