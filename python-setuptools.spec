@@ -7,8 +7,8 @@
 %global srcname distribute
 
 Name:           python-setuptools
-Version:        0.6.10
-Release:        3%{?dist}
+Version:        0.6.13
+Release:        2%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -17,10 +17,11 @@ URL:            http://pypi.python.org/pypi/%{srcname}
 Source0:        http://pypi.python.org/packages/source/d/%{srcname}/%{srcname}-%{version}.tar.gz
 Source1:        psfl.txt
 Source2:        zpl.txt
+Patch0:         distribute-0.6.13-tests.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
-BuildRequires:  python-devel
+BuildRequires:  python2-devel
 %if 0%{?with_python3}
 BuildRequires:  python3-devel
 %endif # if with_python3
@@ -54,6 +55,8 @@ execute the software that requires pkg_resources.py.
 
 %prep
 %setup -q -n %{srcname}-%{version}
+%patch0 -p1
+
 find -name '*.txt' | xargs chmod -x
 
 %if 0%{?with_python3}
@@ -81,7 +84,7 @@ rm -rf %{buildroot}
 # to be the default for now).
 %if 0%{?with_python3}
 pushd %{py3dir}
-%{__python3} setup.py install --skip-build --root $RPM_BUILD_ROOT
+%{__python3} setup.py install --skip-build --root %{buildroot}
 
 rm -rf %{buildroot}%{python3_sitelib}/setuptools/tests
 
@@ -91,7 +94,7 @@ chmod +x %{buildroot}%{python3_sitelib}/setuptools/command/easy_install.py
 popd
 %endif # with_python3
 
-%{__python} setup.py install --skip-build --root $RPM_BUILD_ROOT
+%{__python} setup.py install --skip-build --root %{buildroot}
 
 rm -rf ${buildroot}%{python_sitelib}/setuptools/tests
 
@@ -128,6 +131,13 @@ rm -rf $RPM_BUILD_ROOT
 %endif # with_python3
 
 %changelog
+* Thu Jun 10 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.13-2
+- Include data that's needed for running tests
+
+* Thu Jun 10 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.13-1
+- Update to upstream 0.6.13
+- Minor specfile formatting fixes
+
 * Thu Feb 04 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.10-3
 - First build with python3 support enabled.
   
