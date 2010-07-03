@@ -8,7 +8,7 @@
 
 Name:           python-setuptools
 Version:        0.6.13
-Release:        3%{?dist}
+Release:        5%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -18,6 +18,8 @@ Source0:        http://pypi.python.org/packages/source/d/%{srcname}/%{srcname}-%
 Source1:        psfl.txt
 Source2:        zpl.txt
 Patch0:         distribute-0.6.13-tests.patch
+Patch1:         distribute-tests-race.patch
+Patch2:         http://bitbucket.org/tarek/distribute/changeset/b045d0750c13/raw/distribute-b045d0750c13.diff
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -31,6 +33,8 @@ BuildRequires:  python3-devel
 Provides: python-setuptools-devel = %{version}-%{release}
 Obsoletes: python-setuptools-devel < 0.6.7-1
 
+# Provide this since some people will request distribute by name
+Provides: python-distribute = %{version}-%{release}
 %description
 Setuptools is a collection of enhancements to the Python distutils that allow
 you to more easily build and distribute Python packages, especially ones that
@@ -56,8 +60,11 @@ execute the software that requires pkg_resources.py.
 %prep
 %setup -q -n %{srcname}-%{version}
 %patch0 -p1
+%patch1 -p1
+%patch2 -p1
 
 find -name '*.txt' | xargs chmod -x
+find . -name '*.orig' -exec rm \{\} \;
 
 %if 0%{?with_python3}
 rm -rf %{pyver}
@@ -117,7 +124,7 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
-%doc psfl.txt zpl.txt docs
+%doc *.txt docs
 %{python_sitelib}/*
 %{_bindir}/easy_install
 %{_bindir}/easy_install-2.6
@@ -131,6 +138,14 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Sat Jul 3 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.13-5
+- Upstream patch for compatibility problem with setuptools
+- Minor spec cleanups
+- Provide python-distribute for those who see an import distribute and need
+  to get the proper package.
+
+* Thu Jun 10 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.13-4
+- Fix race condition in unittests under the python-2.6.x on F-14.
 * Thu Jun 10 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.13-3
 - Fix few more buildroot macros
 
