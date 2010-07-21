@@ -8,7 +8,7 @@
 
 Name:           python-setuptools
 Version:        0.6.13
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -139,6 +139,9 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Wed Jul 21 2010 David Malcolm <dmalcolm@redhat.com> - 0.6.13-6
+- Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
+
 * Sat Jul 3 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.13-5
 - Upstream patch for compatibility problem with setuptools
 - Minor spec cleanups
