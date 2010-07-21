@@ -8,7 +8,7 @@
 
 Name:           python-setuptools
 Version:        0.6.13
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -128,17 +128,20 @@ rm -rf %{buildroot}
 %doc *.txt docs
 %{python_sitelib}/*
 %{_bindir}/easy_install
-%{_bindir}/easy_install-2.6
+%{_bindir}/easy_install-2.*
 
 %if 0%{?with_python3}
 %files -n python3-setuptools
 %defattr(-,root,root,-)
 %doc psfl.txt zpl.txt docs
 %{python3_sitelib}/*
-%{_bindir}/easy_install-3.1
+%{_bindir}/easy_install-3.*
 %endif # with_python3
 
 %changelog
+* Wed Jul 21 2010 David Malcolm <dmalcolm@redhat.com> - 0.6.13-7
+- generalize path of easy_install-2.6 and -3.1 to -2.* and -3.*
+
 * Wed Jul 21 2010 David Malcolm <dmalcolm@redhat.com> - 0.6.13-6
 - Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
 
