@@ -7,8 +7,8 @@
 %global srcname distribute
 
 Name:           python-setuptools
-Version:        0.6.13
-Release:        7%{?dist}
+Version:        0.6.14
+Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -17,9 +17,6 @@ URL:            http://pypi.python.org/pypi/%{srcname}
 Source0:        http://pypi.python.org/packages/source/d/%{srcname}/%{srcname}-%{version}.tar.gz
 Source1:        psfl.txt
 Source2:        zpl.txt
-Patch0:         distribute-0.6.13-tests.patch
-Patch1:         distribute-tests-race.patch
-Patch2:         http://bitbucket.org/tarek/distribute/changeset/b045d0750c13/raw/distribute-b045d0750c13.diff
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -60,9 +57,6 @@ execute the software that requires pkg_resources.py.
 
 %prep
 %setup -q -n %{srcname}-%{version}
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
 
 find -name '*.txt' | xargs chmod -x
 find . -name '*.orig' -exec rm \{\} \;
@@ -139,6 +133,10 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Thu Jul 22 2010 Thomas Spura <tomspur@fedoraproject.org> - 0.6.14-1
+- update to new version
+- all patches are upsteam
+
 * Wed Jul 21 2010 David Malcolm <dmalcolm@redhat.com> - 0.6.13-7
 - generalize path of easy_install-2.6 and -3.1 to -2.* and -3.*
 
