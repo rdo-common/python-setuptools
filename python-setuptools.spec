@@ -8,7 +8,7 @@
 
 Name:           python-setuptools
 Version:        0.6.14
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -41,6 +41,7 @@ have dependencies on other packages.
 This package contains the runtime components of setuptools, necessary to
 execute the software that requires pkg_resources.py.
 
+This package contains the distribute fork of setuptools.
 %if 0%{?with_python3}
 %package -n python3-setuptools
 Summary:        Easily build and distribute Python 3 packages
@@ -53,6 +54,8 @@ have dependencies on other packages.
 
 This package contains the runtime components of setuptools, necessary to
 execute the software that requires pkg_resources.py.
+
+This package contains the distribute fork of setuptools.
 %endif # with_python3
 
 %prep
@@ -133,6 +136,9 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Tue Aug 10 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.14-3
+- Update description to mention this is distribute
+
 * Thu Jul 22 2010 Thomas Spura <tomspur@fedoraproject.org> - 0.6.14-2
 - bump for building against python 2.7
 
