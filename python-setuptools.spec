@@ -8,7 +8,7 @@
 
 Name:           python-setuptools
 Version:        0.6.14
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -136,6 +136,9 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Wed Feb 09 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.6.14-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
 * Sun Aug 22 2010 Thomas Spura <tomspur@fedoraproject.org> - 0.6.14-4
 - rebuild with python3.2
   http://lists.fedoraproject.org/pipermail/devel/2010-August/141368.html
