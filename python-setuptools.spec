@@ -8,7 +8,7 @@
 
 Name:           python-setuptools
 Version:        0.6.14
-Release:        4%{?dist}
+Release:        6%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -138,8 +138,15 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
-* Tue Feb 22 2011 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.14-4
+* Tue Feb 22 2011 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.14-6
 - Fix build on python-3.2
+
+* Wed Feb 09 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.6.14-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
+* Sun Aug 22 2010 Thomas Spura <tomspur@fedoraproject.org> - 0.6.14-4
+- rebuild with python3.2
+  http://lists.fedoraproject.org/pipermail/devel/2010-August/141368.html
 
 * Tue Aug 10 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.14-3
 - Update description to mention this is distribute
@@ -263,30 +270,3 @@ rm -rf %{buildroot}
 
 * Sun Jan 28 2007 Konstantin Ryabitsev <icon@fedoraproject.org> - 0.6c5-1
 - Upstream 0.6c5 (known bugs, but the promised 0.6c6 is taking too long)
-
-* Tue Dec 05 2006 Konstantin Ryabitsev <icon@fedoraproject.org> - 0.6c3-1
-- Upstream 0.6c3 (#218540, thanks to Michel Alexandre Salim for the patch)
-
-* Tue Sep 12 2006 Konstantin Ryabitsev <icon@fedoraproject.org> - 0.6c2-1
-- Upstream 0.6c2
-- Ghostbusting
-
-* Mon Jul 31 2006 Konstantin Ryabitsev <icon@fedoraproject.org> - 0.6c1-2
-- Set perms on license files (#200768)
-
-* Sat Jul 22 2006 Konstantin Ryabitsev <icon@fedoraproject.org> - 0.6c1-1
-- Version 0.6c1
-
-* Wed Jun 28 2006 Konstantin Ryabitsev <icon@fedoraproject.org> - 0.6b3-1
-- Taking over from Ignacio
-- Version 0.6b3
-- Ghost .pyo files in sitelib
-- Add license files
-- Remove manual python-abi, since we're building FC4 and up
-- Kill .exe files
-
-* Wed Feb 15 2006 Ignacio Vazquez-Abrams <ivazquez@ivazquez.net> 0.6a10-1
-- Upstream update
-
-* Mon Jan 16 2006 Ignacio Vazquez-Abrams <ivazquez@ivazquez.net> 0.6a9-1
-- Upstream update
