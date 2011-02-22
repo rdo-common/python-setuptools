@@ -1,0 +1,23 @@
+diff -up distribute-0.6.14/setuptools/command/easy_install.py.bak distribute-0.6.14/setuptools/command/easy_install.py
+--- distribute-0.6.14/setuptools/command/easy_install.py.bak	2011-02-22 09:50:37.899769278 -0800
++++ distribute-0.6.14/setuptools/command/easy_install.py	2011-02-22 10:03:06.662931661 -0800
+@@ -191,7 +191,6 @@ class easy_install(Command):
+ 
+         py_version = sys.version.split()[0]
+         prefix, exec_prefix = get_config_vars('prefix', 'exec_prefix')
+-
+         self.config_vars = {'dist_name': self.distribution.get_name(),
+                             'dist_version': self.distribution.get_version(),
+                             'dist_fullname': self.distribution.get_fullname(),
+@@ -203,6 +202,11 @@ class easy_install(Command):
+                             'sys_exec_prefix': exec_prefix,
+                             'exec_prefix': exec_prefix,
+                            }
++        try:
++            self.config_vars['abiflags'] = sys.abiflags
++        except AttributeError:
++            # abiflags is only available on python-3.2+
++            pass
+ 
+         if HAS_USER_SITE:
+             self.config_vars['userbase'] = self.install_userbase
