@@ -7,8 +7,8 @@
 %global srcname distribute
 
 Name:           python-setuptools
-Version:        0.6.14
-Release:        7%{?dist}
+Version:        0.6.19
+Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -17,7 +17,6 @@ URL:            http://pypi.python.org/pypi/%{srcname}
 Source0:        http://pypi.python.org/packages/source/d/%{srcname}/%{srcname}-%{version}.tar.gz
 Source1:        psfl.txt
 Source2:        zpl.txt
-Patch0: distribute-py32.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -61,7 +60,6 @@ This package contains the distribute fork of setuptools.
 
 %prep
 %setup -q -n %{srcname}-%{version}
-%patch0 -p1 -b .py32
 
 find -name '*.txt' | xargs chmod -x
 find . -name '*.orig' -exec rm \{\} \;
@@ -138,6 +136,9 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Thu Jul 14 2011 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.19
+- Upstream bugfix release
+
 * Tue Feb 22 2011 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.14-7
 - Switch to patch that I got in to upstream
 
