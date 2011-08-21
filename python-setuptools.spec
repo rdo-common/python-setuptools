@@ -7,7 +7,7 @@
 %global srcname distribute
 
 Name:           python-setuptools
-Version:        0.6.19
+Version:        0.6.21
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -136,6 +136,9 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Sun Aug 21 2011 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.21
+- Upstream bugfix release
+
 * Thu Jul 14 2011 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.19
 - Upstream bugfix release
 
