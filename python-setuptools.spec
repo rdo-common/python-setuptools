@@ -7,7 +7,7 @@
 %global srcname distribute
 
 Name:           python-setuptools
-Version:        0.6.21
+Version:        0.6.24
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -73,6 +73,7 @@ find %{py3dir} -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python3}|'
 find -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python}|'
 
 %build
+
 CFLAGS="$RPM_OPT_FLAGS" %{__python} setup.py build
 
 %if 0%{?with_python3}
@@ -136,10 +137,14 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
-* Sun Aug 21 2011 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.21
+* Mon Oct 17 2011 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.24-1
+- Upstream bugfix
+- Compile the win32 launcher binary using mingw
+
+* Sun Aug 21 2011 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.21-1
 - Upstream bugfix release
 
-* Thu Jul 14 2011 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.19
+* Thu Jul 14 2011 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.19-1
 - Upstream bugfix release
 
 * Tue Feb 22 2011 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.14-7
