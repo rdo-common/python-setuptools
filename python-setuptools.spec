@@ -8,7 +8,7 @@
 
 Name:           python-setuptools
 Version:        0.6.24
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -137,6 +137,9 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Sat Jan 14 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.6.24-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
+
 * Mon Oct 17 2011 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.24-1
 - Upstream bugfix
 - Compile the win32 launcher binary using mingw
