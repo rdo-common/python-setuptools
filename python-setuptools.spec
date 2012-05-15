@@ -67,7 +67,9 @@ find . -name '*.orig' -exec rm \{\} \;
 %if 0%{?with_python3}
 rm -rf %{py3dir}
 cp -a . %{py3dir}
-find %{py3dir} -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python3}|'
+for file in setuptools/command/easy_install.py distribute_setup.py ; do
+    sed -i '1s|^#!python|#!%{__python3}|' $file
+done
 %endif # with_python3
 
 for file in setuptools/command/easy_install.py distribute_setup.py ; do
