@@ -70,7 +70,9 @@ cp -a . %{py3dir}
 find %{py3dir} -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python3}|'
 %endif # with_python3
 
-find -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python}|'
+for file in setuptools/command/easy_install.py distribute_setup.py ; do
+    sed -i '1s|^#!python|#!%{__python}|' $file
+done
 
 %build
 
