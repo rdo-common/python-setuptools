@@ -1,0 +1,13 @@
+Index: distribute-0.6.27/setuptools/tests/test_packageindex.py
+===================================================================
+--- distribute-0.6.27.orig/setuptools/tests/test_packageindex.py
++++ distribute-0.6.27/setuptools/tests/test_packageindex.py
+@@ -70,7 +70,7 @@ class TestPackageIndex(unittest.TestCase
+             index.open_url(url)
+         except distutils.errors.DistutilsError, error:
+             # Python 2.7.3
+-            self.assert_('getaddrinfo failed' in str(error))
++            self.assert_('getaddrinfo failed' in str(error) or 'Name or service not known' in str(error))
+         except httplib.InvalidURL, error:
+             # Python 2.7.2 and earlier
+             self.assert_('nonnumeric port' in str(error))

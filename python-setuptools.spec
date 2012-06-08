@@ -7,7 +7,7 @@
 %global srcname distribute
 
 Name:           python-setuptools
-Version:        0.6.26
+Version:        0.6.27
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -17,6 +17,9 @@ URL:            http://pypi.python.org/pypi/%{srcname}
 Source0:        http://pypi.python.org/packages/source/d/%{srcname}/%{srcname}-%{version}.tar.gz
 Source1:        psfl.txt
 Source2:        zpl.txt
+Patch0: distribute-different-exception-message.patch
+Patch1: distribute-timeout-exception.patch
+
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
@@ -60,6 +63,9 @@ This package contains the distribute fork of setuptools.
 
 %prep
 %setup -q -n %{srcname}-%{version}
+
+%patch0 -p1 -b .excmsg
+%patch1 -p1 -b .exctype
 
 find -name '*.txt' | xargs chmod -x
 find . -name '*.orig' -exec rm \{\} \;
@@ -141,6 +147,9 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Thu Jun  7 2012 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.27-1
+- Upstream bugfix
+
 * Tue May 15 2012 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.24-2
 - Upstream bugfix
 
@@ -259,36 +268,3 @@ rm -rf %{buildroot}
 
 * Thu Feb 26 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.6c9-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
-
-* Fri Nov 28 2008 Ignacio Vazquez-Abrams <ivazqueznet+rpm@gmail.com> - 0.6c9-2
-- Rebuild for Python 2.6
-
-* Sun Nov 23 2008 Konstantin Ryabitsev <icon@fedoraproject.org> - 0.6c9-1
-- Update to 0.6c9
-- Small fixes to URL, summary and description
-
-* Sat Jun 21 2008 Konstantin Ryabitsev <icon@fedoraproject.org> - 0.6c8-1
-- Update to 0.6c8
-- Accept small tweaks from Gareth Armstrong
-
-* Mon Sep 24 2007 Konstantin Ryabitsev <icon@fedoraproject.org> - 0.6c7-2
-- Move pretty much everything back into runtime in order to avoid more
-  brokenness than we're trying to address with these fixes.
-
-* Fri Sep 14 2007 Konstantin Ryabitsev <icon@fedoraproject.org> - 0.6c7-1
-- Upstream 0.6c7
-- Move some things from devel into runtime, in order to not break other
-  projects.
-
-* Sat Aug 18 2007 Konstantin Ryabitsev <icon@fedoraproject.org> - 0.6c6-2
-- Make license tag conform to the new Licensing Guidelines
-- Move everything except pkg_resources.py into a separate -devel package
-  so we avoid bundling python-devel when it's not required (#251645)
-- Do not package tests
-
-* Sun Jun 10 2007 Konstantin Ryabitsev <icon@fedoraproject.org> - 0.6c6-1
-- Upstream 0.6c6
-- Require python-devel (#240707)
-
-* Sun Jan 28 2007 Konstantin Ryabitsev <icon@fedoraproject.org> - 0.6c5-1
-- Upstream 0.6c5 (known bugs, but the promised 0.6c6 is taking too long)
