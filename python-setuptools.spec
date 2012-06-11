@@ -8,7 +8,7 @@
 
 Name:           python-setuptools
 Version:        0.6.27
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -73,9 +73,11 @@ find . -name '*.orig' -exec rm \{\} \;
 %if 0%{?with_python3}
 rm -rf %{py3dir}
 cp -a . %{py3dir}
+pushd %{py3dir}
 for file in setuptools/command/easy_install.py distribute_setup.py ; do
     sed -i '1s|^#!python|#!%{__python3}|' $file
 done
+popd
 %endif # with_python3
 
 for file in setuptools/command/easy_install.py distribute_setup.py ; do
@@ -147,6 +149,9 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Mon Jun 11 2012 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.27-2
+- Fix easy_install.py having a python3 shebang in the python2 package
+
 * Thu Jun  7 2012 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.27-1
 - Upstream bugfix
 
