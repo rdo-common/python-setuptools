@@ -8,7 +8,7 @@
 
 Name:           python-setuptools
 Version:        0.6.27
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -149,6 +149,9 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Sat Jul 21 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.6.27-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
 * Mon Jun 11 2012 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.27-2
 - Fix easy_install.py having a python3 shebang in the python2 package
 
