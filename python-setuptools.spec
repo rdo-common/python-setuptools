@@ -157,6 +157,9 @@ rm -rf %{buildroot}
   - python-3.3 fixes
   - honor umask when setuptools is used to install other modules
 
+* Sat Jul 21 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.6.27-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
 * Mon Jun 11 2012 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.27-2
 - Fix easy_install.py having a python3 shebang in the python2 package
 
