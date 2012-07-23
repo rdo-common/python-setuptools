@@ -7,8 +7,8 @@
 %global srcname distribute
 
 Name:           python-setuptools
-Version:        0.6.27
-Release:        2%{?dist}
+Version:        0.6.28
+Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -17,8 +17,11 @@ URL:            http://pypi.python.org/pypi/%{srcname}
 Source0:        http://pypi.python.org/packages/source/d/%{srcname}/%{srcname}-%{version}.tar.gz
 Source1:        psfl.txt
 Source2:        zpl.txt
+# https://bitbucket.org/tarek/distribute/issue/300/invalid-urls-can-fail-with-other-error
 Patch0: distribute-different-exception-message.patch
-Patch1: distribute-timeout-exception.patch
+# Sometimes this times out in the build system.  Hanging onto the patch in git
+# for a bit in case that behavior returns
+#Patch1: distribute-timeout-exception.patch
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -65,7 +68,7 @@ This package contains the distribute fork of setuptools.
 %setup -q -n %{srcname}-%{version}
 
 %patch0 -p1 -b .excmsg
-%patch1 -p1 -b .exctype
+#patch1 -p1 -b .exctype
 
 find -name '*.txt' | xargs chmod -x
 find . -name '*.orig' -exec rm \{\} \;
@@ -149,6 +152,11 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Mon Jul 23 2012 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.28-1
+- New upstream release:
+  - python-3.3 fixes
+  - honor umask when setuptools is used to install other modules
+
 * Mon Jun 11 2012 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.27-2
 - Fix easy_install.py having a python3 shebang in the python2 package
 
