@@ -8,7 +8,7 @@
 
 Name:           python-setuptools
 Version:        0.6.28
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -152,6 +152,9 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Fri Aug 03 2012 David Malcolm <dmalcolm@redhat.com> - 0.6.28-3
+- rebuild for https://fedoraproject.org/wiki/Features/Python_3.3
+
 * Fri Aug  3 2012 David Malcolm <dmalcolm@redhat.com> - 0.6.28-2
 - remove rhel logic from with_python3 conditional
 
