@@ -1,4 +1,4 @@
-%if 0%{?fedora} > 12 || 0%{?rhel} > 6
+%if 0%{?fedora} > 12
 %global with_python3 1
 %else
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print (get_python_lib())")}
@@ -152,8 +152,14 @@ rm -rf %{buildroot}
 * Thu Apr 11 2013 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.36-1
 - Update to upstream 0.6.36.  Many bugfixes
 
-* Sat Oct 20 2012 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.29-1
-- New upstream release
+* Thu Feb 14 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.6.28-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
+
+* Fri Aug 03 2012 David Malcolm <dmalcolm@redhat.com> - 0.6.28-3
+- rebuild for https://fedoraproject.org/wiki/Features/Python_3.3
+
+* Fri Aug  3 2012 David Malcolm <dmalcolm@redhat.com> - 0.6.28-2
+- remove rhel logic from with_python3 conditional
 
 * Mon Jul 23 2012 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.28-1
 - New upstream release:
