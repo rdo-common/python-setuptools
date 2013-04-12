@@ -7,7 +7,7 @@
 %global srcname distribute
 
 Name:           python-setuptools
-Version:        0.6.28
+Version:        0.6.36
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -17,11 +17,9 @@ URL:            http://pypi.python.org/pypi/%{srcname}
 Source0:        http://pypi.python.org/packages/source/d/%{srcname}/%{srcname}-%{version}.tar.gz
 Source1:        psfl.txt
 Source2:        zpl.txt
-# https://bitbucket.org/tarek/distribute/issue/300/invalid-urls-can-fail-with-other-error
-Patch0: distribute-different-exception-message.patch
-# Sometimes this times out in the build system.  Hanging onto the patch in git
-# for a bit in case that behavior returns
-#Patch1: distribute-timeout-exception.patch
+# Submitted upstream
+# https://bitbucket.org/tarek/distribute/issue/363/skip-test_sdist_with_utf8_encoded_filename
+Patch0: distribute-skip-sdist_with_utf8_encoded_filename.patch
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -67,8 +65,7 @@ This package contains the distribute fork of setuptools.
 %prep
 %setup -q -n %{srcname}-%{version}
 
-%patch0 -p1 -b .excmsg
-#patch1 -p1 -b .exctype
+%patch0 -p1
 
 find -name '*.txt' | xargs chmod -x
 find . -name '*.orig' -exec rm \{\} \;
@@ -152,6 +149,12 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Thu Apr 11 2013 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.36-1
+- Update to upstream 0.6.36.  Many bugfixes
+
+* Sat Oct 20 2012 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.29-1
+- New upstream release
+
 * Mon Jul 23 2012 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.28-1
 - New upstream release:
   - python-3.3 fixes
