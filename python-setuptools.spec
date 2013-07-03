@@ -1,20 +1,20 @@
-%if 0%{?fedora} > 12
+%if 0%{?fedora}
 %global with_python3 1
 %else
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print (get_python_lib())")}
 %endif
 
-%global srcname distribute
+%global srcname setuptools
 
 Name:           python-setuptools
-Version:        0.6.36
+Version:        0.7.7
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
 License:        Python or ZPLv2.0
 URL:            http://pypi.python.org/pypi/%{srcname}
-Source0:        http://pypi.python.org/packages/source/d/%{srcname}/%{srcname}-%{version}.tar.gz
+Source0:        http://pypi.python.org/packages/source/s/%{srcname}/%{srcname}-%{version}.tar.gz
 Source1:        psfl.txt
 Source2:        zpl.txt
 # Submitted upstream
@@ -34,8 +34,11 @@ BuildRequires:  python3-devel
 Provides: python-setuptools-devel = %{version}-%{release}
 Obsoletes: python-setuptools-devel < 0.6.7-1
 
-# Provide this since some people will request distribute by name
+# We're now back to setuptools as the package.
+# Keep the python-distribute name active for a few releases.  Eventually we'll
+# want to get rid of the Provides and just keep the Obsoletes
 Provides: python-distribute = %{version}-%{release}
+Obsoletes: python-distribute < 0.6.36-2
 
 %description
 Setuptools is a collection of enhancements to the Python distutils that allow
@@ -45,7 +48,6 @@ have dependencies on other packages.
 This package contains the runtime components of setuptools, necessary to
 execute the software that requires pkg_resources.py.
 
-This package contains the distribute fork of setuptools.
 %if 0%{?with_python3}
 %package -n python3-setuptools
 Summary:        Easily build and distribute Python 3 packages
@@ -59,7 +61,6 @@ have dependencies on other packages.
 This package contains the runtime components of setuptools, necessary to
 execute the software that requires pkg_resources.py.
 
-This package contains the distribute fork of setuptools.
 %endif # with_python3
 
 %prep
@@ -67,20 +68,20 @@ This package contains the distribute fork of setuptools.
 
 %patch0 -p1
 
-find -name '*.txt' | xargs chmod -x
+find -name '*.txt' -exec chmod -x \{\} \;
 find . -name '*.orig' -exec rm \{\} \;
 
 %if 0%{?with_python3}
 rm -rf %{py3dir}
 cp -a . %{py3dir}
 pushd %{py3dir}
-for file in setuptools/command/easy_install.py distribute_setup.py ; do
+for file in setuptools/command/easy_install.py ; do
     sed -i '1s|^#!python|#!%{__python3}|' $file
 done
 popd
 %endif # with_python3
 
-for file in setuptools/command/easy_install.py distribute_setup.py ; do
+for file in setuptools/command/easy_install.py ; do
     sed -i '1s|^#!python|#!%{__python}|' $file
 done
 
@@ -149,6 +150,12 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Wed Jul  3 2013 Toshio Kuratomi <toshio@fedoraproject.org> - 0.7.7-1
+- Update to 0.7.7 upstream release
+
+* Mon Jun 10 2013 Toshio Kuratomi <toshio@fedoraproject.org> - 0.7.2-2
+- Update to the setuptools-0.7 branch that merges distribute and setuptools
+
 * Thu Apr 11 2013 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.36-1
 - Update to upstream 0.6.36.  Many bugfixes
 
