@@ -7,7 +7,7 @@
 %global srcname setuptools
 
 Name:           python-setuptools
-Version:        0.7.7
+Version:        0.8
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -150,6 +150,10 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Fri Jul  5 2013 Toshio Kuratomi <toshio@fedoraproject.org> - 0.8-1
+- Update to upstream 0.8  release.  Codebase now runs on anything from
+  python-2.4 to python-3.3 without having to be translated by 2to3.
+
 * Wed Jul  3 2013 Toshio Kuratomi <toshio@fedoraproject.org> - 0.7.7-1
 - Update to 0.7.7 upstream release
 

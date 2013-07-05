@@ -1,6 +1,7 @@
-diff -r a59fcbbf5ca7 setuptools/tests/test_sdist.py
---- a/setuptools/tests/test_sdist.py	Fri Apr 05 17:14:51 2013 -0400
-+++ b/setuptools/tests/test_sdist.py	Thu Apr 11 18:04:06 2013 -0700
+Index: setuptools-0.8b7/setuptools/tests/test_sdist.py
+===================================================================
+--- setuptools-0.8b7.orig/setuptools/tests/test_sdist.py
++++ setuptools-0.8b7/setuptools/tests/test_sdist.py
 @@ -1,7 +1,7 @@
  # -*- coding: utf-8 -*-
  """sdist tests"""
@@ -10,16 +11,15 @@ diff -r a59fcbbf5ca7 setuptools/tests/test_sdist.py
  import os
  import shutil
  import sys
-@@ -11,7 +11,7 @@
+@@ -9,6 +9,7 @@ import tempfile
+ import unittest
  import unicodedata
- from StringIO import StringIO
  
--
 +from setuptools.tests.py26compat import skipIf
+ from setuptools.compat import StringIO, unicode
  from setuptools.command.sdist import sdist
  from setuptools.command.egg_info import manifest_maker
- from setuptools.dist import Distribution
-@@ -316,6 +316,8 @@
+@@ -318,6 +319,8 @@ class TestSdistTest(unittest.TestCase):
              filename = filename.decode('latin-1')
              self.assertFalse(filename in cmd.filelist.files)
  
