@@ -7,7 +7,7 @@
 %global srcname setuptools
 
 Name:           python-setuptools
-Version:        0.9.5
+Version:        0.9.6
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -150,6 +150,9 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Tue Jul 23 2013 Toshio Kuratomi <toshio@fedoraproject.org> - 0.9.6-1
+- Upstream update -- just fixes python-2.4 compat
+
 * Tue Jul 16 2013 Toshio Kuratomi <toshio@fedoraproject.org> - 0.9.5-1
 - Update to 0.9.5
   - package_index can handle hashes other than md5
