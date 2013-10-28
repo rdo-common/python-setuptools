@@ -7,7 +7,7 @@
 %global srcname setuptools
 
 Name:           python-setuptools
-Version:        1.1.6
+Version:        1.1.7
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -17,13 +17,19 @@ URL:            http://pypi.python.org/pypi/%{srcname}
 Source0:        http://pypi.python.org/packages/source/s/%{srcname}/%{srcname}-%{version}.tar.gz
 Source1:        psfl.txt
 Source2:        zpl.txt
-# Submitted upstream
-# https://bitbucket.org/tarek/distribute/issue/363/skip-test_sdist_with_utf8_encoded_filename
-Patch0: distribute-skip-sdist_with_utf8_encoded_filename.patch
+# https://github.com/jaraco/setuptools/pull/2
+# Fixes security issue: http://bugs.python.org/issue17997#msg194950
+Patch0: setuptools-ssl-match_hostname-wildcard.patch
+# https://github.com/jaraco/setuptools/pull/3
+# Shouldn't actually affect us as it's compat for 2.5 or earlier
+Patch1: 0001-Import-socket.error-so-the-code-throws-the-correct-e.patch
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildArch:      noarch
+# Require this so that we use a system copy of the match_hostname() function
+Requires: python-backports-ssl_match_hostname
+BuildRequires: python-backports-ssl_match_hostname
 BuildRequires:  python2-devel
 %if 0%{?with_python3}
 BuildRequires:  python3-devel
@@ -53,6 +59,10 @@ execute the software that requires pkg_resources.py.
 Summary:        Easily build and distribute Python 3 packages
 Group:          Applications/System
 
+# Note: Do not need to Require python3-backports-ssl_match_hostname because it
+# has been present since python3-3.2.  We do not ship python3-3.0 or
+# python3-3.1 anywhere
+
 %description -n python3-setuptools
 Setuptools is a collection of enhancements to the Python 3 distutils that allow
 you to more easily build and distribute Python 3 packages, especially ones that
@@ -67,6 +77,7 @@ execute the software that requires pkg_resources.py.
 %setup -q -n %{srcname}-%{version}
 
 %patch0 -p1
+%patch1 -p1
 
 find -name '*.txt' -exec chmod -x \{\} \;
 find . -name '*.orig' -exec rm \{\} \;
@@ -150,6 +161,13 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Mon Oct 28 2013 Toshio Kuratomi <toshio@fedoraproject.org> - 1.1.7-1
+- Update to newer upstream release that has our patch to the unittests
+- Fix for http://bugs.python.org/issue17997#msg194950 which affects us since
+  setuptools copies that code. Changed to use
+  python-backports-ssl_match_hostname so that future issues can be fixed in
+  that package.
+
 * Sat Oct 26 2013 Toshio Kuratomi <toshio@fedoraproject.org> - 1.1.6-1
 - Update to newer upstream release.  Some minor incompatibilities listed but
   they should affect few, if any consumers.
@@ -269,10 +287,10 @@ rm -rf %{buildroot}
 * Thu Feb 04 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.10-3
 - First build with python3 support enabled.
   
-* Thu Jan 29 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.10-2
+* Fri Jan 29 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.10-2
 - Really disable the python3 portion
 
-* Thu Jan 29 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.10-1
+* Fri Jan 29 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.10-1
 - Update the python3 portions but disable for now.
 - Update to 0.6.10
 - Remove %%pre scriptlet as the file has a different name than the old
@@ -283,7 +301,7 @@ rm -rf %{buildroot}
 - Don't need python3-tools since the library is now in the python3 package
 - Few other changes to cleanup style
 
-* Thu Jan 22 2010 David Malcolm <dmalcolm@redhat.com> - 0.6.9-2
+* Fri Jan 22 2010 David Malcolm <dmalcolm@redhat.com> - 0.6.9-2
 - add python3 subpackage
 
 * Mon Dec 14 2009 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.9-1
