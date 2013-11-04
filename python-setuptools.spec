@@ -7,7 +7,7 @@
 %global srcname setuptools
 
 Name:           python-setuptools
-Version:        1.1.7
+Version:        1.3
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -17,12 +17,13 @@ URL:            http://pypi.python.org/pypi/%{srcname}
 Source0:        http://pypi.python.org/packages/source/s/%{srcname}/%{srcname}-%{version}.tar.gz
 Source1:        psfl.txt
 Source2:        zpl.txt
-# https://github.com/jaraco/setuptools/pull/2
-# Fixes security issue: http://bugs.python.org/issue17997#msg194950
-Patch0: setuptools-ssl-match_hostname-wildcard.patch
-# https://github.com/jaraco/setuptools/pull/3
-# Shouldn't actually affect us as it's compat for 2.5 or earlier
-Patch1: 0001-Import-socket.error-so-the-code-throws-the-correct-e.patch
+# Test data for the svn unittests from
+# https://bitbucket.org/pypa/setuptools/src/ca2fc862ded7e3a2c07397f0d7d929a9534493a7/setuptools/tests/svn_data/svn17_example.zip?at=default
+# Pull Request to add this to the next upstream release here: 
+# https://github.com/jaraco/setuptools/pull/4
+Source3:        svn17_example.zip
+# https://bitbucket.org/pypa/setuptools/src/ca2fc862ded7e3a2c07397f0d7d929a9534493a7/setuptools/tests/svn_data/svn18_example.zip?at=default
+Source4:        svn18_example.zip
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -34,9 +35,13 @@ BuildRequires:  python2-devel
 %if 0%{?with_python3}
 BuildRequires:  python3-devel
 %endif # if with_python3
+# For unittests
+BuildRequires: subversion
 
 # Legacy: We removed this subpackage once easy_install no longer depended on
 # python-devel
+# Planning on removing for F21
+# https://lists.fedoraproject.org/pipermail/devel/2013-November/191344.html
 Provides: python-setuptools-devel = %{version}-%{release}
 Obsoletes: python-setuptools-devel < 0.6.7-1
 
@@ -51,7 +56,7 @@ Setuptools is a collection of enhancements to the Python distutils that allow
 you to more easily build and distribute Python packages, especially ones that
 have dependencies on other packages.
 
-This package contains the runtime components of setuptools, necessary to
+This package also contains the runtime components of setuptools, necessary to
 execute the software that requires pkg_resources.py.
 
 %if 0%{?with_python3}
@@ -68,7 +73,7 @@ Setuptools is a collection of enhancements to the Python 3 distutils that allow
 you to more easily build and distribute Python 3 packages, especially ones that
 have dependencies on other packages.
 
-This package contains the runtime components of setuptools, necessary to
+This package also contains the runtime components of setuptools, necessary to
 execute the software that requires pkg_resources.py.
 
 %endif # with_python3
@@ -76,11 +81,12 @@ execute the software that requires pkg_resources.py.
 %prep
 %setup -q -n %{srcname}-%{version}
 
-%patch0 -p1
-%patch1 -p1
-
 find -name '*.txt' -exec chmod -x \{\} \;
 find . -name '*.orig' -exec rm \{\} \;
+
+# For unittests
+cp %{SOURCE3} setuptools/tests/svn_data/
+cp %{SOURCE4} setuptools/tests/svn_data/
 
 %if 0%{?with_python3}
 rm -rf %{py3dir}
@@ -112,6 +118,7 @@ rm -rf %{buildroot}
 # Must do the python3 install first because the scripts in /usr/bin are
 # overwritten with every setup.py install (and we want the python2 version
 # to be the default for now).
+# Change to defaulting to python3 version in F22
 %if 0%{?with_python3}
 pushd %{py3dir}
 %{__python3} setup.py install --skip-build --root %{buildroot}
@@ -161,6 +168,9 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Mon Nov  4 2013 Toshio Kuratomi <toshio@fedoraproject.org> - 1.3-1
+- Upstream update that pulls in our security patches
+
 * Mon Oct 28 2013 Toshio Kuratomi <toshio@fedoraproject.org> - 1.1.7-1
 - Update to newer upstream release that has our patch to the unittests
 - Fix for http://bugs.python.org/issue17997#msg194950 which affects us since
