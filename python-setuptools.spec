@@ -7,7 +7,7 @@
 %global srcname setuptools
 
 Name:           python-setuptools
-Version:        1.3
+Version:        1.3.1
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -168,6 +168,9 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Thu Nov  7 2013 Toshio Kuratomi <toshio@fedoraproject.org> - 1.3.1-1
+- Minor upstream update to reign in overzealous warnings
+
 * Mon Nov  4 2013 Toshio Kuratomi <toshio@fedoraproject.org> - 1.3-1
 - Upstream update that pulls in our security patches
 
