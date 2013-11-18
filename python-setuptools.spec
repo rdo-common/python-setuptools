@@ -7,7 +7,7 @@
 %global srcname setuptools
 
 Name:           python-setuptools
-Version:        1.3.1
+Version:        1.4
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -168,6 +168,9 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Mon Nov 18 2013 Toshio Kuratomi <toshio@fedoraproject.org> - 1.4-1
+- Update to 1.4 that gives easy_install pypi credential handling
+
 * Thu Nov  7 2013 Toshio Kuratomi <toshio@fedoraproject.org> - 1.3.1-1
 - Minor upstream update to reign in overzealous warnings
 
