@@ -20,7 +20,7 @@
 
 Name:           python-setuptools
 Version:        2.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -204,6 +204,9 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Thu Apr 24 2014 Tomas Radej <tradej@redhat.com> - 2.0-3
+- Rebuilt for tag f21-python
+
 * Wed Apr 23 2014 Matej Stuchlik <mstuchli@redhat.com> - 2.0-2
 - Add a switch to build setuptools as wheel
 
