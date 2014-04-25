@@ -3,7 +3,7 @@
 
 # This controls whether setuptools is build as a wheel or not,
 # simplifying Python 3.4 bootstraping process
-%global build_wheel 0
+%global build_wheel 1
 %else
 %{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print (get_python_lib())")}
 %endif
@@ -20,7 +20,7 @@
 
 Name:           python-setuptools
 Version:        2.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -204,6 +204,9 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Fri Apr 25 2014 Matej Stuchlik <mstuchli@redhat.com> - 2.0-4
+- Rebuild as wheel for Python 3.4
+
 * Thu Apr 24 2014 Tomas Radej <tradej@redhat.com> - 2.0-3
 - Rebuilt for tag f21-python
 
