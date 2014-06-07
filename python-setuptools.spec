@@ -20,7 +20,7 @@
 
 Name:           python-setuptools
 Version:        2.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -204,6 +204,9 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.0-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
 * Fri Apr 25 2014 Matej Stuchlik <mstuchli@redhat.com> - 2.0-4
 - Rebuild as wheel for Python 3.4
 
