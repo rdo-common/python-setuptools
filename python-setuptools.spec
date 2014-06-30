@@ -20,7 +20,7 @@
 
 Name:           python-setuptools
 Version:        2.0
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -29,6 +29,8 @@ URL:            http://pypi.python.org/pypi/%{srcname}
 Source0:        http://pypi.python.org/packages/source/s/%{srcname}/%{srcname}-%{version}.tar.gz
 Source1:        psfl.txt
 Source2:        zpl.txt
+# Fixed in upstream using a different method
+Patch0: setuptools-sdist-postproc.patch
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -93,6 +95,7 @@ execute the software that requires pkg_resources.py.
 
 %prep
 %setup -q -n %{srcname}-%{version}
+%patch0 -p1
 
 find -name '*.txt' -exec chmod -x \{\} \;
 find . -name '*.orig' -exec rm \{\} \;
@@ -204,6 +207,9 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Mon Jun 30 2014 Toshio Kuratomi <toshio@fedoraproject.org> - 2.0-6
+- Fix a bug in the sdist command
+
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 2.0-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
