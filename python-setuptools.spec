@@ -20,7 +20,7 @@
 
 Name:           python-setuptools
 Version:        2.0
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -30,7 +30,7 @@ Source0:        http://pypi.python.org/packages/source/s/%{srcname}/%{srcname}-%
 Source1:        psfl.txt
 Source2:        zpl.txt
 # Fixed in upstream using a different method
-Patch0: setuptools-sdist-postproc.patch
+Patch0: setuptools-sdist.patch
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -207,6 +207,9 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Mon Jun 30 2014 Toshio Kuratomi <toshio@fedoraproject.org> - 2.0-7
+- And another bug in sdist
+
 * Mon Jun 30 2014 Toshio Kuratomi <toshio@fedoraproject.org> - 2.0-6
 - Fix a bug in the sdist command
 
