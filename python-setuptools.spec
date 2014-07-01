@@ -20,7 +20,7 @@
 
 Name:           python-setuptools
 Version:        2.0
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -52,13 +52,6 @@ BuildRequires:  python3-wheel
 %endif # if with_python3
 # For unittests
 BuildRequires: subversion
-
-# Legacy: We removed this subpackage once easy_install no longer depended on
-# python-devel
-# Planning on removing for F21
-# https://lists.fedoraproject.org/pipermail/devel/2013-November/191344.html
-Provides: python-setuptools-devel = %{version}-%{release}
-Obsoletes: python-setuptools-devel < 0.6.7-1
 
 # We're now back to setuptools as the package.
 # Keep the python-distribute name active for a few releases.  Eventually we'll
@@ -207,6 +200,10 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Mon Jun 30 2014 Toshio Kuratomi <toshio@fedoraproject.org> - 2.0-8
+- Remove the python-setuptools-devel Virtual Provides as per this Fedora 21
+  Change: http://fedoraproject.org/wiki/Changes/Remove_Python-setuptools-devel
+
 * Mon Jun 30 2014 Toshio Kuratomi <toshio@fedoraproject.org> - 2.0-7
 - And another bug in sdist
 
