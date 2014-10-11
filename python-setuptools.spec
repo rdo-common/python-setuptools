@@ -20,7 +20,7 @@
 
 Name:           python-setuptools
 Version:        6.0.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -87,6 +87,12 @@ execute the software that requires pkg_resources.py.
 
 %prep
 %setup -q -n %{srcname}-%{version}
+
+# Remove bundled egg-info
+rm -rf *.egg*
+
+# Remove bundled exes
+rm -f setuptools/*.exe
 
 find -name '*.txt' -exec chmod -x \{\} \;
 find . -name '*.orig' -exec rm \{\} \;
@@ -157,28 +163,24 @@ popd
 %if 0%{?build_wheel}
 pip2 install -I dist/%{python2_wheelname} --root %{buildroot} --strip-file-prefix %{buildroot}
 %else
-%{__python} setup.py install --skip-build --root %{buildroot}
+%{__python2} setup.py install --skip-build --root %{buildroot}
 %endif
 
-rm -rf %{buildroot}%{python_sitelib}/setuptools/tests
+rm -rf %{buildroot}%{python2_sitelib}/setuptools/tests
 %if 0%{?build_wheel}
 sed -i '/^setuptools\/tests\//d' %{buildroot}%{python2_record}
 %endif
 
 install -p -m 0644 %{SOURCE1} %{SOURCE2} .
-find %{buildroot}%{python_sitelib} -name '*.exe' | xargs rm -f
-chmod +x %{buildroot}%{python_sitelib}/setuptools/command/easy_install.py
+find %{buildroot}%{python2_sitelib} -name '*.exe' | xargs rm -f
+chmod +x %{buildroot}%{python2_sitelib}/setuptools/command/easy_install.py
 
 %check
-export LANG=en_GB.utf8
-export LC_ALL=en_GB.utf8
-%{__python} setup.py test
+LANG=en_GB.utf8 LC_ALL=en_GB.utf8 %{__python2} setup.py test
 
 %if 0%{?with_python3}
 pushd %{py3dir}
-export LANG=en_GB.utf8
-export LC_ALL=en_GB.utf8
-%{__python3} setup.py test
+LANG=en_GB.utf8 LC_ALL=en_GB.utf8 %{__python3} setup.py test
 popd
 %endif # with_python3
 
@@ -189,7 +191,7 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %doc *.txt docs
-%{python_sitelib}/*
+%{python2_sitelib}/*
 %{_bindir}/easy_install
 %{_bindir}/easy_install-2.*
 
@@ -202,6 +204,11 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Sat Oct 11 2014 Ralph Bean <rbean@redhat.com> - 6.0.2-2
+- Modernized python2 macros.
+- Inlined locale environment variables in the %%check section.
+- Remove bundled egg-info and .exes.
+
 * Fri Oct 03 2014 Kevin Fenzi <kevin@scrye.com> 6.0.2-1
 - Update to 6.0.2
 
