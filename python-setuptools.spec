@@ -19,8 +19,8 @@
 %endif
 
 Name:           python-setuptools
-Version:        2.0
-Release:        8%{?dist}
+Version:        6.0.2
+Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -29,8 +29,6 @@ URL:            http://pypi.python.org/pypi/%{srcname}
 Source0:        http://pypi.python.org/packages/source/s/%{srcname}/%{srcname}-%{version}.tar.gz
 Source1:        psfl.txt
 Source2:        zpl.txt
-# Fixed in upstream using a different method
-Patch0: setuptools-sdist.patch
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -45,13 +43,14 @@ BuildRequires:  python-wheel
 %endif
 %if 0%{?with_python3}
 BuildRequires:  python3-devel
+BuildRequires:  python3-pytest
 %if 0%{?build_wheel}
 BuildRequires:  python3-pip
 BuildRequires:  python3-wheel
 %endif
 %endif # if with_python3
 # For unittests
-BuildRequires: subversion
+BuildRequires: subversion pytest
 
 # We're now back to setuptools as the package.
 # Keep the python-distribute name active for a few releases.  Eventually we'll
@@ -88,7 +87,6 @@ execute the software that requires pkg_resources.py.
 
 %prep
 %setup -q -n %{srcname}-%{version}
-%patch0 -p1
 
 find -name '*.txt' -exec chmod -x \{\} \;
 find . -name '*.orig' -exec rm \{\} \;
@@ -172,10 +170,14 @@ find %{buildroot}%{python_sitelib} -name '*.exe' | xargs rm -f
 chmod +x %{buildroot}%{python_sitelib}/setuptools/command/easy_install.py
 
 %check
+export LANG=en_GB.utf8
+export LC_ALL=en_GB.utf8
 %{__python} setup.py test
 
 %if 0%{?with_python3}
 pushd %{py3dir}
+export LANG=en_GB.utf8
+export LC_ALL=en_GB.utf8
 %{__python3} setup.py test
 popd
 %endif # with_python3
@@ -200,6 +202,12 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Fri Oct 03 2014 Kevin Fenzi <kevin@scrye.com> 6.0.2-1
+- Update to 6.0.2
+
+* Sat Sep 27 2014 Kevin Fenzi <kevin@scrye.com> 6.0.1-1
+- Update to 6.0.1. Fixes bug #1044444
+
 * Mon Jun 30 2014 Toshio Kuratomi <toshio@fedoraproject.org> - 2.0-8
 - Remove the python-setuptools-devel Virtual Provides as per this Fedora 21
   Change: http://fedoraproject.org/wiki/Changes/Remove_Python-setuptools-devel
