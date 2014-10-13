@@ -19,8 +19,8 @@
 %endif
 
 Name:           python-setuptools
-Version:        6.0.2
-Release:        2%{?dist}
+Version:        6.1
+Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -204,6 +204,9 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Mon Oct 13 2014 Ralph Bean <rbean@redhat.com> - 6.1-1
+- Latest upstream.  Fixes bug #1152130.
+
 * Sat Oct 11 2014 Ralph Bean <rbean@redhat.com> - 6.0.2-2
 - Modernized python2 macros.
 - Inlined locale environment variables in the %%check section.
