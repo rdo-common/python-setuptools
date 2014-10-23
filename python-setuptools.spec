@@ -19,7 +19,7 @@
 %endif
 
 Name:           python-setuptools
-Version:        6.1
+Version:        7.0
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -204,6 +204,9 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Thu Oct 23 2014 Ralph Bean <rbean@redhat.com> - 7.0-1
+- Latest upstream.  Fixes bug #1154590.
+
 * Mon Oct 13 2014 Ralph Bean <rbean@redhat.com> - 6.1-1
 - Latest upstream.  Fixes bug #1152130.
 
