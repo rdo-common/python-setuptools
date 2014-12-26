@@ -19,7 +19,7 @@
 %endif
 
 Name:           python-setuptools
-Version:        7.0
+Version:        8.2.1
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -204,6 +204,9 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Fri Dec 26 2014 Kevin Fenzi <kevin@scrye.com> 8.2.1-1
+- Update to 8.2.1. Fixes bug #1175229
+
 * Thu Oct 23 2014 Ralph Bean <rbean@redhat.com> - 7.0-1
 - Latest upstream.  Fixes bug #1154590.
 
