@@ -19,7 +19,7 @@
 %endif
 
 Name:           python-setuptools
-Version:        8.2.1
+Version:        11.0
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -44,13 +44,14 @@ BuildRequires:  python-wheel
 %if 0%{?with_python3}
 BuildRequires:  python3-devel
 BuildRequires:  python3-pytest
+BuildRequires:  python3-mock
 %if 0%{?build_wheel}
 BuildRequires:  python3-pip
 BuildRequires:  python3-wheel
 %endif
 %endif # if with_python3
 # For unittests
-BuildRequires: subversion pytest
+BuildRequires: subversion pytest python-mock
 
 # We're now back to setuptools as the package.
 # Keep the python-distribute name active for a few releases.  Eventually we'll
@@ -204,6 +205,9 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Sun Jan 04 2015 Kevin Fenzi <kevin@scrye.com> 11.0-1
+- Update to 11.0. Fixes bug #1178421
+
 * Fri Dec 26 2014 Kevin Fenzi <kevin@scrye.com> 8.2.1-1
 - Update to 8.2.1. Fixes bug #1175229
 
