@@ -19,7 +19,7 @@
 %endif
 
 Name:           python-setuptools
-Version:        11.0
+Version:        11.3.1
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -205,6 +205,9 @@ rm -rf %{buildroot}
 %endif # with_python3
 
 %changelog
+* Wed Jan 07 2015 Kevin Fenzi <kevin@scrye.com> 11.3.1-1
+- Update to 11.3.1. Fixes bugs: #1179393 and #1178817
+
 * Sun Jan 04 2015 Kevin Fenzi <kevin@scrye.com> 11.0-1
 - Update to 11.0. Fixes bug #1178421
 
