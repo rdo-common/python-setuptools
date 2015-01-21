@@ -26,8 +26,8 @@
 %endif
 
 Name:           python-setuptools
-Version:        11.3.1
-Release:        2%{?dist}
+Version:        12.0.3
+Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -36,8 +36,6 @@ URL:            http://pypi.python.org/pypi/%{srcname}
 Source0:        http://pypi.python.org/packages/source/s/%{srcname}/%{srcname}-%{version}.tar.gz
 Source1:        psfl.txt
 Source2:        zpl.txt
-# https://bitbucket.org/pypa/setuptools/pull-request/116
-Patch0:         setuptools-fix-pytest-contexts.patch
 
 BuildArch:      noarch
 # Require this so that we use a system copy of the match_hostname() function
@@ -99,8 +97,6 @@ execute the software that requires pkg_resources.py.
 
 %prep
 %setup -q -n %{srcname}-%{version}
-
-%patch0 -p1
 
 # We can't remove .egg-info (but it doesn't matter, since it'll be rebuilt):
 #  The problem is that to properly execute setuptools' setup.py,
@@ -210,6 +206,9 @@ popd
 %endif # with_python3
 
 %changelog
+* Tue Jan 20 2015 Kevin Fenzi <kevin@scrye.com> 12.0.3-1
+- Update to 12.0.3
+
 * Fri Jan 09 2015 Slavek Kabrda <bkabrda@redhat.com> - 11.3.1-2
 - Huge spec cleanup
 - Make spec buildable on all Fedoras and RHEL 6 and 7
