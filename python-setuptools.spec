@@ -26,7 +26,7 @@
 %endif
 
 Name:           python-setuptools
-Version:        14.3
+Version:        14.3.1
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -206,6 +206,9 @@ popd
 %endif # with_python3
 
 %changelog
+* Sat Mar 21 2015 Ralph Bean <rbean@redhat.com> - 14.3.1-1
+- new version
+
 * Mon Mar 16 2015 Ralph Bean <rbean@redhat.com> - 14.3-1
 - new version
 
