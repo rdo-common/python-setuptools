@@ -206,6 +206,9 @@ popd
 %endif # with_python3
 
 %changelog
+* Sun Mar 22 2015 Ralph Bean <rbean@redhat.com> - 14.3.1-1
+- new version
+
 * Sat Mar 21 2015 Ralph Bean <rbean@redhat.com> - 14.3.1-1
 - new version
 
