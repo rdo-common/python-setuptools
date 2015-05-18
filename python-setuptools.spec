@@ -26,14 +26,14 @@
 %endif
 
 Name:           python-setuptools
-Version:        15.2
+Version:        16.0
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
 License:        Python or ZPLv2.0
-URL:            http://pypi.python.org/pypi/%{srcname}
-Source0:        http://pypi.python.org/packages/source/s/%{srcname}/%{srcname}-%{version}.tar.gz
+URL:            https://pypi.python.org/pypi/%{srcname}
+Source0:        https://pypi.python.org/packages/source/s/%{srcname}/%{srcname}-%{version}.tar.gz
 Source1:        psfl.txt
 Source2:        zpl.txt
 
@@ -206,6 +206,9 @@ popd
 %endif # with_python3
 
 %changelog
+* Mon May 18 2015 Kevin Fenzi <kevin@scrye.com> 16.0-1
+- Update to 16
+
 * Mon Apr 27 2015 Ralph Bean <rbean@redhat.com> - 15.2-1
 - new version
 
