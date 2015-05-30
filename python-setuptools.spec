@@ -26,7 +26,7 @@
 %endif
 
 Name:           python-setuptools
-Version:        16.0
+Version:        17.0
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -206,6 +206,9 @@ popd
 %endif # with_python3
 
 %changelog
+* Sat May 30 2015 Kevin Fenzi <kevin@scrye.com> 17.0-1
+- Update to 17
+
 * Mon May 18 2015 Kevin Fenzi <kevin@scrye.com> 16.0-1
 - Update to 16
 
