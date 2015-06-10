@@ -26,7 +26,7 @@
 %endif
 
 Name:           python-setuptools
-Version:        17.1
+Version:        17.1.1
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -206,6 +206,9 @@ popd
 %endif # with_python3
 
 %changelog
+* Wed Jun 10 2015 Kevin Fenzi <kevin@scrye.com> 17.1.1-1
+- Update to 17.1.1. Fixes bug 1229507
+
 * Sun Jun 07 2015 Kevin Fenzi <kevin@scrye.com> 17.1-1
 - Update to 17.1. Fixes bug 1229066
 
