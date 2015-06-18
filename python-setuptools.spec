@@ -27,7 +27,7 @@
 
 Name:           python-setuptools
 Version:        17.1.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -206,6 +206,9 @@ popd
 %endif # with_python3
 
 %changelog
+* Thu Jun 18 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 17.1.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
+
 * Wed Jun 10 2015 Kevin Fenzi <kevin@scrye.com> 17.1.1-1
 - Update to 17.1.1. Fixes bug 1229507
 
