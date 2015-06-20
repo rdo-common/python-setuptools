@@ -27,7 +27,7 @@
 
 Name:           python-setuptools
 Version:        17.1.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -38,9 +38,6 @@ Source1:        psfl.txt
 Source2:        zpl.txt
 
 BuildArch:      noarch
-# Require this so that we use a system copy of the match_hostname() function
-Requires:       python-backports-ssl_match_hostname
-BuildRequires:  python-backports-ssl_match_hostname
 BuildRequires:  python2-devel
 %if 0%{?build_wheel}
 BuildRequires:  python-pip
@@ -206,6 +203,10 @@ popd
 %endif # with_python3
 
 %changelog
+* Sat Jun 20 2015 Kevin Fenzi <kevin@scrye.com> 17.1.1-3
+- Drop no longer needed Requires/BuildRequires on python-backports-ssl_match_hostname
+- Fixes bug #1231325
+
 * Thu Jun 18 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 17.1.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
 
