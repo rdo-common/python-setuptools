@@ -26,8 +26,8 @@
 %endif
 
 Name:           python-setuptools
-Version:        17.1.1
-Release:        3%{?dist}
+Version:        18.0.1
+Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -203,6 +203,9 @@ popd
 %endif # with_python3
 
 %changelog
+* Thu Jun 25 2015 Kevin Fenzi <kevin@scrye.com> 18.0.1-1
+- Update to 18.0.1
+
 * Sat Jun 20 2015 Kevin Fenzi <kevin@scrye.com> 17.1.1-3
 - Drop no longer needed Requires/BuildRequires on python-backports-ssl_match_hostname
 - Fixes bug #1231325
