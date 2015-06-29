@@ -27,7 +27,7 @@
 
 Name:           python-setuptools
 Version:        18.0.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -64,6 +64,10 @@ BuildRequires:  python3-wheel
 # want to get rid of the Provides and just keep the Obsoletes
 Provides: python-distribute = %{version}-%{release}
 Obsoletes: python-distribute < 0.6.36-2
+
+# Declare that we provide the py2 version of setuptools
+Provides:  python2-setuptools
+
 
 %description
 Setuptools is a collection of enhancements to the Python distutils that allow
@@ -203,6 +207,9 @@ popd
 %endif # with_python3
 
 %changelog
+* Mon Jun 29 2015 Pierre-Yves Chibon <pingou@pingoured.fr> - 18.0.1-2
+- Explicitely provide python2-setuptools
+
 * Thu Jun 25 2015 Kevin Fenzi <kevin@scrye.com> 18.0.1-1
 - Update to 18.0.1
 
