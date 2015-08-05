@@ -26,8 +26,8 @@
 %endif
 
 Name:           python-setuptools
-Version:        18.0.1
-Release:        2%{?dist}
+Version:        18.1
+Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -207,6 +207,9 @@ popd
 %endif # with_python3
 
 %changelog
+* Wed Aug 05 2015 Kevin Fenzi <kevin@scrye.com> 18.1-1
+- Update to 18.1. Fixes bug #1249436
+
 * Mon Jun 29 2015 Pierre-Yves Chibon <pingou@pingoured.fr> - 18.0.1-2
 - Explicitely provide python2-setuptools
 
