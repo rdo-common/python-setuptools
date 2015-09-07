@@ -26,7 +26,7 @@
 %endif
 
 Name:           python-setuptools
-Version:        18.1
+Version:        18.3.1
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -207,6 +207,9 @@ popd
 %endif # with_python3
 
 %changelog
+* Mon Sep 07 2015 Kevin Fenzi <kevin@scrye.com> 18.3.1-1
+- Update to 18.3.1. Fixes bug #1256188
+
 * Wed Aug 05 2015 Kevin Fenzi <kevin@scrye.com> 18.1-1
 - Update to 18.1. Fixes bug #1249436
 
