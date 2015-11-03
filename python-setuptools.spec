@@ -26,7 +26,7 @@
 %endif
 
 Name:           python-setuptools
-Version:        18.4
+Version:        18.5
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -207,6 +207,9 @@ popd
 %endif # with_python3
 
 %changelog
+* Tue Nov 03 2015 Robert Kuska <rkuska@redhat.com> - 18.5-1
+- Update to 18.5. Fixes bug #1270578
+
 * Tue Oct 13 2015 Robert Kuska <rkuska@redhat.coM> - 18.4-1
 - Update to 18.4. Fixes bug #1270578
 - Build with wheel and check phase
