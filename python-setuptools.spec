@@ -100,6 +100,7 @@ execute the software that requires pkg_resources.py.
 
 %prep
 %setup -q -n %{srcname}-%{version}
+%patch1 -p1
 
 # We can't remove .egg-info (but it doesn't matter, since it'll be rebuilt):
 #  The problem is that to properly execute setuptools' setup.py,
