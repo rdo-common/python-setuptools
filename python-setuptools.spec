@@ -27,7 +27,7 @@
 
 Name:           python-setuptools
 Version:        18.5
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -36,6 +36,8 @@ URL:            https://pypi.python.org/pypi/%{srcname}
 Source0:        https://pypi.python.org/packages/source/s/%{srcname}/%{srcname}-%{version}.tar.gz
 Source1:        psfl.txt
 Source2:        zpl.txt
+# add-setter-for-test_args.patch
+Patch1:         add-setter-for-test_args.patch
 
 BuildArch:      noarch
 BuildRequires:  python2-devel
@@ -207,6 +209,9 @@ popd
 %endif # with_python3
 
 %changelog
+* Fri Nov 06 2015 Robert Kuska <rkuska@redhat.com> - 18.5-2
+- Add patch so it is possible to set test_args variable
+
 * Tue Nov 03 2015 Robert Kuska <rkuska@redhat.com> - 18.5-1
 - Update to 18.5. Fixes bug #1270578
 
