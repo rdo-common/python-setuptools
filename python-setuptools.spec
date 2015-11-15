@@ -27,7 +27,7 @@
 
 Name:           python-setuptools
 Version:        18.5
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -38,6 +38,7 @@ Source1:        psfl.txt
 Source2:        zpl.txt
 # add-setter-for-test_args.patch
 Patch1:         add-setter-for-test_args.patch
+Patch2:         setuptools-18.5-disable-zip-safe.patch
 
 BuildArch:      noarch
 BuildRequires:  python2-devel
@@ -101,6 +102,7 @@ execute the software that requires pkg_resources.py.
 %prep
 %setup -q -n %{srcname}-%{version}
 %patch1 -p1
+%patch2
 
 # We can't remove .egg-info (but it doesn't matter, since it'll be rebuilt):
 #  The problem is that to properly execute setuptools' setup.py,
@@ -210,6 +212,9 @@ popd
 %endif # with_python3
 
 %changelog
+* Sun Nov 15 2015 Thomas Spura <tomspur@fedoraproject.org> - 18.5-3
+- Try to disable zip_safe bug #1271776
+
 * Fri Nov 06 2015 Robert Kuska <rkuska@redhat.com> - 18.5-2
 - Add patch so it is possible to set test_args variable
 
