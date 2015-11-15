@@ -68,11 +68,19 @@ BuildRequires:  python3-wheel
 Provides: python-distribute = %{version}-%{release}
 Obsoletes: python-distribute < 0.6.36-2
 
-# Declare that we provide the py2 version of setuptools
-Provides:  python2-setuptools
-
 
 %description
+Setuptools is a collection of enhancements to the Python distutils that allow
+you to more easily build and distribute Python packages, especially ones that
+have dependencies on other packages.
+
+This package also contains the runtime components of setuptools, necessary to
+execute the software that requires pkg_resources.py.
+
+%package -n python2-setuptools
+Summary:        Easily build and distribute Python packages
+%{?python_provide:%python_provide python2-setuptools}
+%description -n python2-setuptools
 Setuptools is a collection of enhancements to the Python distutils that allow
 you to more easily build and distribute Python packages, especially ones that
 have dependencies on other packages.
@@ -84,6 +92,7 @@ execute the software that requires pkg_resources.py.
 %package -n python3-setuptools
 Summary:        Easily build and distribute Python 3 packages
 Group:          Applications/System
+%{?python_provide:%python_provide python3-setuptools}
 
 # Note: Do not need to Require python3-backports-ssl_match_hostname because it
 # has been present since python3-3.2.  We do not ship python3-3.0 or
@@ -214,6 +223,7 @@ popd
 %changelog
 * Sun Nov 15 2015 Thomas Spura <tomspur@fedoraproject.org> - 18.5-3
 - Try to disable zip_safe bug #1271776
+- Add python2 subpackage
 
 * Fri Nov 06 2015 Robert Kuska <rkuska@redhat.com> - 18.5-2
 - Add patch so it is possible to set test_args variable
