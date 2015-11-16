@@ -207,7 +207,7 @@ popd
 %endif # with_python3
 %endif # with_check
 
-%files
+%files -n python2-setuptools
 %doc *.txt docs
 %{python2_sitelib}/*
 %{_bindir}/easy_install
