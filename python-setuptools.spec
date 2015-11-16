@@ -38,6 +38,7 @@ Source1:        psfl.txt
 Source2:        zpl.txt
 # add-setter-for-test_args.patch
 Patch1:         add-setter-for-test_args.patch
+# WIP patch for #1271776
 Patch2:         setuptools-18.5-disable-zip-safe.patch
 
 BuildArch:      noarch
@@ -111,7 +112,6 @@ execute the software that requires pkg_resources.py.
 %prep
 %setup -q -n %{srcname}-%{version}
 %patch1 -p1
-%patch2
 
 # We can't remove .egg-info (but it doesn't matter, since it'll be rebuilt):
 #  The problem is that to properly execute setuptools' setup.py,
