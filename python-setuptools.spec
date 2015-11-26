@@ -26,8 +26,8 @@
 %endif
 
 Name:           python-setuptools
-Version:        18.5
-Release:        3%{?dist}
+Version:        18.6.1
+Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -221,6 +221,9 @@ popd
 %endif # with_python3
 
 %changelog
+* Wed Nov 25 2015 Kevin Fenzi <kevin@scrye.com> - 18.6.1-1
+- Update to 18.6.1. Fixes bug #1270578
+
 * Sun Nov 15 2015 Thomas Spura <tomspur@fedoraproject.org> - 18.5-3
 - Try to disable zip_safe bug #1271776
 - Add python2 subpackage
