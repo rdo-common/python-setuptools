@@ -26,7 +26,7 @@
 %endif
 
 Name:           python-setuptools
-Version:        18.6.1
+Version:        18.7.1
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -36,8 +36,6 @@ URL:            https://pypi.python.org/pypi/%{srcname}
 Source0:        https://pypi.python.org/packages/source/s/%{srcname}/%{srcname}-%{version}.tar.gz
 Source1:        psfl.txt
 Source2:        zpl.txt
-# add-setter-for-test_args.patch
-Patch1:         add-setter-for-test_args.patch
 # WIP patch for #1271776
 Patch2:         setuptools-18.5-disable-zip-safe.patch
 
@@ -111,7 +109,6 @@ execute the software that requires pkg_resources.py.
 
 %prep
 %setup -q -n %{srcname}-%{version}
-%patch1 -p1
 
 # We can't remove .egg-info (but it doesn't matter, since it'll be rebuilt):
 #  The problem is that to properly execute setuptools' setup.py,
@@ -221,6 +218,9 @@ popd
 %endif # with_python3
 
 %changelog
+* Fri Dec 04 2015 Kevin Fenzi <kevin@scrye.com> - 18.7.1-1
+- Update to 18.7.1. Fixes bug #1287372
+
 * Wed Nov 25 2015 Kevin Fenzi <kevin@scrye.com> - 18.6.1-1
 - Update to 18.6.1. Fixes bug #1270578
 
