@@ -1,15 +1,18 @@
-%if 0%{?fedora}
-%global with_python3 1
+# Dependencies for check and wheel introduce circular dependencies
+# Set this to 0 after we've bootstrapped.
+%{!?_with_bootstrap: %global bootstrap 0}
+
+%if ! 0%{?bootstrap}
 %global with_check 1
-
-# This controls whether setuptools is build as a wheel or not,
-# simplifying Python 3.4 bootstraping process
-%if %{fedora} > 20
 %global build_wheel 1
-%endif
-
 %else
 %global with_check 0
+%global build_wheel 0
+%endif
+
+%if 0%{?fedora}
+%global with_python3 1
+%else
 # define some macros for RHEL 6
 %global __python2 %__python
 %global python2_sitelib %python_sitelib
@@ -27,17 +30,20 @@
 
 Name:           python-setuptools
 Version:        19.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
-License:        Python or ZPLv2.0
+# LIcensing is in flux, see https://bitbucket.org/pypa/setuptools/issues/132/missing-license
+License:        (Python or ZPLv2.0) and ASL 2.0
 URL:            https://pypi.python.org/pypi/%{srcname}
 Source0:        https://pypi.python.org/packages/source/s/%{srcname}/%{srcname}-%{version}.tar.gz
-Source1:        psfl.txt
-Source2:        zpl.txt
-# WIP patch for #1271776
-Patch2:         setuptools-18.5-disable-zip-safe.patch
+# PSFL
+Source1:        https://hg.python.org/cpython/raw-file/tip/LICENSE
+# ZPL
+Source2:        https://raw.githubusercontent.com/zopefoundation/Zope/master/LICENSE.txt
+# ASL 2.0
+Source3:        http://www.apache.org/licenses/LICENSE-2.0
 
 BuildArch:      noarch
 BuildRequires:  python2-devel
@@ -46,7 +52,8 @@ BuildRequires:  python-pip
 BuildRequires:  python-wheel
 %endif
 %if 0%{?with_check}
-BuildRequires:  pytest python-mock
+BuildRequires:  pytest
+BuildRequires:  python-mock
 %endif # with_check
 
 %if 0%{?with_python3}
@@ -122,15 +129,12 @@ execute the software that requires pkg_resources.py.
 # Note: this is only a problem if bootstrapping wheel or building on RHEL,
 #  otherwise setuptools are installed as dependency into buildroot
 
+# Strip shbang
+find setuptools -name \*.py | xargs sed -i -e '1 {/^#!\//d}'
 # Remove bundled exes
 rm -f setuptools/*.exe
 # These tests require internet connection
 rm setuptools/tests/test_integration.py 
-
-%if 0%{?with_python3}
-rm -rf %{py3dir}
-cp -a . %{py3dir}
-%endif # with_python3
 
 %build
 %if 0%{?build_wheel}
@@ -140,13 +144,11 @@ cp -a . %{py3dir}
 %endif
 
 %if 0%{?with_python3}
-pushd %{py3dir}
 %if 0%{?build_wheel}
 %{__python3} setup.py bdist_wheel
 %else
 %{__python3} setup.py build
 %endif
-popd
 %endif # with_python3
 
 %install
@@ -154,7 +156,6 @@ popd
 # overwritten with every setup.py install (and we want the python2 version
 # to be the default for now).
 %if 0%{?with_python3}
-pushd %{py3dir}
 %if 0%{?build_wheel}
 pip3 install -I dist/%{python3_wheelname} --root %{buildroot} --strip-file-prefix %{buildroot}
 
@@ -172,10 +173,7 @@ rm -rf %{buildroot}%{python3_sitelib}/setuptools/tests
 sed -i '/^setuptools\/tests\//d' %{buildroot}%{python3_record}
 %endif
 
-install -p -m 0644 %{SOURCE1} %{SOURCE2} %{py3dir}
 find %{buildroot}%{python3_sitelib} -name '*.exe' | xargs rm -f
-chmod +x %{buildroot}%{python3_sitelib}/setuptools/command/easy_install.py
-popd
 %endif # with_python3
 
 %if 0%{?build_wheel}
@@ -189,35 +187,42 @@ rm -rf %{buildroot}%{python2_sitelib}/setuptools/tests
 sed -i '/^setuptools\/tests\//d' %{buildroot}%{python2_record}
 %endif
 
-install -p -m 0644 %{SOURCE1} %{SOURCE2} .
+install -p -m 0644 %{SOURCE1} psfl.txt
+install -p -m 0644 %{SOURCE2} zpl.txt
+install -p -m 0644 %{SOURCE3} asl.txt
 find %{buildroot}%{python2_sitelib} -name '*.exe' | xargs rm -f
-chmod +x %{buildroot}%{python2_sitelib}/setuptools/command/easy_install.py
+
+# Don't ship these
+rm -r docs/{Makefile,conf.py,_*}
 
 %if 0%{?with_check}
 %check
 LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test
 
 %if 0%{?with_python3}
-pushd %{py3dir}
 LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
-popd
 %endif # with_python3
 %endif # with_check
 
 %files -n python2-setuptools
-%doc *.txt docs
+%license psfl.txt zpl.txt asl.txt
+%doc docs/*
 %{python2_sitelib}/*
 %{_bindir}/easy_install
 %{_bindir}/easy_install-2.*
 
 %if 0%{?with_python3}
 %files -n python3-setuptools
-%doc psfl.txt zpl.txt docs
+%license psfl.txt zpl.txt asl.txt
+%doc docs/*
 %{python3_sitelib}/*
 %{_bindir}/easy_install-3.*
 %endif # with_python3
 
 %changelog
+* Tue Jan 12 2016 Orion Poplawski <orion@cora.nwra.com> - 19.2-2
+- Cleanup spec from python3-setuptools review
+
 * Fri Jan 08 2016 Kevin Fenzi <kevin@scrye.com> - 19.2-1
 - Update to 19.2. Fixes bug #1296755
 
