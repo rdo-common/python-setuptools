@@ -29,8 +29,8 @@
 %endif
 
 Name:           python-setuptools
-Version:        19.2
-Release:        2%{?dist}
+Version:        19.4
+Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -220,6 +220,9 @@ LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
 %endif # with_python3
 
 %changelog
+* Mon Jan 18 2016 Kevin Fenzi <kevin@scrye.com> - 19.4-1
+- Update to 19.4. Fixes bug #1299288
+
 * Tue Jan 12 2016 Orion Poplawski <orion@cora.nwra.com> - 19.2-2
 - Cleanup spec from python3-setuptools review
 
