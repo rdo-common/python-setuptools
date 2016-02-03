@@ -30,7 +30,7 @@
 
 Name:           python-setuptools
 Version:        19.6.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -215,11 +215,18 @@ LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
 %files -n python3-setuptools
 %license psfl.txt zpl.txt asl.txt
 %doc docs/*
-%{python3_sitelib}/*
+%{python3_sitelib}/easy_install.py
+%{python3_sitelib}/_markerlib/
+%{python3_sitelib}/pkg_resources/
+%{python3_sitelib}/setuptools*/
+%{python3_sitelib}/__pycache__/*
 %{_bindir}/easy_install-3.*
 %endif # with_python3
 
 %changelog
+* Wed Feb 3 2016 Orion Poplawski <orion@cora.nwra.com> - 19.6.2-2
+- Fix python3 package file ownership
+
 * Sun Jan 31 2016 Kevin Fenzi <kevin@scrye.com> - 19.6.2-1
 - Update to 19.6.2. Fixes bug #1303397
 
