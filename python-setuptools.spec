@@ -29,8 +29,8 @@
 %endif
 
 Name:           python-setuptools
-Version:        19.6.2
-Release:        2%{?dist}
+Version:        19.7
+Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -224,6 +224,9 @@ LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
 %endif # with_python3
 
 %changelog
+* Sat Feb 06 2016 Kevin Fenzi <kevin@scrye.com> - 19.7-1
+- Update to 19.7. Fixes bug #1304563
+
 * Wed Feb 3 2016 Orion Poplawski <orion@cora.nwra.com> - 19.6.2-2
 - Fix python3 package file ownership
 
