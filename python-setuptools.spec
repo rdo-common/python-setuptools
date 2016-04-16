@@ -29,7 +29,7 @@
 %endif
 
 Name:           python-setuptools
-Version:        20.8.1
+Version:        20.9.0
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -223,6 +223,9 @@ LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
 %endif # with_python3
 
 %changelog
+* Sat Apr 16 2016 Kevin Fenzi <kevin@scrye.com> - 20.9.0-1
+- Update to 20.9.0. Fixes bug #1327827
+
 * Fri Apr 15 2016 Kevin Fenzi <kevin@scrye.com> - 20.8.1-1
 - Update to 20.8.1. Fixes bug #1325910
 
