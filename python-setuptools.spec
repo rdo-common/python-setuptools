@@ -37,7 +37,7 @@ Group:          Applications/System
 # LIcensing is in flux, see https://bitbucket.org/pypa/setuptools/issues/132/missing-license
 License:        (Python or ZPLv2.0) and ASL 2.0
 URL:            https://pypi.python.org/pypi/%{srcname}
-Source0:        https://pypi.python.org/packages/source/s/%{srcname}/%{srcname}-%{version}.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/s/%{srcname}/%{srcname}-%{version}.tar.gz
 # PSFL
 Source1:        https://hg.python.org/cpython/raw-file/tip/LICENSE
 # ZPL
@@ -223,6 +223,9 @@ LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
 %endif # with_python3
 
 %changelog
+* Tue May 31 2016 Nils Philippsen <nils@redhat.com>
+- fix source URL
+
 * Sun May 29 2016 Kevin Fenzi <kevin@scrye.com> - 21.2.2-1
 - Update to 21.2.2. Fixes bug #1332357
 
