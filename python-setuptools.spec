@@ -29,7 +29,7 @@
 %endif
 
 Name:           python-setuptools
-Version:        21.2.2
+Version:        22.0.0
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -223,6 +223,9 @@ LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
 %endif # with_python3
 
 %changelog
+* Thu Jun 02 2016 Kevin Fenzi <kevin@scrye.com> - 20.0.0-1
+- Upgrade to 22.0.0
+
 * Tue May 31 2016 Nils Philippsen <nils@redhat.com>
 - fix source URL
 
