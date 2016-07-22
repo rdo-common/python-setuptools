@@ -29,8 +29,8 @@
 %endif
 
 Name:           python-setuptools
-Version:        24.0.1
-Release:        2%{?dist}
+Version:        24.2.0
+Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -223,6 +223,9 @@ LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
 %endif # with_python3
 
 %changelog
+* Fri Jul 22 2016 Kevin Fenzi <kevin@scrye.com> - 24.2.0-1
+- Update to 24.2.0. Fixes bug #1352734
+
 * Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 24.0.1-2
 - https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages
 
