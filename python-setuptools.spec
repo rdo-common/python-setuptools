@@ -29,7 +29,7 @@
 %endif
 
 Name:           python-setuptools
-Version:        28.3.0
+Version:        28.6.0
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -44,6 +44,9 @@ Source1:        https://hg.python.org/cpython/raw-file/tip/LICENSE
 Source2:        https://raw.githubusercontent.com/zopefoundation/Zope/master/LICENSE.txt
 # ASL 2.0
 Source3:        http://www.apache.org/licenses/LICENSE-2.0
+# Already upsteamed
+# https://github.com/pypa/setuptools/issues/816
+Patch0:         https://github.com/timheap/setuptools/commit/d7523602f9fd7d81b19a6526221875fcb5a258eb.patch
 
 BuildArch:      noarch
 BuildRequires:  python2-devel
@@ -136,6 +139,8 @@ rm -f setuptools/*.exe
 # These tests require internet connection
 rm setuptools/tests/test_integration.py 
 
+%patch0 -p1
+
 %build
 %if 0%{?build_wheel}
 %{__python} setup.py bdist_wheel
@@ -223,6 +228,9 @@ LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
 %endif # with_python3
 
 %changelog
+* Tue Oct 18 2016 Kevin Fenzi <kevin@scrye.com> - 28.6.0-1
+- Update to 28.6.0. Fixes bug #1385655
+
 * Sat Oct 08 2016 Kevin Fenzi <kevin@scrye.com> - 28.3.0-1
 - Update to 28.3.0. Fixes bug #1382971
 
