@@ -1,6 +1,6 @@
 # Dependencies for check and wheel introduce circular dependencies
 # Set this to 0 after we've bootstrapped.
-%{!?_with_bootstrap: %global bootstrap 0}
+%{!?_with_bootstrap: %global bootstrap 1}
 
 %if ! 0%{?bootstrap}
 %global with_check 1
@@ -30,7 +30,7 @@
 
 Name:           python-setuptools
 Version:        28.8.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -223,6 +223,9 @@ LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
 %endif # with_python3
 
 %changelog
+* Fri Dec 09 2016 Charalampos Stratakis <cstratak@redhat.com> - 28.8.0-2
+- Rebuild for Python 3.6 without wheel
+
 * Wed Nov 09 2016 Kevin Fenzi <kevin@scrye.com> - 28.8.0-1
 - Update to 28.8.1. Fixes bug #1392722
 
