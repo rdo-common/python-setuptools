@@ -1,9 +1,9 @@
 # Dependencies for check and wheel introduce circular dependencies
 # Set this to 0 after we've bootstrapped.
-%{!?_with_bootstrap: %global bootstrap 1}
+%{!?_with_bootstrap: %global bootstrap 0}
 
 %if ! 0%{?bootstrap}
-%global with_check 1
+%global with_check 0
 %global build_wheel 1
 %else
 %global with_check 0
@@ -30,7 +30,7 @@
 
 Name:           python-setuptools
 Version:        28.8.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -223,6 +223,10 @@ LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
 %endif # with_python3
 
 %changelog
+* Fri Dec 09 2016 Charalampos Stratakis <cstratak@redhat.com> - 28.8.0-3
+- Rebuild for Python 3.6 with wheel
+- Disable tests
+
 * Fri Dec 09 2016 Charalampos Stratakis <cstratak@redhat.com> - 28.8.0-2
 - Rebuild for Python 3.6 without wheel
 
