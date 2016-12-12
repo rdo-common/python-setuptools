@@ -29,8 +29,8 @@
 %endif
 
 Name:           python-setuptools
-Version:        28.8.0
-Release:        3%{?dist}
+Version:        30.4.0
+Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -223,6 +223,9 @@ LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
 %endif # with_python3
 
 %changelog
+* Sun Dec 11 2016 Kevin Fenzi <kevin@scrye.com> - 30.4.0-1
+- Update to 30.4.0. Fixes bug #1400310
+
 * Fri Dec 09 2016 Charalampos Stratakis <cstratak@redhat.com> - 28.8.0-3
 - Rebuild for Python 3.6 with wheel
 - Disable tests
