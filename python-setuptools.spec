@@ -3,7 +3,7 @@
 %{!?_with_bootstrap: %global bootstrap 0}
 
 %if ! 0%{?bootstrap}
-%global with_check 0
+%global with_check 1
 %global build_wheel 1
 %else
 %global with_check 0
@@ -30,7 +30,7 @@
 
 Name:           python-setuptools
 Version:        30.4.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -223,6 +223,9 @@ LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
 %endif # with_python3
 
 %changelog
+* Tue Dec 13 2016 Stratakis Charalampos <cstratak@redhat.com> - 30.4.0-2
+- Enable tests
+
 * Sun Dec 11 2016 Kevin Fenzi <kevin@scrye.com> - 30.4.0-1
 - Update to 30.4.0. Fixes bug #1400310
 
