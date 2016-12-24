@@ -29,15 +29,15 @@
 %endif
 
 Name:           python-setuptools
-Version:        30.4.0
-Release:        2%{?dist}
+Version:        32.2.0
+Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
 # LIcensing is in flux, see https://bitbucket.org/pypa/setuptools/issues/132/missing-license
 License:        (Python or ZPLv2.0) and ASL 2.0
 URL:            https://pypi.python.org/pypi/%{srcname}
-Source0:        https://files.pythonhosted.org/packages/source/s/%{srcname}/%{srcname}-%{version}.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/s/%{srcname}/%{srcname}-%{version}.zip
 # PSFL
 Source1:        https://hg.python.org/cpython/raw-file/tip/LICENSE
 # ZPL
@@ -223,6 +223,9 @@ LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
 %endif # with_python3
 
 %changelog
+* Fri Dec 23 2016 Kevin Fenzi <kevin@scrye.com> - 32.2.0-1
+- Update to 32.2.0. Fixes bug #1400310
+
 * Tue Dec 13 2016 Stratakis Charalampos <cstratak@redhat.com> - 30.4.0-2
 - Enable tests
 
