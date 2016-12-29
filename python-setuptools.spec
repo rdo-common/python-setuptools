@@ -29,7 +29,7 @@
 %endif
 
 Name:           python-setuptools
-Version:        32.3.0
+Version:        32.3.1
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -223,6 +223,9 @@ LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
 %endif # with_python3
 
 %changelog
+* Thu Dec 29 2016 Kevin Fenzi <kevin@scrye.com> - 32.3.1-1
+- Update to 32.3.1. Fixes bug #1409091
+
 * Wed Dec 28 2016 Kevin Fenzi <kevin@scrye.com> - 32.3.0-1
 - Update to 32.3.0. Fixes bug #1408564
 
