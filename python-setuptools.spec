@@ -30,7 +30,7 @@
 
 Name:           python-setuptools
 Version:        32.3.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -138,16 +138,16 @@ rm setuptools/tests/test_integration.py
 
 %build
 %if 0%{?build_wheel}
-%{__python} setup.py bdist_wheel
+%py2_build_wheel
 %else
-%{__python} setup.py build
+%py2_build
 %endif
 
 %if 0%{?with_python3}
 %if 0%{?build_wheel}
-%{__python3} setup.py bdist_wheel
+%py3_build_wheel
 %else
-%{__python3} setup.py build
+%py3_build
 %endif
 %endif # with_python3
 
@@ -157,7 +157,7 @@ rm setuptools/tests/test_integration.py
 # to be the default for now).
 %if 0%{?with_python3}
 %if 0%{?build_wheel}
-pip3 install -I dist/%{python3_wheelname} --root %{buildroot} --strip-file-prefix %{buildroot}
+%py3_install_wheel %{python3_wheelname}
 
 # TODO: we have to remove this by hand now, but it'd be nice if we wouldn't have to
 # (pip install wheel doesn't overwrite)
@@ -165,7 +165,7 @@ rm %{buildroot}%{_bindir}/easy_install
 
 sed -i '/\/usr\/bin\/easy_install,/d' %{buildroot}%{python3_record}
 %else
-%{__python3} setup.py install --skip-build --root %{buildroot}
+%py3_install
 %endif
 
 rm -rf %{buildroot}%{python3_sitelib}/setuptools/tests
@@ -177,9 +177,9 @@ find %{buildroot}%{python3_sitelib} -name '*.exe' | xargs rm -f
 %endif # with_python3
 
 %if 0%{?build_wheel}
-pip2 install -I dist/%{python2_wheelname} --root %{buildroot} --strip-file-prefix %{buildroot}
+%py2_install_wheel %{python2_wheelname}
 %else
-%{__python2} setup.py install --skip-build --root %{buildroot}
+%py2_install
 %endif
 
 rm -rf %{buildroot}%{python2_sitelib}/setuptools/tests
@@ -223,6 +223,9 @@ LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
 %endif # with_python3
 
 %changelog
+* Tue Jan 03 2017 Michal Cyprian <mcyprian@redhat.com> - 32.3.1-2
+- Use python macros in build and install sections
+
 * Thu Dec 29 2016 Kevin Fenzi <kevin@scrye.com> - 32.3.1-1
 - Update to 32.3.1. Fixes bug #1409091
 
