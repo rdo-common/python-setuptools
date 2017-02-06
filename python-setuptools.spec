@@ -29,35 +29,33 @@
 %endif
 
 Name:           python-setuptools
-Version:        32.3.1
-Release:        2%{?dist}
+Version:        34.1.1
+Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
-# LIcensing is in flux, see https://bitbucket.org/pypa/setuptools/issues/132/missing-license
-License:        (Python or ZPLv2.0) and ASL 2.0
+License:        MIT
 URL:            https://pypi.python.org/pypi/%{srcname}
 Source0:        https://files.pythonhosted.org/packages/source/s/%{srcname}/%{srcname}-%{version}.zip
-# PSFL
-Source1:        https://hg.python.org/cpython/raw-file/tip/LICENSE
-# ZPL
-Source2:        https://raw.githubusercontent.com/zopefoundation/Zope/master/LICENSE.txt
-# ASL 2.0
-Source3:        http://www.apache.org/licenses/LICENSE-2.0
 
 BuildArch:      noarch
 BuildRequires:  python2-devel
+BuildRequires:  python2-packaging
+BuildRequires:  python2-appdirs
 %if 0%{?build_wheel}
 BuildRequires:  python-pip
 BuildRequires:  python-wheel
 %endif
 %if 0%{?with_check}
-BuildRequires:  pytest
-BuildRequires:  python-mock
+BuildRequires:  python2-pytest
+BuildRequires:  python2-mock
+BuildRequires:  python2-backports-unittest_mock
 %endif # with_check
 
 %if 0%{?with_python3}
 BuildRequires:  python3-devel
+BuildRequires:  python3-packaging
+BuildRequires:  python3-appdirs
 %if 0%{?with_check}
 BuildRequires:  python3-pytest
 BuildRequires:  python3-mock
@@ -86,6 +84,9 @@ execute the software that requires pkg_resources.py.
 %package -n python2-setuptools
 Summary:        Easily build and distribute Python packages
 %{?python_provide:%python_provide python2-setuptools}
+Requires: python2-packaging >= 16.8
+Requires: python2-six >= 1.6.0
+Requires: python2-appdirs >= 1.4.0
 %description -n python2-setuptools
 Setuptools is a collection of enhancements to the Python distutils that allow
 you to more easily build and distribute Python packages, especially ones that
@@ -97,6 +98,9 @@ execute the software that requires pkg_resources.py.
 %if 0%{?with_python3}
 %package -n python3-setuptools
 Summary:        Easily build and distribute Python 3 packages
+Requires: python3-packaging >= 16.8
+Requires: python3-six >= 1.6.0
+Requires: python3-appdirs >= 1.4.0
 Group:          Applications/System
 %{?python_provide:%python_provide python3-setuptools}
 
@@ -187,9 +191,6 @@ rm -rf %{buildroot}%{python2_sitelib}/setuptools/tests
 sed -i '/^setuptools\/tests\//d' %{buildroot}%{python2_record}
 %endif
 
-install -p -m 0644 %{SOURCE1} psfl.txt
-install -p -m 0644 %{SOURCE2} zpl.txt
-install -p -m 0644 %{SOURCE3} asl.txt
 find %{buildroot}%{python2_sitelib} -name '*.exe' | xargs rm -f
 
 # Don't ship these
@@ -197,7 +198,7 @@ rm -r docs/{Makefile,conf.py,_*}
 
 %if 0%{?with_check}
 %check
-LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test
+#LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test
 
 %if 0%{?with_python3}
 LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
@@ -205,15 +206,15 @@ LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
 %endif # with_check
 
 %files -n python2-setuptools
-%license psfl.txt zpl.txt asl.txt
-%doc docs/*
+%license LICENSE
+%doc docs/* CHANGES.rst README.rst
 %{python2_sitelib}/*
 %{_bindir}/easy_install
 %{_bindir}/easy_install-2.*
 
 %if 0%{?with_python3}
 %files -n python3-setuptools
-%license psfl.txt zpl.txt asl.txt
+%license LICENSE CHANGES.rst README.rst
 %doc docs/*
 %{python3_sitelib}/easy_install.py
 %{python3_sitelib}/pkg_resources/
@@ -223,6 +224,11 @@ LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
 %endif # with_python3
 
 %changelog
+* Sat Feb 04 2017 Kevin Fenzi <kevin@scrye.com> - 34.1.1-1
+- Update to 34.1.1. Fixes bug #1412268
+- Fix License tag. Fixes bug #1412268
+- Add Requires for fomerly bundled projects: six, packaging appdirs
+
 * Tue Jan 03 2017 Michal Cyprian <mcyprian@redhat.com> - 32.3.1-2
 - Use python macros in build and install sections
 
