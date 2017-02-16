@@ -29,7 +29,7 @@
 %endif
 
 Name:           python-setuptools
-Version:        34.1.1
+Version:        34.2.0
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -224,6 +224,9 @@ LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
 %endif # with_python3
 
 %changelog
+* Thu Feb 16 2017 Charalampos Stratakis <cstratak@redhat.com> - 34.2.0-1
+- Update to 34.2.0. Fixes bug #1421676
+
 * Sat Feb 04 2017 Kevin Fenzi <kevin@scrye.com> - 34.1.1-1
 - Update to 34.1.1. Fixes bug #1412268
 - Fix License tag. Fixes bug #1412268
