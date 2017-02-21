@@ -30,13 +30,17 @@
 
 Name:           python-setuptools
 Version:        34.2.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
 License:        MIT
 URL:            https://pypi.python.org/pypi/%{srcname}
 Source0:        https://files.pythonhosted.org/packages/source/s/%{srcname}/%{srcname}-%{version}.zip
+
+# Add --executable option to easy_install command to make it work for
+# entry_points
+Patch0: add-executable-option.patch
 
 BuildArch:      noarch
 BuildRequires:  python2-devel
@@ -140,6 +144,8 @@ rm -f setuptools/*.exe
 # These tests require internet connection
 rm setuptools/tests/test_integration.py 
 
+%patch0 -p1
+
 %build
 %if 0%{?build_wheel}
 %py2_build_wheel
@@ -224,6 +230,9 @@ LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
 %endif # with_python3
 
 %changelog
+* Fri Feb 17 2017 Michal Cyprian <mcyprian@redhat.com> - 34.2.0-2
+- Add --executable option to easy_install command
+
 * Thu Feb 16 2017 Charalampos Stratakis <cstratak@redhat.com> - 34.2.0-1
 - Update to 34.2.0. Fixes bug #1421676
 
