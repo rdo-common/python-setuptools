@@ -29,8 +29,8 @@
 %endif
 
 Name:           python-setuptools
-Version:        34.2.0
-Release:        2%{?dist}
+Version:        34.3.0
+Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -230,6 +230,9 @@ LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
 %endif # with_python3
 
 %changelog
+* Sat Feb 25 2017 Kevin Fenzi <kevin@scrye.com> - 34.3.0-1
+- Update to 34.3.0. Fixes bug #1426463
+
 * Fri Feb 17 2017 Michal Cyprian <mcyprian@redhat.com> - 34.2.0-2
 - Add --executable option to easy_install command
 
