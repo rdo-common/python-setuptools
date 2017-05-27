@@ -29,7 +29,7 @@
 %endif
 
 Name:           python-setuptools
-Version:        35.0.1
+Version:        35.0.2
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -230,6 +230,9 @@ LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
 %endif # with_python3
 
 %changelog
+* Sat May 27 2017 Kevin Fenzi <kevin@scrye.com> - 35.0.2-1
+- update to 35.0.2. Fixes bug #1446622
+
 * Sun Apr 23 2017 Kevin Fenzi <kevin@scrye.com> - 35.0.1-1
 - Update to 35.0.1. Fixes bug #1440388
 
