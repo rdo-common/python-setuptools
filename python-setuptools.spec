@@ -29,7 +29,7 @@
 %endif
 
 Name:           python-setuptools
-Version:        35.0.2
+Version:        36.0.1
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -44,11 +44,9 @@ Patch0: add-executable-option.patch
 
 BuildArch:      noarch
 BuildRequires:  python2-devel
-BuildRequires:  python2-packaging
-BuildRequires:  python2-appdirs
 %if 0%{?build_wheel}
-BuildRequires:  python-pip
-BuildRequires:  python-wheel
+BuildRequires:  python2-pip
+BuildRequires:  python2-wheel
 %endif
 %if 0%{?with_check}
 BuildRequires:  python2-pytest
@@ -58,8 +56,6 @@ BuildRequires:  python2-backports-unittest_mock
 
 %if 0%{?with_python3}
 BuildRequires:  python3-devel
-BuildRequires:  python3-packaging
-BuildRequires:  python3-appdirs
 %if 0%{?with_check}
 BuildRequires:  python3-pytest
 BuildRequires:  python3-mock
@@ -88,9 +84,6 @@ execute the software that requires pkg_resources.py.
 %package -n python2-setuptools
 Summary:        Easily build and distribute Python packages
 %{?python_provide:%python_provide python2-setuptools}
-Requires: python2-packaging >= 16.8
-Requires: python2-six >= 1.6.0
-Requires: python2-appdirs >= 1.4.0
 %description -n python2-setuptools
 Setuptools is a collection of enhancements to the Python distutils that allow
 you to more easily build and distribute Python packages, especially ones that
@@ -102,9 +95,6 @@ execute the software that requires pkg_resources.py.
 %if 0%{?with_python3}
 %package -n python3-setuptools
 Summary:        Easily build and distribute Python 3 packages
-Requires: python3-packaging >= 16.8
-Requires: python3-six >= 1.6.0
-Requires: python3-appdirs >= 1.4.0
 Group:          Applications/System
 %{?python_provide:%python_provide python3-setuptools}
 
@@ -230,6 +220,9 @@ LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
 %endif # with_python3
 
 %changelog
+* Thu Jun 15 2017 Charalampos Stratakis <cstratak@redhat.com> - 36.0.1-1
+- update to 36.0.1. Fixes bug #1458093
+
 * Sat May 27 2017 Kevin Fenzi <kevin@scrye.com> - 35.0.2-1
 - update to 35.0.2. Fixes bug #1446622
 
