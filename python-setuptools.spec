@@ -29,7 +29,7 @@
 %endif
 
 Name:           python-setuptools
-Version:        36.0.1
+Version:        36.2.0
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -220,6 +220,9 @@ LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
 %endif # with_python3
 
 %changelog
+* Sat Jul 15 2017 Charalampos Stratakis <cstratak@redhat.com> - 36.2.0-1
+- update to 36.2.0. Fixes bug #1470908
+
 * Thu Jun 15 2017 Charalampos Stratakis <cstratak@redhat.com> - 36.0.1-1
 - update to 36.0.1. Fixes bug #1458093
 
