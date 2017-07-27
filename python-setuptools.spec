@@ -30,7 +30,7 @@
 
 Name:           python-setuptools
 Version:        36.2.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -220,6 +220,9 @@ LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
 %endif # with_python3
 
 %changelog
+* Thu Jul 27 2017 Fedora Release Engineering <releng@fedoraproject.org> - 36.2.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
+
 * Sat Jul 15 2017 Charalampos Stratakis <cstratak@redhat.com> - 36.2.0-1
 - update to 36.2.0. Fixes bug #1470908
 
