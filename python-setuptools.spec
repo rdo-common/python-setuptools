@@ -1,36 +1,34 @@
-# Dependencies for check and wheel introduce circular dependencies
-# Set this to 0 after we've bootstrapped.
-%{!?_with_bootstrap: %global bootstrap 0}
+%global srcname setuptools
 
-%if ! 0%{?bootstrap}
-%global with_check 1
-%global build_wheel 1
-%else
-%global with_check 0
-%global build_wheel 0
-%endif
+%bcond_with bootstrap
+%bcond_without check
 
-%if 0%{?fedora}
-%global with_python3 1
-%else
+%bcond_without python2
+%bcond_without python3
+
+%if ! 0%{?fedora}
+# disable Python 3 if not Fedora
+%global _without_python3 1
 # define some macros for RHEL 6
 %global __python2 %__python
 %global python2_sitelib %python_sitelib
 %endif
 
-%global srcname setuptools
-%if 0%{?build_wheel}
-%global python2_wheelname %{srcname}-%{version}-py2.py3-none-any.whl
+%if %{without bootstrap}
+%global python_wheelname %{srcname}-%{version}-py2.py3-none-any.whl
+%if %{with python2}
+%global python2_wheelname %python_wheelname
 %global python2_record %{python2_sitelib}/%{srcname}-%{version}.dist-info/RECORD
-%if 0%{?with_python3}
-%global python3_wheelname %python2_wheelname
+%endif
+%if %{with python3}
+%global python3_wheelname %python_wheelname
 %global python3_record %{python3_sitelib}/%{srcname}-%{version}.dist-info/RECORD
 %endif
 %endif
 
 Name:           python-setuptools
 Version:        36.2.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -39,35 +37,37 @@ URL:            https://pypi.python.org/pypi/%{srcname}
 Source0:        https://files.pythonhosted.org/packages/source/s/%{srcname}/%{srcname}-%{version}.zip
 
 BuildArch:      noarch
+
+%if %{with python2}
 BuildRequires:  python2-devel
-%if 0%{?build_wheel}
+%if %{without bootstrap}
 BuildRequires:  python2-pip
 BuildRequires:  python2-wheel
-%endif
-%if 0%{?with_check}
+%endif # without bootstrap
+%if %{with check}
 BuildRequires:  python2-pytest
 BuildRequires:  python2-mock
 BuildRequires:  python2-backports-unittest_mock
-%endif # with_check
+%endif # with check
+%endif # with python2
 
-%if 0%{?with_python3}
+%if %{with python3}
 BuildRequires:  python3-devel
-%if 0%{?with_check}
+%if %{with check}
 BuildRequires:  python3-pytest
 BuildRequires:  python3-mock
-%endif # with_check
-%if 0%{?build_wheel}
+%endif # with check
+%if %{without bootstrap}
 BuildRequires:  python3-pip
 BuildRequires:  python3-wheel
-%endif # build_wheel
-%endif # with_python3
+%endif # without bootstrap
+%endif # with python3
 
 # We're now back to setuptools as the package.
 # Keep the python-distribute name active for a few releases.  Eventually we'll
 # want to get rid of the Provides and just keep the Obsoletes
 Provides: python-distribute = %{version}-%{release}
 Obsoletes: python-distribute < 0.6.36-2
-
 
 %description
 Setuptools is a collection of enhancements to the Python distutils that allow
@@ -77,9 +77,12 @@ have dependencies on other packages.
 This package also contains the runtime components of setuptools, necessary to
 execute the software that requires pkg_resources.py.
 
+
+%if %{with python2}
 %package -n python2-setuptools
 Summary:        Easily build and distribute Python packages
 %{?python_provide:%python_provide python2-setuptools}
+
 %description -n python2-setuptools
 Setuptools is a collection of enhancements to the Python distutils that allow
 you to more easily build and distribute Python packages, especially ones that
@@ -88,15 +91,14 @@ have dependencies on other packages.
 This package also contains the runtime components of setuptools, necessary to
 execute the software that requires pkg_resources.py.
 
-%if 0%{?with_python3}
+%endif # with python2
+
+
+%if %{with python3}
 %package -n python3-setuptools
 Summary:        Easily build and distribute Python 3 packages
 Group:          Applications/System
 %{?python_provide:%python_provide python3-setuptools}
-
-# Note: Do not need to Require python3-backports-ssl_match_hostname because it
-# has been present since python3-3.2.  We do not ship python3-3.0 or
-# python3-3.1 anywhere
 
 %description -n python3-setuptools
 Setuptools is a collection of enhancements to the Python 3 distutils that allow
@@ -106,7 +108,8 @@ have dependencies on other packages.
 This package also contains the runtime components of setuptools, necessary to
 execute the software that requires pkg_resources.py.
 
-%endif # with_python3
+%endif # with python3
+
 
 %prep
 %setup -q -n %{srcname}-%{version}
@@ -130,27 +133,31 @@ rm -f setuptools/*.exe
 # These tests require internet connection
 rm setuptools/tests/test_integration.py 
 
+
 %build
-%if 0%{?build_wheel}
+%if %{with python2}
+%if %{without bootstrap}
 %py2_build_wheel
 %else
 %py2_build
 %endif
+%endif # with python2
 
-%if 0%{?with_python3}
-%if 0%{?build_wheel}
+%if %{with python3}
+%if %{without bootstrap}
 %py3_build_wheel
 %else
 %py3_build
 %endif
-%endif # with_python3
+%endif # with python3
+
 
 %install
 # Must do the python3 install first because the scripts in /usr/bin are
 # overwritten with every setup.py install (and we want the python2 version
 # to be the default for now).
-%if 0%{?with_python3}
-%if 0%{?build_wheel}
+%if %{with python3}
+%if %{without bootstrap}
 %py3_install_wheel %{python3_wheelname}
 
 # TODO: we have to remove this by hand now, but it'd be nice if we wouldn't have to
@@ -163,46 +170,55 @@ sed -i '/\/usr\/bin\/easy_install,/d' %{buildroot}%{python3_record}
 %endif
 
 rm -rf %{buildroot}%{python3_sitelib}/setuptools/tests
-%if 0%{?build_wheel}
+%if %{without bootstrap}
 sed -i '/^setuptools\/tests\//d' %{buildroot}%{python3_record}
 %endif
 
 find %{buildroot}%{python3_sitelib} -name '*.exe' | xargs rm -f
-%endif # with_python3
+%endif # with python3
 
-%if 0%{?build_wheel}
+
+%if %{with python2}
+%if %{without bootstrap}
 %py2_install_wheel %{python2_wheelname}
 %else
 %py2_install
 %endif
 
 rm -rf %{buildroot}%{python2_sitelib}/setuptools/tests
-%if 0%{?build_wheel}
+%if %{without bootstrap}
 sed -i '/^setuptools\/tests\//d' %{buildroot}%{python2_record}
 %endif
 
 find %{buildroot}%{python2_sitelib} -name '*.exe' | xargs rm -f
+%endif # with python2
 
 # Don't ship these
 rm -r docs/{Makefile,conf.py,_*}
 
-%if 0%{?with_check}
+
+%if %{with check}
 %check
+%if %{with python2}
 #LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test
+%endif # with python2
 
-%if 0%{?with_python3}
+%if %{with python3}
 LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
-%endif # with_python3
-%endif # with_check
+%endif # with python3
+%endif # with check
 
+
+%if %{with python2}
 %files -n python2-setuptools
 %license LICENSE
 %doc docs/* CHANGES.rst README.rst
 %{python2_sitelib}/*
 %{_bindir}/easy_install
 %{_bindir}/easy_install-2.*
+%endif # with python2
 
-%if 0%{?with_python3}
+%if %{with python3}
 %files -n python3-setuptools
 %license LICENSE CHANGES.rst README.rst
 %doc docs/*
@@ -211,9 +227,13 @@ LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
 %{python3_sitelib}/setuptools*/
 %{python3_sitelib}/__pycache__/*
 %{_bindir}/easy_install-3.*
-%endif # with_python3
+%endif # with python3
 
 %changelog
+* Wed Aug 09 2017 Tomas Orsava <torsava@redhat.com> - 36.2.0-4
+- Switch macros to bcond's and make Python 2 optional to facilitate building
+  the Python 2 and Python 3 modules.
+
 * Tue Aug 08 2017 Michal Cyprian <mcyprian@redhat.com> - 36.2.0-3
 - Revert "Add --executable option to easy_install command"
   This enhancement is currently not needed and it can possibly
