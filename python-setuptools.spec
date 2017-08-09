@@ -28,13 +28,17 @@
 
 Name:           python-setuptools
 Version:        36.2.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
 License:        MIT
 URL:            https://pypi.python.org/pypi/%{srcname}
 Source0:        https://files.pythonhosted.org/packages/source/s/%{srcname}/%{srcname}-%{version}.zip
+
+# Run test on a version specific pip: pip3 for Python 3, pip2 for Python 2,
+# because the other might not be installed
+Patch0:         0001-Run-test-on-a-version-specific-pip.patch
 
 BuildArch:      noarch
 
@@ -113,6 +117,8 @@ execute the software that requires pkg_resources.py.
 
 %prep
 %setup -q -n %{srcname}-%{version}
+
+%patch0 -p1
 
 # We can't remove .egg-info (but it doesn't matter, since it'll be rebuilt):
 #  The problem is that to properly execute setuptools' setup.py,
@@ -220,8 +226,8 @@ LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
 
 %if %{with python3}
 %files -n python3-setuptools
-%license LICENSE CHANGES.rst README.rst
-%doc docs/*
+%license LICENSE
+%doc docs/* CHANGES.rst README.rst
 %{python3_sitelib}/easy_install.py
 %{python3_sitelib}/pkg_resources/
 %{python3_sitelib}/setuptools*/
@@ -230,6 +236,11 @@ LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
 %endif # with python3
 
 %changelog
+* Wed Aug 09 2017 Tomas Orsava <torsava@redhat.com> - 36.2.0-5
+- Add Patch 0 that fixes a test suite failure on Python 3 in absence of
+  the Python 2 version of pip
+- Move docs to their proper place
+
 * Wed Aug 09 2017 Tomas Orsava <torsava@redhat.com> - 36.2.0-4
 - Switch macros to bcond's and make Python 2 optional to facilitate building
   the Python 2 and Python 3 modules.

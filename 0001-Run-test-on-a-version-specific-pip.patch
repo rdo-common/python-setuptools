@@ -1,0 +1,58 @@
+From 62effe4db3d51c42531bf3f333bf82a3928358bf Mon Sep 17 00:00:00 2001
+From: Tomas Orsava <torsava@redhat.com>
+Date: Wed, 9 Aug 2017 14:46:01 +0200
+Subject: [PATCH] Run test on a version specific pip
+
+pip3 for Python 3, pip2 for Python 2, because the other might not be installed
+---
+ setuptools/tests/test_develop.py    | 2 +-
+ setuptools/tests/test_namespaces.py | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/setuptools/tests/test_develop.py b/setuptools/tests/test_develop.py
+index ad7cfa0..c1b6e22 100644
+--- a/setuptools/tests/test_develop.py
++++ b/setuptools/tests/test_develop.py
+@@ -167,7 +167,7 @@ class TestNamespaces:
+         target = tmpdir / 'packages'
+         # use pip to install to the target directory
+         install_cmd = [
+-            'pip',
++            'pip%s' % sys.version_info.major,
+             'install',
+             str(pkg_A),
+             '-t', str(target),
+diff --git a/setuptools/tests/test_namespaces.py b/setuptools/tests/test_namespaces.py
+index 721cad1..a71fd69 100644
+--- a/setuptools/tests/test_namespaces.py
++++ b/setuptools/tests/test_namespaces.py
+@@ -30,7 +30,7 @@ class TestNamespaces:
+         targets = site_packages, path_packages
+         # use pip to install to the target directory
+         install_cmd = [
+-            'pip',
++            'pip%s' % sys.version_info.major,
+             'install',
+             str(pkg_A),
+             '-t', str(site_packages),
+@@ -38,7 +38,7 @@ class TestNamespaces:
+         subprocess.check_call(install_cmd)
+         namespaces.make_site_dir(site_packages)
+         install_cmd = [
+-            'pip',
++            'pip%s' % sys.version_info.major,
+             'install',
+             str(pkg_B),
+             '-t', str(path_packages),
+@@ -88,7 +88,7 @@ class TestNamespaces:
+         target = tmpdir / 'packages'
+         # use pip to install to the target directory
+         install_cmd = [
+-            'pip',
++            'pip%s' % sys.version_info.major,
+             'install',
+             str(pkg_A),
+             '-t', str(target),
+-- 
+2.13.3
+
