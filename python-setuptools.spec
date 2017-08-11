@@ -1,10 +1,12 @@
 %global srcname setuptools
 
+# Bootstrapping does not affect the platform-python-setuptools subpackage
 %bcond_with bootstrap
 %bcond_without check
 
 %bcond_without python2
 %bcond_without python3
+%bcond_without platform_python
 
 %if ! 0%{?fedora}
 # disable Python 3 if not Fedora
@@ -28,7 +30,7 @@
 
 Name:           python-setuptools
 Version:        36.2.0
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -66,6 +68,14 @@ BuildRequires:  python3-pip
 BuildRequires:  python3-wheel
 %endif # without bootstrap
 %endif # with python3
+
+%if %{with platform_python}
+BuildRequires:  platform-python-devel
+BuildRequires:  platform-python-libs-devel
+%if 0%{?with_check}
+BuildRequires:  platform-python-pytest
+%endif # with_check
+%endif # with platform_python
 
 # We're now back to setuptools as the package.
 # Keep the python-distribute name active for a few releases.  Eventually we'll
@@ -115,6 +125,22 @@ execute the software that requires pkg_resources.py.
 %endif # with python3
 
 
+%if %{with platform_python}
+%package -n platform-python-setuptools
+Summary:        Easily build and distribute Python 3 packages
+Group:          Applications/System
+
+%description -n platform-python-setuptools
+Setuptools is a collection of enhancements to the Python 3 distutils that allow
+you to more easily build and distribute Python 3 packages, especially ones that
+have dependencies on other packages.
+
+This package also contains the runtime components of setuptools, necessary to
+execute the software that requires pkg_resources.py.
+
+%endif # with platform_python
+
+
 %prep
 %setup -q -n %{srcname}-%{version}
 
@@ -157,11 +183,28 @@ rm setuptools/tests/test_integration.py
 %endif
 %endif # with python3
 
+%if %{with platform_python}
+# Platform Python build does not need to build the wheel
+%platform_py_build
+%endif # with platform_python
+
 
 %install
-# Must do the python3 install first because the scripts in /usr/bin are
-# overwritten with every setup.py install (and we want the python2 version
-# to be the default for now).
+# Must do the platform-python and python3 install first because the scripts in
+# /usr/bin are overwritten with every setup.py install (and we want the python2
+# version to be the default for now).
+%if %{with platform_python}
+%platform_py_install
+
+# Delete all executables under /usr/bin, we don't want them for platform-python
+rm %{buildroot}%{_bindir}/*
+
+rm -rf %{buildroot}%{platform_python_sitelib}/setuptools/tests
+
+find %{buildroot}%{platform_python_sitelib} -name '*.exe' | xargs rm -f
+%endif # with platform_python
+
+
 %if %{with python3}
 %if %{without bootstrap}
 %py3_install_wheel %{python3_wheelname}
@@ -235,7 +278,22 @@ LANG=en_US.utf8 PYTHONPATH=$(pwd) py.test-%{python3_version}
 %{_bindir}/easy_install-3.*
 %endif # with python3
 
+%if %{with platform_python}
+%files -n platform-python-setuptools
+%license LICENSE
+%doc docs/* CHANGES.rst README.rst
+%{platform_python_sitelib}/easy_install.py
+%{platform_python_sitelib}/pkg_resources/
+%{platform_python_sitelib}/setuptools*/
+%{platform_python_sitelib}/__pycache__/*
+%endif # with platform_python
+
+
 %changelog
+* Wed Aug 09 2017 Tomas Orsava <torsava@redhat.com> - 36.2.0-6
+- Add the platform-python subpackage
+  (https://fedoraproject.org/wiki/Changes/Platform_Python_Stack)
+
 * Wed Aug 09 2017 Tomas Orsava <torsava@redhat.com> - 36.2.0-5
 - Add Patch 0 that fixes a test suite failure on Python 3 in absence of
   the Python 2 version of pip
