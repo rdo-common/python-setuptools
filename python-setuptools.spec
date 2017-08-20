@@ -2,7 +2,7 @@
 
 # Bootstrapping does not affect the platform-python-setuptools subpackage
 %bcond_with bootstrap
-%bcond_with tests
+%bcond_without tests
 
 %bcond_without python2
 %bcond_without python3
@@ -30,7 +30,7 @@
 
 Name:           python-setuptools
 Version:        36.2.0
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -294,6 +294,10 @@ LANG=en_US.utf8 PYTHONPATH=$(pwd) %{__platform_python} -m pytest
 
 
 %changelog
+* Sun Aug 20 2017 Tomas Orsava <torsava@redhat.com> - 36.2.0-7
+- Re-enable tests to finish bootstrapping the platform-python stack
+  (https://fedoraproject.org/wiki/Changes/Platform_Python_Stack)
+
 * Wed Aug 09 2017 Tomas Orsava <torsava@redhat.com> - 36.2.0-6
 - Add the platform-python subpackage
 - Disable tests so platform-python stack can be bootstrapped
