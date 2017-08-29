@@ -209,14 +209,15 @@ find %{buildroot}%{platform_python_sitelib} -name '*.exe' | xargs rm -f
 %if %{without bootstrap}
 %py3_install_wheel %{python3_wheelname}
 
-# TODO: we have to remove this by hand now, but it'd be nice if we wouldn't have to
-# (pip install wheel doesn't overwrite)
-rm %{buildroot}%{_bindir}/easy_install
-
+# Remove /usr/bin/easy_install from the record as later on we delete the file
 sed -i '/\/usr\/bin\/easy_install,/d' %{buildroot}%{python3_record}
 %else
 %py3_install
 %endif
+
+# TODO: we have to remove this by hand now, but it'd be nice if we wouldn't have to
+# (pip install wheel doesn't overwrite)
+rm %{buildroot}%{_bindir}/easy_install
 
 rm -rf %{buildroot}%{python3_sitelib}/setuptools/tests
 %if %{without bootstrap}
