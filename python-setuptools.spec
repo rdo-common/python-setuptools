@@ -1,5 +1,7 @@
 %global srcname setuptools
 
+#  WARNING  When bootstrapping, disable tests as well,
+#           because tests need pip.
 # Bootstrapping does not affect the platform-python-setuptools subpackage
 %bcond_with bootstrap
 %bcond_without tests
@@ -51,6 +53,7 @@ BuildRequires:  python2-pip
 BuildRequires:  python2-wheel
 %endif # without bootstrap
 %if %{with test}
+BuildRequires:  python2-pip
 BuildRequires:  python2-pytest
 BuildRequires:  python2-mock
 BuildRequires:  python2-backports-unittest_mock
@@ -60,6 +63,7 @@ BuildRequires:  python2-backports-unittest_mock
 %if %{with python3}
 BuildRequires:  python3-devel
 %if %{with tests}
+BuildRequires:  python3-pip
 BuildRequires:  python3-pytest
 BuildRequires:  python3-mock
 %endif # with tests
