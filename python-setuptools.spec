@@ -29,7 +29,7 @@
 %endif
 
 Name:           python-setuptools
-Version:        37.0.0
+Version:        38.2.5
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -242,6 +242,9 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python3_version}
 
 
 %changelog
+* Tue Jan 02 2018 Charalampos Stratakis <cstratak@redhat.com> - 38.2.5-1
+- update to 38.2.5 Fixes bug #1528968
+
 * Tue Nov 21 2017 Miro Hrončok <mhroncok@redhat.com> - 37.0.0-1
 - Update to 37.0.0 (fixes #1474126)
 - Removed not needed pip3 patch (upstream included different version of fix)
