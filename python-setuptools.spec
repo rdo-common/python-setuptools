@@ -38,6 +38,10 @@ License:        MIT
 URL:            https://pypi.python.org/pypi/%{srcname}
 Source0:        https://files.pythonhosted.org/packages/source/s/%{srcname}/%{srcname}-%{version}.zip
 
+# Some tests require an active internet connection, which is not possible
+# within koji, so we mark them as expected failures.
+Patch0:         skip-internet-requiring-tests.patch
+
 BuildArch:      noarch
 
 %if %{with python2}
@@ -142,6 +146,7 @@ rm -f setuptools/*.exe
 # These tests require internet connection
 rm setuptools/tests/test_integration.py 
 
+%patch0 -p1
 
 %build
 %if %{with python2}
