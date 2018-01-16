@@ -29,7 +29,7 @@
 %endif
 
 Name:           python-setuptools
-Version:        38.2.5
+Version:        38.4.0
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -247,6 +247,9 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python3_version}
 
 
 %changelog
+* Tue Jan 16 2018 Charalampos Stratakis <cstratak@redhat.com> - 38.4.0-1
+- update to 38.4.0 Fixes bug #1531527
+
 * Tue Jan 02 2018 Charalampos Stratakis <cstratak@redhat.com> - 38.2.5-1
 - update to 38.2.5 Fixes bug #1528968
 
