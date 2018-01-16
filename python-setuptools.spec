@@ -8,8 +8,7 @@
 %bcond_without python2
 %bcond_without python3
 
-%if ! 0%{?fedora}
-# disable Python 3 if not Fedora
+%if 0%{?rhel} && 0%{?rhel} <= 7
 %global _without_python3 1
 # define some macros for RHEL 6
 %global __python2 %__python
@@ -30,7 +29,7 @@
 
 Name:           python-setuptools
 Version:        38.4.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -247,6 +246,9 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python3_version}
 
 
 %changelog
+* Tue Jan 16 2018 Troy Dawson <tdawson@redhat.com> - 38.4.0-2
+- Update conditional
+
 * Tue Jan 16 2018 Charalampos Stratakis <cstratak@redhat.com> - 38.4.0-1
 - update to 38.4.0 Fixes bug #1531527
 
