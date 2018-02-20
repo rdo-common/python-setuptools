@@ -43,6 +43,7 @@ Patch0:         skip-internet-requiring-tests.patch
 
 BuildArch:      noarch
 
+BuildRequires:  gcc
 %if %{with python2}
 BuildRequires:  python2-devel
 %if %{without bootstrap}
