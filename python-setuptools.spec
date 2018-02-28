@@ -5,15 +5,17 @@
 %bcond_with bootstrap
 %bcond_without tests
 
-%bcond_without python2
-%bcond_without python3
-
 %if 0%{?rhel} && 0%{?rhel} <= 7
 %global _without_python3 1
 # define some macros for RHEL 6
 %global __python2 %__python
 %global python2_sitelib %python_sitelib
 %endif
+
+# Note(hguemar): overrides must be placed *before* those
+# Otherwise it doesn't work
+%bcond_without python2
+%bcond_without python3
 
 %if %{without bootstrap}
 %global python_wheelname %{srcname}-%{version}-py2.py3-none-any.whl
