@@ -1,5 +1,7 @@
 %global srcname setuptools
 
+%global _without_tests 1
+
 #  WARNING  When bootstrapping, disable tests as well,
 #           because tests need pip.
 %bcond_with bootstrap
