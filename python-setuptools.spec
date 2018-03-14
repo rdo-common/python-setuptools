@@ -31,7 +31,7 @@
 
 Name:           python-setuptools
 Version:        38.4.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -222,7 +222,10 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python2_version}
 %endif # with python2
 
 %if %{with python3}
-PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python3_version}
+# --ignore=setuptools/tests/test_virtualenv.py: because virtualenv executable
+#   is configured only for Python 2 version of virtualenv—this needs to be fixed
+#   in the `python-pytest-virtualenv` package
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python3_version} --ignore=setuptools/tests/test_virtualenv.py
 %endif # with python3
 %endif # with tests
 
@@ -249,6 +252,9 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python3_version}
 
 
 %changelog
+* Wed Mar 14 2018 Tomas Orsava <torsava@redhat.com> - 38.4.0-4
+- Skip test_virtualenv due to broken executable detection
+
 * Fri Feb 09 2018 Fedora Release Engineering <releng@fedoraproject.org> - 38.4.0-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
