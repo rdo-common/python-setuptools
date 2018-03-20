@@ -30,8 +30,8 @@
 %endif
 
 Name:           python-setuptools
-Version:        38.4.0
-Release:        4%{?dist}
+Version:        39.0.1
+Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -252,6 +252,9 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python3_version} --ignore=
 
 
 %changelog
+* Tue Mar 20 2018 Charalampos Stratakis <cstratak@redhat.com> - 39.0.1-1
+- update to 39.0.1 Fixes bug #1531527
+
 * Wed Mar 14 2018 Tomas Orsava <torsava@redhat.com> - 38.4.0-4
 - Skip test_virtualenv due to broken executable detection
 
