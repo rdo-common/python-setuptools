@@ -30,7 +30,7 @@
 %endif
 
 Name:           python-setuptools
-Version:        39.0.1
+Version:        39.2.0
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
@@ -38,10 +38,6 @@ Group:          Applications/System
 License:        MIT
 URL:            https://pypi.python.org/pypi/%{srcname}
 Source0:        https://files.pythonhosted.org/packages/source/s/%{srcname}/%{srcname}-%{version}.zip
-
-# Some tests require an active internet connection, which is not possible
-# within koji, so we mark them as expected failures.
-Patch0:         skip-internet-requiring-tests.patch
 
 BuildArch:      noarch
 
@@ -148,8 +144,6 @@ rm -f setuptools/*.exe
 # These tests require internet connection
 rm setuptools/tests/test_integration.py 
 
-%patch0 -p1
-
 %build
 %if %{with python2}
 %if %{without bootstrap}
@@ -252,6 +246,9 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python3_version} --ignore=
 
 
 %changelog
+* Wed May 23 2018 Charalampos Stratakis <cstratak@redhat.com> - 39.2.0-1
+- update to 39.2.0 Fixes bug #1572889
+
 * Tue Mar 20 2018 Charalampos Stratakis <cstratak@redhat.com> - 39.0.1-1
 - update to 39.0.1 Fixes bug #1531527
 
