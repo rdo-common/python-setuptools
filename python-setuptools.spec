@@ -1,4 +1,3 @@
-%global _without_tests 1
 %global srcname setuptools
 
 #  WARNING  When bootstrapping, disable tests as well,
@@ -32,7 +31,7 @@
 
 Name:           python-setuptools
 Version:        39.2.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -247,6 +246,9 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python3_version} --ignore=
 
 
 %changelog
+* Mon Jun 18 2018 Miro Hrončok <mhroncok@redhat.com> - 39.2.0-4
+- Rebuilt for Python 3.7
+
 * Wed Jun 13 2018 Miro Hrončok <mhroncok@redhat.com> - 39.2.0-3
 - Bootstrap for Python 3.7
 
