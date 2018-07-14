@@ -31,7 +31,7 @@
 
 Name:           python-setuptools
 Version:        39.2.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -246,6 +246,9 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python3_version} --ignore=
 
 
 %changelog
+* Sat Jul 14 2018 Fedora Release Engineering <releng@fedoraproject.org> - 39.2.0-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
 * Mon Jun 18 2018 Miro Hrončok <mhroncok@redhat.com> - 39.2.0-4
 - Rebuilt for Python 3.7
 
