@@ -31,13 +31,19 @@
 
 Name:           python-setuptools
 Version:        39.2.0
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
 License:        MIT
 URL:            https://pypi.python.org/pypi/%{srcname}
 Source0:        https://files.pythonhosted.org/packages/source/s/%{srcname}/%{srcname}-%{version}.zip
+
+# In Fedora, sudo setup.py install installs to /usr/local/lib/pythonX.Y/site-packages
+# But pythonX doesn't own that dir, that would be against FHS
+# We need to create it if it doesn't exist
+# https://bugzilla.redhat.com/show_bug.cgi?id=1576924
+Patch0:         create-site-packages.patch
 
 BuildArch:      noarch
 
@@ -123,7 +129,7 @@ execute the software that requires pkg_resources.py.
 
 
 %prep
-%setup -q -n %{srcname}-%{version}
+%autosetup -p1 -n %{srcname}-%{version}
 
 # We can't remove .egg-info (but it doesn't matter, since it'll be rebuilt):
 #  The problem is that to properly execute setuptools' setup.py,
@@ -246,6 +252,9 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python3_version} --ignore=
 
 
 %changelog
+* Thu Jul 19 2018 Miro Hrončok <mhroncok@redhat.com> - 39.2.0-6
+- Create /usr/local/lib/pythonX.Y when needed (#1576924)
+
 * Sat Jul 14 2018 Fedora Release Engineering <releng@fedoraproject.org> - 39.2.0-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
