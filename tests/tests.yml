@@ -1,0 +1,52 @@
+---
+- hosts: localhost
+  roles:
+  - role: standard-test-basic
+    tags:
+    - classic
+    repositories:
+    - repo: "https://src.fedoraproject.org/tests/python.git"
+      dest: "python"
+    tests:
+    - smoke34:
+        dir: python/smoke
+        run: VERSION=3.4 ./venv.sh
+    - smoke35:
+        dir: python/smoke
+        run: VERSION=3.5 ./venv.sh
+    - smoke36:
+        dir: python/smoke
+        run: VERSION=3.6 ./venv.sh
+    - smoke37:
+        dir: python/smoke
+        run: VERSION=3.7 ./venv.sh
+    - smoke26:
+        dir: python/smoke
+        run: VERSION=2.6 METHOD=virtualenv TOX=false ./venv.sh
+    - smoke27:
+        dir: python/smoke
+        run: VERSION=2.7 METHOD=virtualenv ./venv.sh
+    - smoke34_virtualenv:
+        dir: python/smoke
+        run: VERSION=3.4 METHOD=virtualenv ./venv.sh
+    - smoke35_virtualenv:
+        dir: python/smoke
+        run: VERSION=3.5 METHOD=virtualenv ./venv.sh
+    - smoke36_virtualenv:
+        dir: python/smoke
+        run: VERSION=3.6 METHOD=virtualenv ./venv.sh
+    - smoke37_virtualenv:
+        dir: python/smoke
+        run: VERSION=3.7 METHOD=virtualenv ./venv.sh
+    required_packages:
+    - gcc
+    - /usr/bin/virtualenv
+    - python26
+    - python27
+    - python34
+    - python35
+    - python36
+    - python37
+    - python2-devel
+    - python3-devel
+    - python3-tox
