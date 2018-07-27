@@ -144,11 +144,13 @@ execute the software that requires pkg_resources.py.
 #  otherwise setuptools are installed as dependency into buildroot
 
 # Strip shbang
-find setuptools -name \*.py | xargs sed -i -e '1 {/^#!\//d}'
+find setuptools pkg_resources -name \*.py | xargs sed -i -e '1 {/^#!\//d}'
 # Remove bundled exes
 rm -f setuptools/*.exe
 # These tests require internet connection
 rm setuptools/tests/test_integration.py 
+# Spurious executable perm https://github.com/pypa/setuptools/pull/1441
+chmod -x README.rst
 
 %build
 %if %{with python2}
