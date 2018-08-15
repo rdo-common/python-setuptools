@@ -10,12 +10,11 @@
 %if %{without bootstrap}
 %global python_wheelname %{srcname}-%{version}-py2.py3-none-any.whl
 %if %{with python2}
-%global python2_wheelname %python_wheelname
 %global python2_record %{python2_sitelib}/%{srcname}-%{version}.dist-info/RECORD
 %endif
-%global python3_wheelname %python_wheelname
 %global python3_record %{python3_sitelib}/%{srcname}-%{version}.dist-info/RECORD
 %endif
+%global python_wheeldir %{_datadir}/python-wheels
 
 Name:           python-setuptools
 Version:        39.2.0
@@ -110,6 +109,14 @@ have dependencies on other packages.
 This package also contains the runtime components of setuptools, necessary to
 execute the software that requires pkg_resources.py.
 
+%if %{without bootstrap}
+%package wheel
+Summary:        The setuptools wheel
+
+%description wheel
+A Python wheel of setuptools to use with venv.
+%endif
+
 
 %prep
 %autosetup -p1 -n %{srcname}-%{version}
@@ -136,17 +143,13 @@ rm setuptools/tests/test_integration.py
 chmod -x README.rst
 
 %build
-%if %{with python2}
-%if %{without bootstrap}
-%py2_build_wheel
-%else
-%py2_build
-%endif
-%endif # with python2
-
 %if %{without bootstrap}
 %py3_build_wheel
 %else
+%if %{with python2}
+%py2_build
+%endif # with python2
+
 %py3_build
 %endif
 
@@ -156,7 +159,7 @@ chmod -x README.rst
 # overwritten with every setup.py install (and we want /usr/bin/pip to be
 # the python2 version).
 %if %{without bootstrap}
-%py3_install_wheel %{python3_wheelname}
+%py3_install_wheel %{python_wheelname}
 
 # Remove /usr/bin/easy_install from the record as later on we delete the file
 sed -i '/\/usr\/bin\/easy_install,/d' %{buildroot}%{python3_record}
@@ -178,7 +181,7 @@ find %{buildroot}%{python3_sitelib} -name '*.exe' | xargs rm -f
 
 %if %{with python2}
 %if %{without bootstrap}
-%py2_install_wheel %{python2_wheelname}
+%py2_install_wheel %{python_wheelname}
 %else
 %py2_install
 %endif
@@ -193,6 +196,11 @@ find %{buildroot}%{python2_sitelib} -name '*.exe' | xargs rm -f
 
 # Don't ship these
 rm -r docs/{Makefile,conf.py,_*}
+
+%if %{without bootstrap}
+mkdir -p %{buildroot}%{python_wheeldir}
+install -p dist/%{python_wheelname} -t %{buildroot}%{python_wheeldir}
+%endif
 
 
 %if %{with tests}
@@ -227,9 +235,18 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python3_version} --ignore=
 %{python3_sitelib}/__pycache__/*
 %{_bindir}/easy_install-3.*
 
+%if %{without bootstrap}
+%files wheel
+%license LICENSE
+# we own the dir for simplicity
+%dir %{python_wheeldir}/
+%{python_wheeldir}/%{python_wheelname}
+%endif
+
 
 %changelog
 * Wed Aug 15 2018 Petr Viktorin <pviktori@redhat.com> - 39.2.0-7
+- Add a subpackage with wheels
 - Remove the python3 bcond
 - Remove macros for RHEL 6
 
