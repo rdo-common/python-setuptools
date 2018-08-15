@@ -5,17 +5,7 @@
 %bcond_with bootstrap
 %bcond_without tests
 
-%if 0%{?rhel} && 0%{?rhel} <= 7
-%global _without_python3 1
-# define some macros for RHEL 6
-%global __python2 %__python
-%global python2_sitelib %python_sitelib
-%endif
-
-# Note(hguemar): overrides must be placed *before* those
-# Otherwise it doesn't work
 %bcond_without python2
-%bcond_without python3
 
 %if %{without bootstrap}
 %global python_wheelname %{srcname}-%{version}-py2.py3-none-any.whl
@@ -23,15 +13,13 @@
 %global python2_wheelname %python_wheelname
 %global python2_record %{python2_sitelib}/%{srcname}-%{version}.dist-info/RECORD
 %endif
-%if %{with python3}
 %global python3_wheelname %python_wheelname
 %global python3_record %{python3_sitelib}/%{srcname}-%{version}.dist-info/RECORD
-%endif
 %endif
 
 Name:           python-setuptools
 Version:        39.2.0
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -64,7 +52,6 @@ BuildRequires:  python2-pytest-virtualenv
 %endif # with tests
 %endif # with python2
 
-%if %{with python3}
 BuildRequires:  python3-devel
 %if %{with tests}
 BuildRequires:  python3-pip
@@ -77,7 +64,6 @@ BuildRequires:  python3-pytest-virtualenv
 BuildRequires:  python3-pip
 BuildRequires:  python3-wheel
 %endif # without bootstrap
-%endif # with python3
 
 # We're now back to setuptools as the package.
 # Keep the python-distribute name active for a few releases.  Eventually we'll
@@ -110,7 +96,6 @@ execute the software that requires pkg_resources.py.
 %endif # with python2
 
 
-%if %{with python3}
 %package -n python3-setuptools
 Summary:        Easily build and distribute Python 3 packages
 Group:          Applications/System
@@ -124,8 +109,6 @@ have dependencies on other packages.
 
 This package also contains the runtime components of setuptools, necessary to
 execute the software that requires pkg_resources.py.
-
-%endif # with python3
 
 
 %prep
@@ -161,20 +144,17 @@ chmod -x README.rst
 %endif
 %endif # with python2
 
-%if %{with python3}
 %if %{without bootstrap}
 %py3_build_wheel
 %else
 %py3_build
 %endif
-%endif # with python3
 
 
 %install
 # Must do the python3 install first because the scripts in /usr/bin are
-# overwritten with every setup.py install (and we want the python2 version to
-# be the default for now).
-%if %{with python3}
+# overwritten with every setup.py install (and we want /usr/bin/pip to be
+# the python2 version).
 %if %{without bootstrap}
 %py3_install_wheel %{python3_wheelname}
 
@@ -194,7 +174,6 @@ sed -i '/^setuptools\/tests\//d' %{buildroot}%{python3_record}
 %endif
 
 find %{buildroot}%{python3_sitelib} -name '*.exe' | xargs rm -f
-%endif # with python3
 
 
 %if %{with python2}
@@ -223,12 +202,10 @@ rm -r docs/{Makefile,conf.py,_*}
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python2_version}
 %endif # with python2
 
-%if %{with python3}
 # --ignore=setuptools/tests/test_virtualenv.py: because virtualenv executable
 #   is configured only for Python 2 version of virtualenv—this needs to be fixed
 #   in the `python-pytest-virtualenv` package
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python3_version} --ignore=setuptools/tests/test_virtualenv.py
-%endif # with python3
 %endif # with tests
 
 
@@ -241,7 +218,6 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python3_version} --ignore=
 %{_bindir}/easy_install-2.*
 %endif # with python2
 
-%if %{with python3}
 %files -n python3-setuptools
 %license LICENSE
 %doc docs/* CHANGES.rst README.rst
@@ -250,10 +226,13 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python3_version} --ignore=
 %{python3_sitelib}/setuptools*/
 %{python3_sitelib}/__pycache__/*
 %{_bindir}/easy_install-3.*
-%endif # with python3
 
 
 %changelog
+* Wed Aug 15 2018 Petr Viktorin <pviktori@redhat.com> - 39.2.0-7
+- Remove the python3 bcond
+- Remove macros for RHEL 6
+
 * Thu Jul 19 2018 Miro Hrončok <mhroncok@redhat.com> - 39.2.0-6
 - Create /usr/local/lib/pythonX.Y when needed (#1576924)
 
