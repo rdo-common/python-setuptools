@@ -17,8 +17,8 @@
 %global python_wheeldir %{_datadir}/python-wheels
 
 Name:           python-setuptools
-Version:        39.2.0
-Release:        7%{?dist}
+Version:        40.4.1
+Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 
 Group:          Applications/System
@@ -213,7 +213,7 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python2_version}
 # --ignore=setuptools/tests/test_virtualenv.py: because virtualenv executable
 #   is configured only for Python 2 version of virtualenv—this needs to be fixed
 #   in the `python-pytest-virtualenv` package
-PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python3_version} --ignore=setuptools/tests/test_virtualenv.py
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python3_version} --ignore=setuptools/tests/test_virtualenv.py --ignore=pavement.py
 %endif # with tests
 
 
@@ -245,6 +245,10 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python3_version} --ignore=
 
 
 %changelog
+* Wed Sep 19 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 40.4.1-1
+- Update to 40.4.1 (#1599307).
+- https://github.com/pypa/setuptools/blob/v40.4.1/CHANGES.rst
+
 * Wed Aug 15 2018 Petr Viktorin <pviktori@redhat.com> - 39.2.0-7
 - Add a subpackage with wheels
 - Remove the python3 bcond
