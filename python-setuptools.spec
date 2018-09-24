@@ -17,14 +17,17 @@
 %global python_wheeldir %{_datadir}/python-wheels
 
 Name:           python-setuptools
-Version:        40.4.1
+# When updating, update the bundled libraries versions bellow!
+Version:        40.4.3
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
-
-Group:          Applications/System
-License:        MIT
+# setuptools is MIT
+# packaging is BSD or ASL 2.0
+# pyparsing is MIT
+# six is MIT
+License:        MIT and (BSD or ASL 2.0)
 URL:            https://pypi.python.org/pypi/%{srcname}
-Source0:        https://files.pythonhosted.org/packages/source/s/%{srcname}/%{srcname}-%{version}.zip
+Source0:        %{pypi_source %{srcname} %{version} zip}
 
 # In Fedora, sudo setup.py install installs to /usr/local/lib/pythonX.Y/site-packages
 # But pythonX doesn't own that dir, that would be against FHS
@@ -78,11 +81,19 @@ have dependencies on other packages.
 This package also contains the runtime components of setuptools, necessary to
 execute the software that requires pkg_resources.py.
 
+# Virtual provides for the packages bundled by setuptools.
+# You can find the versions in setuptools/setuptools/_vendor/vendored.txt
+%global bundled() %{expand:
+Provides: bundled(python%{1}dist(packaging)) = 16.8
+Provides: bundled(python%{1}dist(pyparsing)) = 2.2.1
+Provides: bundled(python%{1}dist(six)) = 1.10.0
+}
 
 %if %{with python2}
 %package -n python2-setuptools
 Summary:        Easily build and distribute Python packages
 %{?python_provide:%python_provide python2-setuptools}
+%{bundled 2}
 
 %description -n python2-setuptools
 Setuptools is a collection of enhancements to the Python distutils that allow
@@ -97,9 +108,9 @@ execute the software that requires pkg_resources.py.
 
 %package -n python3-setuptools
 Summary:        Easily build and distribute Python 3 packages
-Group:          Applications/System
 %{?python_provide:%python_provide python3-setuptools}
 Obsoletes:      platform-python-setuptools < %{version}-%{release}
+%{bundled 3}
 
 %description -n python3-setuptools
 Setuptools is a collection of enhancements to the Python 3 distutils that allow
@@ -112,6 +123,8 @@ execute the software that requires pkg_resources.py.
 %if %{without bootstrap}
 %package wheel
 Summary:        The setuptools wheel
+%{bundled 2}
+%{bundled 3}
 
 %description wheel
 A Python wheel of setuptools to use with venv.
@@ -245,6 +258,11 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python3_version} --ignore=
 
 
 %changelog
+* Mon Sep 24 2018 Miro Hrončok <mhroncok@redhat.com> - 40.4.3-1
+- Update to 40.4.3 to fix dire DeprecationWarnings (#1627071)
+- List vendored libraries
+- https://github.com/pypa/setuptools/blob/v40.4.3/CHANGES.rst
+
 * Wed Sep 19 2018 Randy Barlow <bowlofeggs@fedoraproject.org> - 40.4.1-1
 - Update to 40.4.1 (#1599307).
 - https://github.com/pypa/setuptools/blob/v40.4.1/CHANGES.rst
