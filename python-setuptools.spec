@@ -18,7 +18,7 @@
 
 Name:           python-setuptools
 # When updating, update the bundled libraries versions bellow!
-Version:        40.4.3
+Version:        40.7.0
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 # setuptools is MIT
@@ -45,6 +45,7 @@ BuildRequires:  python2-pip
 BuildRequires:  python2-wheel
 %endif # without bootstrap
 %if %{with tests}
+BuildRequires:  python2-futures
 BuildRequires:  python2-pip
 BuildRequires:  python2-pytest
 BuildRequires:  python2-mock
@@ -66,12 +67,6 @@ BuildRequires:  python3-pytest-virtualenv
 BuildRequires:  python3-pip
 BuildRequires:  python3-wheel
 %endif # without bootstrap
-
-# We're now back to setuptools as the package.
-# Keep the python-distribute name active for a few releases.  Eventually we'll
-# want to get rid of the Provides and just keep the Obsoletes
-Provides: python-distribute = %{version}-%{release}
-Obsoletes: python-distribute < 0.6.36-2
 
 %description
 Setuptools is a collection of enhancements to the Python distutils that allow
@@ -258,6 +253,10 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python3_version} --ignore=
 
 
 %changelog
+* Mon Jan 28 2019 Miro Hrončok <mhroncok@redhat.com> - 40.7.0-1
+- Update to 40.7.0 (#1669876)
+- https://github.com/pypa/setuptools/blob/v40.7.0/CHANGES.rst
+
 * Mon Sep 24 2018 Miro Hrončok <mhroncok@redhat.com> - 40.4.3-1
 - Update to 40.4.3 to fix dire DeprecationWarnings (#1627071)
 - List vendored libraries
