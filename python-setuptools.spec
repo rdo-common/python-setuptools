@@ -18,7 +18,7 @@
 
 Name:           python-setuptools
 # When updating, update the bundled libraries versions bellow!
-Version:        40.7.2
+Version:        40.7.3
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 # setuptools is MIT
@@ -253,6 +253,10 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python3_version} --ignore=
 
 
 %changelog
+* Sun Feb 03 2019 Miro Hrončok <mhroncok@redhat.com> - 40.7.3-1
+- Hotfix update to 40.7.3 (#1672084)
+- https://github.com/pypa/setuptools/blob/v40.7.3/CHANGES.rst
+
 * Sat Feb 02 2019 Miro Hrončok <mhroncok@redhat.com> - 40.7.2-1
 - Hotfix update to 40.7.2 (#1671608)
 - https://github.com/pypa/setuptools/blob/v40.7.2/CHANGES.rst
