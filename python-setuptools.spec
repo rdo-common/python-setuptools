@@ -2,8 +2,8 @@
 
 #  WARNING  When bootstrapping, disable tests as well,
 #           because tests need pip.
-%bcond_with bootstrap
-%bcond_without tests
+%bcond_without bootstrap
+%bcond_with tests
 
 %if 0%{?rhel} && 0%{?rhel} <= 7
 %global _without_python3 1
@@ -41,7 +41,7 @@ Summary:        Easily build and distribute Python packages
 # six is MIT
 License:        MIT and (BSD or ASL 2.0)
 URL:            https://pypi.python.org/pypi/%{srcname}
-Source0:        %{pypi_source %{srcname} %{version} zip}
+Source0:        https://files.pythonhosted.org/packages/source/s/setuptools/setuptools-%{version}.zip
 
 # In Fedora, sudo setup.py install installs to /usr/local/lib/pythonX.Y/site-packages
 # But pythonX doesn't own that dir, that would be against FHS
