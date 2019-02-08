@@ -5,16 +5,30 @@
 %bcond_with bootstrap
 %bcond_without tests
 
+%if 0%{?rhel} && 0%{?rhel} <= 7
+%global _without_python3 1
+# define some macros for RHEL 6
+%global __python2 %__python
+%global python2_sitelib %python_sitelib
+%endif
+
+# Note(hguemar): overrides must be placed *before* those
+# Otherwise it doesn't work
 %bcond_without python2
+%bcond_without python3
 
 %if %{without bootstrap}
 %global python_wheelname %{srcname}-%{version}-py2.py3-none-any.whl
 %if %{with python2}
 %global python2_record %{python2_sitelib}/%{srcname}-%{version}.dist-info/RECORD
 %endif
-%global python3_record %{python3_sitelib}/%{srcname}-%{version}.dist-info/RECORD
 %endif
 %global python_wheeldir %{_datadir}/python-wheels
+
+%if %{with python3}
+%global python3_wheelname %python_wheelname
+%global python3_record %{python3_sitelib}/%{srcname}-%{version}.dist-info/RECORD
+%endif
 
 Name:           python-setuptools
 # When updating, update the bundled libraries versions bellow!
@@ -55,6 +69,7 @@ BuildRequires:  python2-pytest-virtualenv
 %endif # with tests
 %endif # with python2
 
+%if %{with python3}
 BuildRequires:  python3-devel
 %if %{with tests}
 BuildRequires:  python3-pip
@@ -67,6 +82,7 @@ BuildRequires:  python3-pytest-virtualenv
 BuildRequires:  python3-pip
 BuildRequires:  python3-wheel
 %endif # without bootstrap
+%endif # with python3
 
 %description
 Setuptools is a collection of enhancements to the Python distutils that allow
@@ -101,6 +117,7 @@ execute the software that requires pkg_resources.py.
 %endif # with python2
 
 
+%if %{with python3}
 %package -n python3-setuptools
 Summary:        Easily build and distribute Python 3 packages
 %{?python_provide:%python_provide python3-setuptools}
@@ -115,11 +132,15 @@ have dependencies on other packages.
 This package also contains the runtime components of setuptools, necessary to
 execute the software that requires pkg_resources.py.
 
+%endif # with python3
+
 %if %{without bootstrap}
 %package wheel
 Summary:        The setuptools wheel
 %{bundled 2}
+%if %{with python3}
 %{bundled 3}
+%endif
 
 %description wheel
 A Python wheel of setuptools to use with venv.
@@ -152,20 +173,25 @@ chmod -x README.rst
 
 %build
 %if %{without bootstrap}
+%if %{with python3}
 %py3_build_wheel
+%endif
 %else
 %if %{with python2}
 %py2_build
 %endif # with python2
-
+%if %{with python3}
 %py3_build
 %endif
+%endif
+
 
 
 %install
 # Must do the python3 install first because the scripts in /usr/bin are
-# overwritten with every setup.py install (and we want /usr/bin/pip to be
-# the python2 version).
+# overwritten with every setup.py install (and we want the python2 version to
+# be the default for now).
+%if %{with python3}
 %if %{without bootstrap}
 %py3_install_wheel %{python_wheelname}
 
@@ -185,6 +211,7 @@ sed -i '/^setuptools\/tests\//d' %{buildroot}%{python3_record}
 %endif
 
 find %{buildroot}%{python3_sitelib} -name '*.exe' | xargs rm -f
+%endif # with python3
 
 
 %if %{with python2}
@@ -218,10 +245,12 @@ install -p dist/%{python_wheelname} -t %{buildroot}%{python_wheeldir}
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python2_version}
 %endif # with python2
 
+%if %{with python3}
 # --ignore=setuptools/tests/test_virtualenv.py: because virtualenv executable
 #   is configured only for Python 2 version of virtualenv—this needs to be fixed
 #   in the `python-pytest-virtualenv` package
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python3_version} --ignore=setuptools/tests/test_virtualenv.py --ignore=pavement.py
+%endif # with python3
 %endif # with tests
 
 
@@ -234,6 +263,7 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python3_version} --ignore=
 %{_bindir}/easy_install-2.*
 %endif # with python2
 
+%if %{with python3}
 %files -n python3-setuptools
 %license LICENSE
 %doc docs/* CHANGES.rst README.rst
@@ -242,6 +272,7 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python3_version} --ignore=
 %{python3_sitelib}/setuptools*/
 %{python3_sitelib}/__pycache__/*
 %{_bindir}/easy_install-3.*
+%endif # with python3
 
 %if %{without bootstrap}
 %files wheel
