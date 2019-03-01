@@ -40,7 +40,7 @@
         run: VERSION=3.7 METHOD=virtualenv ./venv.sh
     required_packages:
     - gcc
-    - /usr/bin/virtualenv
+    - virtualenv
     - python26
     - python27
     - python34
