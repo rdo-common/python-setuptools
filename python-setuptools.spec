@@ -66,6 +66,9 @@ BuildRequires:  python3-pytest-virtualenv
 %if %{without bootstrap}
 BuildRequires:  python3-pip
 BuildRequires:  python3-wheel
+# python3 bootstrap: this is built before the final build of python3, which
+# adds the dependency on python3-rpm-generators, so we require it manually
+BuildRequires:  python3-rpm-generators
 %endif # without bootstrap
 
 %description
