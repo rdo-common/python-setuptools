@@ -49,7 +49,6 @@ BuildRequires:  python2-futures
 BuildRequires:  python2-pip
 BuildRequires:  python2-pytest
 BuildRequires:  python2-mock
-BuildRequires:  python2-backports-unittest_mock
 BuildRequires:  python2-pytest-fixture-config
 BuildRequires:  python2-pytest-virtualenv
 %endif # with tests
