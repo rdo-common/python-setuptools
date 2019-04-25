@@ -18,7 +18,7 @@
 
 Name:           python-setuptools
 # When updating, update the bundled libraries versions bellow!
-Version:        40.8.0
+Version:        41.0.1
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 # setuptools is MIT
@@ -130,18 +130,7 @@ A Python wheel of setuptools to use with venv.
 
 %prep
 %autosetup -p1 -n %{srcname}-%{version}
-
-# We can't remove .egg-info (but it doesn't matter, since it'll be rebuilt):
-#  The problem is that to properly execute setuptools' setup.py,
-#   it is needed for setuptools to be loaded as a Distribution
-#   (with egg-info or .dist-info dir), it's not sufficient
-#   to just have them on PYTHONPATH
-#  Running "setup.py install" without having setuptools installed
-#   as a distribution gives warnings such as
-#    ... distutils/dist.py:267: UserWarning: Unknown distribution option: 'entry_points'
-#   and doesn't create "easy_install" and .egg-info directory
-# Note: this is only a problem if bootstrapping wheel or building on RHEL,
-#  otherwise setuptools are installed as dependency into buildroot
+rm -r %{srcname}.egg-info
 
 # Strip shbang
 find setuptools pkg_resources -name \*.py | xargs sed -i -e '1 {/^#!\//d}'
@@ -153,6 +142,10 @@ rm setuptools/tests/test_integration.py
 chmod -x README.rst
 
 %build
+# Warning, different bootstrap meaning here, has nothing to do with our bcond
+# This bootstraps .egg-info directory needed to build setuptools
+%{__python3} bootstrap.py
+
 %if %{without bootstrap}
 %py3_build_wheel
 %else
@@ -217,13 +210,13 @@ install -p dist/%{python_wheelname} -t %{buildroot}%{python_wheeldir}
 %check
 %if %{with python2}
 # see https://github.com/pypa/setuptools/issues/1170 for PYTHONDONTWRITEBYTECODE
-PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python2_version}
+# several tests are xfailed with POSIX locale, so we set C.utf-8 (not needed on py3)
+LANG=C.utf-8 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) pytest-%{python2_version}
 %endif # with python2
 
-# --ignore=setuptools/tests/test_virtualenv.py: because virtualenv executable
-#   is configured only for Python 2 version of virtualenv—this needs to be fixed
-#   in the `python-pytest-virtualenv` package
-PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python3_version} --ignore=setuptools/tests/test_virtualenv.py --ignore=pavement.py
+# --ignore=pavement.py: No python3-paver in Fedora (the test is only collected on py3)
+# pavement.py is only used by upstream to do releases and vendoring, we don't ship it
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) pytest-%{python3_version} --ignore=pavement.py
 %endif # with tests
 
 
@@ -255,7 +248,11 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) py.test-%{python3_version} --ignore=
 
 
 %changelog
-* Tue Feb 05 2019 Miro Hrončok <mhroncok@redhat.com>
+* Thu Apr 25 2019 Miro Hrončok <mhroncok@redhat.com> - 41.0.1-1
+- Update to 41.0.1 (#1695846)
+- https://github.com/pypa/setuptools/blob/v41.0.1/CHANGES.rst
+
+* Tue Feb 05 2019 Miro Hrončok <mhroncok@redhat.com> - 40.8.0-1
 - Update to 40.8.0 (#1672756)
 - https://github.com/pypa/setuptools/blob/v40.8.0/CHANGES.rst
 
