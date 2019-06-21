@@ -19,7 +19,7 @@
 Name:           python-setuptools
 # When updating, update the bundled libraries versions bellow!
 Version:        41.0.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Easily build and distribute Python packages
 # setuptools is MIT
 # packaging is BSD or ASL 2.0
@@ -49,8 +49,6 @@ BuildRequires:  python2-futures
 BuildRequires:  python2-pip
 BuildRequires:  python2-pytest
 BuildRequires:  python2-mock
-BuildRequires:  python2-pytest-fixture-config
-BuildRequires:  python2-pytest-virtualenv
 %endif # with tests
 %endif # with python2
 
@@ -211,7 +209,9 @@ install -p dist/%{python_wheelname} -t %{buildroot}%{python_wheeldir}
 %if %{with python2}
 # see https://github.com/pypa/setuptools/issues/1170 for PYTHONDONTWRITEBYTECODE
 # several tests are xfailed with POSIX locale, so we set C.utf-8 (not needed on py3)
-LANG=C.utf-8 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) pytest-%{python2_version}
+# test_virtualenv is ignored to break dependency on python2-pytest-virtualenv
+LANG=C.utf-8 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) pytest-%{python2_version} \
+    --ignore setuptools/tests/test_virtualenv.py \
 %endif # with python2
 
 # --ignore=pavement.py: No python3-paver in Fedora (the test is only collected on py3)
@@ -248,6 +248,10 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) pytest-%{python3_version} --ignore=p
 
 
 %changelog
+* Fri Jun 21 2019 Petr Viktorin <pviktori@redhat.com> - 41.0.1-2
+- Remove optional test dependencies for Python 2
+- Skip test_virtualenv on Python 2
+
 * Thu Apr 25 2019 Miro Hrončok <mhroncok@redhat.com> - 41.0.1-1
 - Update to 41.0.1 (#1695846)
 - https://github.com/pypa/setuptools/blob/v41.0.1/CHANGES.rst
