@@ -19,7 +19,7 @@
 Name:           python-setuptools
 # When updating, update the bundled libraries versions bellow!
 Version:        41.0.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Easily build and distribute Python packages
 # setuptools is MIT
 # packaging is BSD or ASL 2.0
@@ -103,8 +103,8 @@ execute the software that requires pkg_resources.py.
 
 %package -n python3-setuptools
 Summary:        Easily build and distribute Python 3 packages
+Conflicts:      python-setuptools < %{version}-%{release}
 %{?python_provide:%python_provide python3-setuptools}
-Obsoletes:      platform-python-setuptools < %{version}-%{release}
 %{bundled 3}
 
 %description -n python3-setuptools
@@ -156,36 +156,22 @@ chmod -x README.rst
 
 
 %install
-# Must do the python3 install first because the scripts in /usr/bin are
+# Must do the python2 install first because the scripts in /usr/bin are
 # overwritten with every setup.py install (and we want /usr/bin/pip to be
-# the python2 version).
+# the python3 version).
+%if %{with python2}
 %if %{without bootstrap}
-%py3_install_wheel %{python_wheelname}
+%py2_install_wheel %{python_wheelname}
 
 # Remove /usr/bin/easy_install from the record as later on we delete the file
-sed -i '/\/usr\/bin\/easy_install,/d' %{buildroot}%{python3_record}
+sed -i '/\/usr\/bin\/easy_install,/d' %{buildroot}%{python2_record}
 %else
-%py3_install
+%py2_install
 %endif
 
 # TODO: we have to remove this by hand now, but it'd be nice if we wouldn't have to
 # (pip install wheel doesn't overwrite)
 rm %{buildroot}%{_bindir}/easy_install
-
-rm -rf %{buildroot}%{python3_sitelib}/setuptools/tests
-%if %{without bootstrap}
-sed -i '/^setuptools\/tests\//d' %{buildroot}%{python3_record}
-%endif
-
-find %{buildroot}%{python3_sitelib} -name '*.exe' | xargs rm -f
-
-
-%if %{with python2}
-%if %{without bootstrap}
-%py2_install_wheel %{python_wheelname}
-%else
-%py2_install
-%endif
 
 rm -rf %{buildroot}%{python2_sitelib}/setuptools/tests
 %if %{without bootstrap}
@@ -194,6 +180,20 @@ sed -i '/^setuptools\/tests\//d' %{buildroot}%{python2_record}
 
 find %{buildroot}%{python2_sitelib} -name '*.exe' | xargs rm -f
 %endif # with python2
+
+
+%if %{without bootstrap}
+%py3_install_wheel %{python_wheelname}
+%else
+%py3_install
+%endif
+
+rm -rf %{buildroot}%{python3_sitelib}/setuptools/tests
+%if %{without bootstrap}
+sed -i '/^setuptools\/tests\//d' %{buildroot}%{python3_record}
+%endif
+
+find %{buildroot}%{python3_sitelib} -name '*.exe' | xargs rm -f
 
 # Don't ship these
 rm -r docs/{Makefile,conf.py,_*}
@@ -225,7 +225,6 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) pytest-%{python3_version} --ignore=p
 %license LICENSE
 %doc docs/* CHANGES.rst README.rst
 %{python2_sitelib}/*
-%{_bindir}/easy_install
 %{_bindir}/easy_install-2.*
 %endif # with python2
 
@@ -236,6 +235,7 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) pytest-%{python3_version} --ignore=p
 %{python3_sitelib}/pkg_resources/
 %{python3_sitelib}/setuptools*/
 %{python3_sitelib}/__pycache__/*
+%{_bindir}/easy_install
 %{_bindir}/easy_install-3.*
 
 %if %{without bootstrap}
@@ -248,6 +248,10 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) pytest-%{python3_version} --ignore=p
 
 
 %changelog
+* Tue Jul 16 2019 Miro Hrončok <mhroncok@redhat.com> - 41.0.1-3
+- Make /usr/bin/easy_install Python 3
+- Drop obsoleted Obsoletes
+
 * Fri Jun 21 2019 Petr Viktorin <pviktori@redhat.com> - 41.0.1-2
 - Remove optional test dependencies for Python 2
 - Skip test_virtualenv on Python 2
