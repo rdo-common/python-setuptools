@@ -1,3 +1,5 @@
+%global _without_tests 1
+%global _with_bootstrap 1
 %global srcname setuptools
 
 #  WARNING  When bootstrapping, disable tests as well,
@@ -19,7 +21,7 @@
 Name:           python-setuptools
 # When updating, update the bundled libraries versions bellow!
 Version:        41.0.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Easily build and distribute Python packages
 # setuptools is MIT
 # packaging is BSD or ASL 2.0
@@ -248,6 +250,9 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) pytest-%{python3_version} --ignore=p
 
 
 %changelog
+* Wed Aug 14 2019 Miro Hrončok <mhroncok@redhat.com> - 41.0.1-5
+- Bootstrap for Python 3.8
+
 * Fri Jul 26 2019 Fedora Release Engineering <releng@fedoraproject.org> - 41.0.1-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 
