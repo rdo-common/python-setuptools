@@ -1,4 +1,5 @@
 %global _without_tests 1
+%global _with_bootstrap 1
 %global srcname setuptools
 
 #  WARNING  When bootstrapping, disable tests as well,
@@ -91,6 +92,11 @@ Summary:        Easily build and distribute Python packages
 %{?python_provide:%python_provide python2-setuptools}
 %{bundled 2}
 
+%if %{with bootstrap}
+Provides:       python2dist(setuptools) = %{version}
+Provides:       python%{python2_version}dist(setuptools) = %{version}
+%endif
+
 %description -n python2-setuptools
 Setuptools is a collection of enhancements to the Python distutils that allow
 you to more easily build and distribute Python packages, especially ones that
@@ -107,6 +113,12 @@ Summary:        Easily build and distribute Python 3 packages
 Conflicts:      python-setuptools < %{version}-%{release}
 %{?python_provide:%python_provide python3-setuptools}
 %{bundled 3}
+
+%if %{with bootstrap}
+Provides:       python3dist(setuptools) = %{version}
+Provides:       python%{python3_version}dist(setuptools) = %{version}
+%endif
+
 
 %description -n python3-setuptools
 Setuptools is a collection of enhancements to the Python 3 distutils that allow
@@ -250,7 +262,7 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) pytest-%{python3_version} --ignore=p
 
 %changelog
 * Wed Aug 14 2019 Miro Hrončok <mhroncok@redhat.com> - 41.0.1-6
-- Bootstrap for Python 3.8
+- Provide pythonXdist(setuptools) when bootstrapping
 
 * Wed Aug 14 2019 Miro Hrončok <mhroncok@redhat.com> - 41.0.1-5
 - Bootstrap for Python 3.8
