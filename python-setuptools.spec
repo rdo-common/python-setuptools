@@ -1,4 +1,3 @@
-%global _without_tests 1
 %global srcname setuptools
 
 #  WARNING  When bootstrapping, disable tests as well,
@@ -20,7 +19,7 @@
 Name:           python-setuptools
 # When updating, update the bundled libraries versions bellow!
 Version:        41.0.1
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        Easily build and distribute Python packages
 # setuptools is MIT
 # packaging is BSD or ASL 2.0
@@ -260,6 +259,9 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) pytest-%{python3_version} --ignore=p
 
 
 %changelog
+* Sun Aug 18 2019 Miro Hrončok <mhroncok@redhat.com> - 41.0.1-8
+- Rebuilt for Python 3.8
+
 * Wed Aug 14 2019 Miro Hrončok <mhroncok@redhat.com> - 41.0.1-7
 - Bootstrap for Python 3.8
 
