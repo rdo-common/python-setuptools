@@ -5,13 +5,8 @@
 %bcond_with bootstrap
 %bcond_without tests
 
-%bcond_without python2
-
 %if %{without bootstrap}
 %global python_wheelname %{srcname}-%{version}-py2.py3-none-any.whl
-%if %{with python2}
-%global python2_record %{python2_sitelib}/%{srcname}-%{version}.dist-info/RECORD
-%endif
 %global python3_record %{python3_sitelib}/%{srcname}-%{version}.dist-info/RECORD
 %endif
 %global python_wheeldir %{_datadir}/python-wheels
@@ -19,7 +14,7 @@
 Name:           python-setuptools
 # When updating, update the bundled libraries versions bellow!
 Version:        41.0.1
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        Easily build and distribute Python packages
 # setuptools is MIT
 # packaging is BSD or ASL 2.0
@@ -38,19 +33,6 @@ Patch0:         create-site-packages.patch
 BuildArch:      noarch
 
 BuildRequires:  gcc
-%if %{with python2}
-BuildRequires:  python2-devel
-%if %{without bootstrap}
-BuildRequires:  python2-pip
-BuildRequires:  python2-wheel
-%endif # without bootstrap
-%if %{with tests}
-BuildRequires:  python2-futures
-BuildRequires:  python2-pip
-BuildRequires:  python2-pytest
-BuildRequires:  python2-mock
-%endif # with tests
-%endif # with python2
 
 BuildRequires:  python3-devel
 %if %{with tests}
@@ -83,28 +65,6 @@ Provides: bundled(python%{1}dist(packaging)) = 16.8
 Provides: bundled(python%{1}dist(pyparsing)) = 2.2.1
 Provides: bundled(python%{1}dist(six)) = 1.10.0
 }
-
-%if %{with python2}
-%package -n python2-setuptools
-Summary:        Easily build and distribute Python packages
-%{?python_provide:%python_provide python2-setuptools}
-%{bundled 2}
-
-%if %{with bootstrap}
-Provides:       python2dist(setuptools) = %{version}
-Provides:       python%{python2_version}dist(setuptools) = %{version}
-%endif
-
-%description -n python2-setuptools
-Setuptools is a collection of enhancements to the Python distutils that allow
-you to more easily build and distribute Python packages, especially ones that
-have dependencies on other packages.
-
-This package also contains the runtime components of setuptools, necessary to
-execute the software that requires pkg_resources.py.
-
-%endif # with python2
-
 
 %package -n python3-setuptools
 Summary:        Easily build and distribute Python 3 packages
@@ -158,41 +118,12 @@ chmod -x README.rst
 %if %{without bootstrap}
 %py3_build_wheel
 %else
-%if %{with python2}
-%py2_build
-%endif # with python2
 
 %py3_build
 %endif
 
 
 %install
-# Must do the python2 install first because the scripts in /usr/bin are
-# overwritten with every setup.py install (and we want /usr/bin/pip to be
-# the python3 version).
-%if %{with python2}
-%if %{without bootstrap}
-%py2_install_wheel %{python_wheelname}
-
-# Remove /usr/bin/easy_install from the record as later on we delete the file
-sed -i '/\/usr\/bin\/easy_install,/d' %{buildroot}%{python2_record}
-%else
-%py2_install
-%endif
-
-# TODO: we have to remove this by hand now, but it'd be nice if we wouldn't have to
-# (pip install wheel doesn't overwrite)
-rm %{buildroot}%{_bindir}/easy_install
-
-rm -rf %{buildroot}%{python2_sitelib}/setuptools/tests
-%if %{without bootstrap}
-sed -i '/^setuptools\/tests\//d' %{buildroot}%{python2_record}
-%endif
-
-find %{buildroot}%{python2_sitelib} -name '*.exe' | xargs rm -f
-%endif # with python2
-
-
 %if %{without bootstrap}
 %py3_install_wheel %{python_wheelname}
 %else
@@ -217,27 +148,11 @@ install -p dist/%{python_wheelname} -t %{buildroot}%{python_wheeldir}
 
 %if %{with tests}
 %check
-%if %{with python2}
-# see https://github.com/pypa/setuptools/issues/1170 for PYTHONDONTWRITEBYTECODE
-# several tests are xfailed with POSIX locale, so we set C.utf-8 (not needed on py3)
-# test_virtualenv is ignored to break dependency on python2-pytest-virtualenv
-LANG=C.utf-8 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) pytest-%{python2_version} \
-    --ignore setuptools/tests/test_virtualenv.py \
-%endif # with python2
-
-# --ignore=pavement.py: No python3-paver in Fedora (the test is only collected on py3)
+# --ignore=pavement.py: No python3-paver in Fedora
 # pavement.py is only used by upstream to do releases and vendoring, we don't ship it
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) pytest-%{python3_version} --ignore=pavement.py
 %endif # with tests
 
-
-%if %{with python2}
-%files -n python2-setuptools
-%license LICENSE
-%doc docs/* CHANGES.rst README.rst
-%{python2_sitelib}/*
-%{_bindir}/easy_install-2.*
-%endif # with python2
 
 %files -n python3-setuptools
 %license LICENSE
@@ -259,6 +174,9 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) pytest-%{python3_version} --ignore=p
 
 
 %changelog
+* Mon Aug 26 2019 Miro Hrončok <mhroncok@redhat.com> - 41.0.1-9
+- Move python2-setuptools to a separate package
+
 * Sun Aug 18 2019 Miro Hrončok <mhroncok@redhat.com> - 41.0.1-8
 - Rebuilt for Python 3.8
 
