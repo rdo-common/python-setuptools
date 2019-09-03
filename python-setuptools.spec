@@ -13,8 +13,8 @@
 
 Name:           python-setuptools
 # When updating, update the bundled libraries versions bellow!
-Version:        41.0.1
-Release:        9%{?dist}
+Version:        41.2.0
+Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 # setuptools is MIT
 # packaging is BSD or ASL 2.0
@@ -174,6 +174,10 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) pytest-%{python3_version} --ignore=p
 
 
 %changelog
+* Tue Sep 03 2019 Randy Barlow <bowlofeggs@fedoraproject.org> - 41.2.0-1
+- Upgrade to 41.2.0 (#1742718).
+- https://setuptools.readthedocs.io/en/latest/history.html#v41-2-0
+
 * Mon Aug 26 2019 Miro Hrončok <mhroncok@redhat.com> - 41.0.1-9
 - Move python2-setuptools to a separate package
 
