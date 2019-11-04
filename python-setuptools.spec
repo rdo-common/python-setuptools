@@ -13,7 +13,7 @@
 
 Name:           python-setuptools
 # When updating, update the bundled libraries versions bellow!
-Version:        41.2.0
+Version:        41.6.0
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 # setuptools is MIT
@@ -149,8 +149,12 @@ install -p dist/%{python_wheelname} -t %{buildroot}%{python_wheeldir}
 %if %{with tests}
 %check
 # --ignore=pavement.py: No python3-paver in Fedora
-# pavement.py is only used by upstream to do releases and vendoring, we don't ship it
-PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) pytest-%{python3_version} --ignore=pavement.py
+#   pavement.py is only used by upstream to do releases and vendoring, we don't ship it
+# --deselect=setuptools/tests/test_setuptools.py::TestDepends::testRequire
+#   Test failure reported upstream: https://github.com/pypa/setuptools/issues/1896
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) pytest-%{python3_version} \
+    --ignore=pavement.py \
+    --deselect=setuptools/tests/test_setuptools.py::TestDepends::testRequire
 %endif # with tests
 
 
@@ -174,6 +178,11 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) pytest-%{python3_version} --ignore=p
 
 
 %changelog
+* Mon Nov 04 2019 Tomas Orsava <torsava@redhat.com> - 41.6.0-1
+- Upgrade to 41.6.0 (#1758945).
+- https://setuptools.readthedocs.io/en/latest/history.html#v41-6-0
+- Disabled a failing upstream test: https://github.com/pypa/setuptools/issues/1896
+
 * Tue Sep 03 2019 Randy Barlow <bowlofeggs@fedoraproject.org> - 41.2.0-1
 - Upgrade to 41.2.0 (#1742718).
 - https://setuptools.readthedocs.io/en/latest/history.html#v41-2-0
