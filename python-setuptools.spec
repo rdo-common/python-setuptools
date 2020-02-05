@@ -3,7 +3,7 @@
 #  WARNING  When bootstrapping, disable tests as well,
 #           because tests need pip.
 %bcond_with bootstrap
-%bcond_without tests
+%bcond_with tests
 
 %if %{without bootstrap}
 %global python_wheelname %{srcname}-%{version}-py2.py3-none-any.whl
@@ -76,6 +76,8 @@ Conflicts:      python-setuptools < %{version}-%{release}
 Provides:       python3dist(setuptools) = %{version}
 Provides:       python%{python3_version}dist(setuptools) = %{version}
 %endif
+Obsoletes: platform-python-setuptools < %{version}
+Provides: platform-python-setuptools = %{version}-%{release}
 
 
 %description -n python3-setuptools
