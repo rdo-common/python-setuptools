@@ -6,23 +6,27 @@
 %bcond_without tests
 
 %if %{without bootstrap}
-%global python_wheelname %{srcname}-%{version}-py2.py3-none-any.whl
+%global python_wheelname %{srcname}-%{version}-py3-none-any.whl
 %global python3_record %{python3_sitelib}/%{srcname}-%{version}.dist-info/RECORD
 %endif
 %global python_wheeldir %{_datadir}/python-wheels
 
 Name:           python-setuptools
 # When updating, update the bundled libraries versions bellow!
-Version:        41.6.0
-Release:        2%{?dist}
+Version:        45.2.0
+Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 # setuptools is MIT
 # packaging is BSD or ASL 2.0
 # pyparsing is MIT
 # six is MIT
+# ordered-set is MIT
 License:        MIT and (BSD or ASL 2.0)
 URL:            https://pypi.python.org/pypi/%{srcname}
 Source0:        %{pypi_source %{srcname} %{version} zip}
+
+# https://github.com/pypa/setuptools/pull/1991
+Source1:        pkg_resources-tests-data-%{version}.tar.gz
 
 # In Fedora, sudo setup.py install installs to /usr/local/lib/pythonX.Y/site-packages
 # But pythonX doesn't own that dir, that would be against FHS
@@ -56,21 +60,22 @@ you to more easily build and distribute Python packages, especially ones that
 have dependencies on other packages.
 
 This package also contains the runtime components of setuptools, necessary to
-execute the software that requires pkg_resources.py.
+execute the software that requires pkg_resources.
 
 # Virtual provides for the packages bundled by setuptools.
 # You can find the versions in setuptools/setuptools/_vendor/vendored.txt
-%global bundled() %{expand:
-Provides: bundled(python%{1}dist(packaging)) = 16.8
-Provides: bundled(python%{1}dist(pyparsing)) = 2.2.1
-Provides: bundled(python%{1}dist(six)) = 1.10.0
+%global bundled %{expand:
+Provides: bundled(python3dist(packaging)) = 19.2
+Provides: bundled(python3dist(pyparsing)) = 2.2.1
+Provides: bundled(python3dist(six)) = 1.10.0
+Provides: bundled(python3dist(ordered-set)) = 3.1.1
 }
 
 %package -n python3-setuptools
 Summary:        Easily build and distribute Python 3 packages
 Conflicts:      python-setuptools < %{version}-%{release}
 %{?python_provide:%python_provide python3-setuptools}
-%{bundled 3}
+%{bundled}
 
 %if %{with bootstrap}
 Provides:       python3dist(setuptools) = %{version}
@@ -84,13 +89,12 @@ you to more easily build and distribute Python 3 packages, especially ones that
 have dependencies on other packages.
 
 This package also contains the runtime components of setuptools, necessary to
-execute the software that requires pkg_resources.py.
+execute the software that requires pkg_resources.
 
 %if %{without bootstrap}
 %package wheel
 Summary:        The setuptools wheel
-%{bundled 2}
-%{bundled 3}
+%{bundled}
 
 %description wheel
 A Python wheel of setuptools to use with venv.
@@ -101,14 +105,17 @@ A Python wheel of setuptools to use with venv.
 %autosetup -p1 -n %{srcname}-%{version}
 rm -r %{srcname}.egg-info
 
+# unpack the pkg_resources test data
+tar -xf %{SOURCE1}
+
 # Strip shbang
 find setuptools pkg_resources -name \*.py | xargs sed -i -e '1 {/^#!\//d}'
 # Remove bundled exes
 rm -f setuptools/*.exe
 # These tests require internet connection
 rm setuptools/tests/test_integration.py 
-# Spurious executable perm https://github.com/pypa/setuptools/pull/1441
-chmod -x README.rst
+# We don't do linting here
+sed -i 's/ --flake8//' pytest.ini
 
 %build
 # Warning, different bootstrap meaning here, has nothing to do with our bcond
@@ -130,7 +137,9 @@ chmod -x README.rst
 %py3_install
 %endif
 
-rm -rf %{buildroot}%{python3_sitelib}/setuptools/tests
+# This is not installed (in 45.2.0 anyway), but better be safe than sorry
+rm -rf %{buildroot}%{python3_sitelib}/{setuptools,pkg_resources}/tests
+
 %if %{without bootstrap}
 sed -i '/^setuptools\/tests\//d' %{buildroot}%{python3_record}
 %endif
@@ -148,13 +157,10 @@ install -p dist/%{python_wheelname} -t %{buildroot}%{python_wheeldir}
 
 %if %{with tests}
 %check
-# --ignore=pavement.py: No python3-paver in Fedora
+# --ignore=pavement.py:
 #   pavement.py is only used by upstream to do releases and vendoring, we don't ship it
-# --deselect=setuptools/tests/test_setuptools.py::TestDepends::testRequire
-#   Test failure reported upstream: https://github.com/pypa/setuptools/issues/1896
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) pytest-%{python3_version} \
-    --ignore=pavement.py \
-    --deselect=setuptools/tests/test_setuptools.py::TestDepends::testRequire
+    --ignore=pavement.py
 %endif # with tests
 
 
@@ -178,6 +184,11 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) pytest-%{python3_version} \
 
 
 %changelog
+* Tue Feb 11 2020 Miro Hrončok <mhroncok@redhat.com> - 45.2.0-1
+- Upgrade to 45.2.0 (#1775943)
+- https://setuptools.readthedocs.io/en/latest/history.html#v45-2-0
+- No longer supports Python 2
+
 * Thu Jan 30 2020 Fedora Release Engineering <releng@fedoraproject.org> - 41.6.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
 
