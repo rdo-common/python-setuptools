@@ -23,6 +23,9 @@
     - smoke38:
         dir: python/smoke
         run: VERSION=3.8 ./venv.sh
+    - smoke39:
+        dir: python/smoke
+        run: VERSION=3.9 ./venv.sh
     - smoke27:
         dir: python/smoke
         run: VERSION=2.7 METHOD=virtualenv ./venv.sh
@@ -41,6 +44,9 @@
     - smoke38_virtualenv:
         dir: python/smoke
         run: VERSION=3.8 METHOD=virtualenv ./venv.sh
+    - smoke39_virtualenv:
+        dir: python/smoke
+        run: VERSION=3.9 METHOD=virtualenv ./venv.sh
     required_packages:
     - gcc
     - virtualenv
@@ -50,5 +56,6 @@
     - python36
     - python37
     - python38
+    - python39
     - python3-devel
     - python3-tox
