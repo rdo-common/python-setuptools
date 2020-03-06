@@ -7,6 +7,8 @@
     repositories:
     - repo: "https://src.fedoraproject.org/tests/python.git"
       dest: "python"
+    - repo: "https://src.fedoraproject.org/rpms/pyproject-rpm-macros.git"
+      dest: "pyproject-rpm-macros"
     tests:
     - smoke34:
         dir: python/smoke
@@ -47,6 +49,12 @@
     - smoke39_virtualenv:
         dir: python/smoke
         run: VERSION=3.9 METHOD=virtualenv ./venv.sh
+    - pyproject_pytest:
+        dir: pyproject-rpm-macros/tests
+        run: ./mocktest.sh python-pytest
+    - pyproject_pluggy:
+        dir: pyproject-rpm-macros/tests
+        run: ./mocktest.sh python-pluggy
     required_packages:
     - gcc
     - virtualenv
@@ -59,3 +67,6 @@
     - python39
     - python3-devel
     - python3-tox
+    - mock
+    - rpmdevtools
+    - rpm-build
