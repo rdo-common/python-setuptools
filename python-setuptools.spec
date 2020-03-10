@@ -13,7 +13,7 @@
 
 Name:           python-setuptools
 # When updating, update the bundled libraries versions bellow!
-Version:        45.2.0
+Version:        46.0.0
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 # setuptools is MIT
@@ -24,9 +24,6 @@ Summary:        Easily build and distribute Python packages
 License:        MIT and (BSD or ASL 2.0)
 URL:            https://pypi.python.org/pypi/%{srcname}
 Source0:        %{pypi_source %{srcname} %{version} zip}
-
-# https://github.com/pypa/setuptools/pull/1991
-Source1:        pkg_resources-tests-data-%{version}.tar.gz
 
 # In Fedora, sudo setup.py install installs to /usr/local/lib/pythonX.Y/site-packages
 # But pythonX doesn't own that dir, that would be against FHS
@@ -105,9 +102,6 @@ A Python wheel of setuptools to use with venv.
 %autosetup -p1 -n %{srcname}-%{version}
 rm -r %{srcname}.egg-info
 
-# unpack the pkg_resources test data
-tar -xf %{SOURCE1}
-
 # Strip shbang
 find setuptools pkg_resources -name \*.py | xargs sed -i -e '1 {/^#!\//d}'
 # Remove bundled exes
@@ -184,6 +178,9 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) pytest-%{python3_version} \
 
 
 %changelog
+* Tue Mar 10 2020 Miro Hrončok <mhroncok@redhat.com> - 46.0.0-1
+- Upgrade to 46.0.0 (#1811340)
+
 * Tue Feb 11 2020 Miro Hrončok <mhroncok@redhat.com> - 45.2.0-1
 - Upgrade to 45.2.0 (#1775943)
 - https://setuptools.readthedocs.io/en/latest/history.html#v45-2-0
