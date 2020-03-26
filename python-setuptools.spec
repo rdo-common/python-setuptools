@@ -13,7 +13,7 @@
 
 Name:           python-setuptools
 # When updating, update the bundled libraries versions bellow!
-Version:        46.0.0
+Version:        46.1.3
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 # setuptools is MIT
@@ -24,12 +24,6 @@ Summary:        Easily build and distribute Python packages
 License:        MIT and (BSD or ASL 2.0)
 URL:            https://pypi.python.org/pypi/%{srcname}
 Source0:        %{pypi_source %{srcname} %{version} zip}
-
-# In Fedora, sudo setup.py install installs to /usr/local/lib/pythonX.Y/site-packages
-# But pythonX doesn't own that dir, that would be against FHS
-# We need to create it if it doesn't exist
-# https://bugzilla.redhat.com/show_bug.cgi?id=1576924
-Patch0:         create-site-packages.patch
 
 BuildArch:      noarch
 
@@ -178,8 +172,13 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) pytest-%{python3_version} \
 
 
 %changelog
+* Thu Mar 26 2020 Miro Hrončok <mhroncok@redhat.com> - 46.1.3-1
+- Upgrade to 46.1.3 (#1817189)
+- https://setuptools.readthedocs.io/en/latest/history.html#v46-1-3
+
 * Tue Mar 10 2020 Miro Hrončok <mhroncok@redhat.com> - 46.0.0-1
 - Upgrade to 46.0.0 (#1811340)
+- https://setuptools.readthedocs.io/en/latest/history.html#v46-0-0
 
 * Tue Feb 11 2020 Miro Hrončok <mhroncok@redhat.com> - 45.2.0-1
 - Upgrade to 45.2.0 (#1775943)
