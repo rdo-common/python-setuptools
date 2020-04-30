@@ -68,7 +68,6 @@ Provides: bundled(python3dist(ordered-set)) = 3.1.1
 %package -n python3-setuptools
 Summary:        Easily build and distribute Python 3 packages
 Conflicts:      python-setuptools < %{version}-%{release}
-%{?python_provide:%python_provide python3-setuptools}
 %{bundled}
 
 %if %{with bootstrap}
