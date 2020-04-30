@@ -25,6 +25,9 @@ License:        MIT and (BSD or ASL 2.0)
 URL:            https://pypi.python.org/pypi/%{srcname}
 Source0:        %{pypi_source %{srcname} %{version} zip}
 
+# https://github.com/pypa/setuptools/issues/2081
+Patch1:         filter-lib2to3-deprecation-warnings.patch
+
 BuildArch:      noarch
 
 BuildRequires:  gcc
