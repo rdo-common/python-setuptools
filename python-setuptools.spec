@@ -13,7 +13,7 @@
 
 Name:           python-setuptools
 # When updating, update the bundled libraries versions bellow!
-Version:        46.2.0
+Version:        46.4.0
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 # setuptools is MIT
@@ -24,9 +24,6 @@ Summary:        Easily build and distribute Python packages
 License:        MIT and (BSD or ASL 2.0)
 URL:            https://pypi.python.org/pypi/%{srcname}
 Source0:        %{pypi_source %{srcname} %{version} zip}
-
-# https://github.com/pypa/setuptools/issues/2100
-Patch1:         reuse-ack2to3-in-TestDevelop-test_2to3_user_mode.patch
 
 BuildArch:      noarch
 
@@ -174,6 +171,10 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) pytest-%{python3_version} \
 
 
 %changelog
+* Mon May 18 2020 Tomas Hrnciar <thrnciar@redhat.com> - 46.4.0-1
+- Update to 46.4.0 (#1835411)
+- https://setuptools.readthedocs.io/en/latest/history.html#v46-4-0
+
 * Tue May 12 2020 Tomas Hrnciar <thrnciar@redhat.com> - 46.2.0-1
 - Update to 46.2.0 (#1833826)
 - https://setuptools.readthedocs.io/en/latest/history.html#v46-2-0
