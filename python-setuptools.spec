@@ -1,3 +1,5 @@
+%global _without_tests 1
+%global _with_bootstrap 1
 %global srcname setuptools
 
 #  WARNING  When bootstrapping, disable tests as well,
@@ -14,7 +16,7 @@
 Name:           python-setuptools
 # When updating, update the bundled libraries versions bellow!
 Version:        46.4.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Easily build and distribute Python packages
 # setuptools is MIT
 # packaging is BSD or ASL 2.0
@@ -171,6 +173,9 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) pytest-%{python3_version} \
 
 
 %changelog
+* Thu May 21 2020 Miro Hrončok <mhroncok@redhat.com> - 46.4.0-2
+- Bootstrap for Python 3.9
+
 * Mon May 18 2020 Tomas Hrnciar <thrnciar@redhat.com> - 46.4.0-1
 - Update to 46.4.0 (#1835411)
 - https://setuptools.readthedocs.io/en/latest/history.html#v46-4-0
