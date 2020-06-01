@@ -13,8 +13,8 @@
 
 Name:           python-setuptools
 # When updating, update the bundled libraries versions bellow!
-Version:        46.4.0
-Release:        4%{?dist}
+Version:        47.1.1
+Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 # setuptools is MIT
 # packaging is BSD or ASL 2.0
@@ -171,6 +171,10 @@ PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) pytest-%{python3_version} \
 
 
 %changelog
+* Mon Jun 01 2020 Charalampos Stratakis <cstratak@redhat.com> - 47.1.1-1
+- Update to 47.1.1 (#1841123)
+- https://setuptools.readthedocs.io/en/latest/history.html#v47-1-1
+
 * Sun May 24 2020 Miro Hrončok <mhroncok@redhat.com> - 46.4.0-4
 - Rebuilt for Python 3.9
 
