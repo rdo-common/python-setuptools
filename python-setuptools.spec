@@ -56,10 +56,10 @@ execute the software that requires pkg_resources.
 # Virtual provides for the packages bundled by setuptools.
 # You can find the versions in setuptools/setuptools/_vendor/vendored.txt
 %global bundled %{expand:
-Provides: bundled(python3dist(packaging)) = 19.2
+Provides: bundled(python3dist(packaging)) = 16.8
 Provides: bundled(python3dist(pyparsing)) = 2.2.1
 Provides: bundled(python3dist(six)) = 1.10.0
-Provides: bundled(python3dist(ordered-set)) = 3.1.1
+Provides: bundled(python3dist(appdirs)) = 1.4.3
 }
 
 %package -n python3-setuptools
