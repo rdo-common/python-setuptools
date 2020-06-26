@@ -42,7 +42,8 @@ BuildRequires:  python3-pip
 BuildRequires:  python3-wheel
 # python3 bootstrap: this is built before the final build of python3, which
 # adds the dependency on python3-rpm-generators, so we require it manually
-BuildRequires:  python3-rpm-generators
+# The minimal version is for bundled provides verification script
+BuildRequires:  python3-rpm-generators >= 11-8
 %endif # without bootstrap
 
 %description
@@ -54,12 +55,13 @@ This package also contains the runtime components of setuptools, necessary to
 execute the software that requires pkg_resources.
 
 # Virtual provides for the packages bundled by setuptools.
-# You can find the versions in setuptools/setuptools/_vendor/vendored.txt
+# You can generate it with:
+# %%{_rpmconfigdir}/pythonbundles.py pkg_resources/_vendor/vendored.txt
 %global bundled %{expand:
+Provides: bundled(python3dist(appdirs)) = 1.4.3
 Provides: bundled(python3dist(packaging)) = 16.8
 Provides: bundled(python3dist(pyparsing)) = 2.2.1
-Provides: bundled(python3dist(six)) = 1.10.0
-Provides: bundled(python3dist(appdirs)) = 1.4.3
+Provides: bundled(python3dist(six)) = 1.10
 }
 
 %package -n python3-setuptools
@@ -144,6 +146,10 @@ install -p dist/%{python_wheelname} -t %{buildroot}%{python_wheeldir}
 
 %if %{with tests}
 %check
+# Verify bundled provides are up to date
+%{_rpmconfigdir}/pythonbundles.py pkg_resources/_vendor/vendored.txt --compare-with '%{bundled}'
+
+# Upstream tests
 # --ignore=pavement.py:
 #   pavement.py is only used by upstream to do releases and vendoring, we don't ship it
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) pytest-%{python3_version} \
