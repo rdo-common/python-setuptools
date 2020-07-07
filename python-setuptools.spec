@@ -152,8 +152,7 @@ install -p dist/%{python_wheelname} -t %{buildroot}%{python_wheeldir}
 # Upstream tests
 # --ignore=pavement.py:
 #   pavement.py is only used by upstream to do releases and vendoring, we don't ship it
-PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=$(pwd) pytest-%{python3_version} \
-    --ignore=pavement.py
+PYTHONPATH=$(pwd) %pytest --ignore=pavement.py
 %endif # with tests
 
 
