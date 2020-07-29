@@ -13,14 +13,17 @@
 
 Name:           python-setuptools
 # When updating, update the bundled libraries versions bellow!
-Version:        47.3.1
-Release:        2%{?dist}
+Version:        49.1.3
+Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 # setuptools is MIT
+# appdirs is MIT
 # packaging is BSD or ASL 2.0
 # pyparsing is MIT
 # six is MIT
-# ordered-set is MIT
+# the setuptools logo has unknown license and possible TM problems,
+# but the sdist **does not** contain it,
+# see https://github.com/pypa/setuptools/issues/2227
 License:        MIT and (BSD or ASL 2.0)
 URL:            https://pypi.python.org/pypi/%{srcname}
 Source0:        %{pypi_source %{srcname} %{version} zip}
@@ -59,7 +62,7 @@ execute the software that requires pkg_resources.
 # %%{_rpmconfigdir}/pythonbundles.py pkg_resources/_vendor/vendored.txt
 %global bundled %{expand:
 Provides: bundled(python3dist(appdirs)) = 1.4.3
-Provides: bundled(python3dist(packaging)) = 16.8
+Provides: bundled(python3dist(packaging)) = 19.2
 Provides: bundled(python3dist(pyparsing)) = 2.2.1
 Provides: bundled(python3dist(six)) = 1.10
 }
@@ -103,8 +106,9 @@ find setuptools pkg_resources -name \*.py | xargs sed -i -e '1 {/^#!\//d}'
 rm -f setuptools/*.exe
 # These tests require internet connection
 rm setuptools/tests/test_integration.py 
-# We don't do linting here
-sed -i 's/ --flake8//' pytest.ini
+# We don't do linting or coverage here
+sed -i pytest.ini -e 's/ --flake8//' \
+                  -e 's/ --cov//'
 
 %build
 # Warning, different bootstrap meaning here, has nothing to do with our bcond
@@ -176,6 +180,10 @@ PYTHONPATH=$(pwd) %pytest --ignore=pavement.py
 
 
 %changelog
+* Wed Jul 29 2020 Miro Hrončok <mhroncok@redhat.com> - 49.1.3-1
+- Update to 49.1.3 (#1853597)
+- https://setuptools.readthedocs.io/en/latest/history.html#v49-1-3
+
 * Wed Jul 29 2020 Fedora Release Engineering <releng@fedoraproject.org> - 47.3.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
 
