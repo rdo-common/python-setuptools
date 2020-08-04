@@ -10,9 +10,9 @@
     - repo: "https://src.fedoraproject.org/rpms/pyproject-rpm-macros.git"
       dest: "pyproject-rpm-macros"
     tests:
-    - smoke34:
+    - smoke34_optional:
         dir: python/smoke
-        run: VERSION=3.4 ./venv.sh
+        run: VERSION=3.4 INSTALL_OR_SKIP=true ./venv.sh
     - smoke35:
         dir: python/smoke
         run: VERSION=3.5 ./venv.sh
@@ -31,9 +31,9 @@
     - smoke27:
         dir: python/smoke
         run: VERSION=2.7 METHOD=virtualenv ./venv.sh
-    - smoke34_virtualenv:
+    - smoke34_virtualenv_optional:
         dir: python/smoke
-        run: VERSION=3.4 METHOD=virtualenv ./venv.sh
+        run: VERSION=3.4 METHOD=virtualenv INSTALL_OR_SKIP=true ./venv.sh
     - smoke35_virtualenv:
         dir: python/smoke
         run: VERSION=3.5 METHOD=virtualenv ./venv.sh
@@ -59,7 +59,6 @@
     - gcc
     - virtualenv
     - python27
-    - python34
     - python35
     - python36
     - python37
