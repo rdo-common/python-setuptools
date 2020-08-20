@@ -13,7 +13,7 @@
 
 Name:           python-setuptools
 # When updating, update the bundled libraries versions bellow!
-Version:        49.1.3
+Version:        49.6.0
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 # setuptools is MIT
@@ -28,6 +28,9 @@ License:        MIT and (BSD or ASL 2.0)
 URL:            https://pypi.python.org/pypi/%{srcname}
 Source0:        %{pypi_source %{srcname} %{version} zip}
 
+# Do not run coverage and lint as part of the test suite
+Patch0:         pytest-no-cov.patch
+
 BuildArch:      noarch
 
 BuildRequires:  gcc
@@ -39,6 +42,7 @@ BuildRequires:  python3-pytest
 BuildRequires:  python3-mock
 BuildRequires:  python3-pytest-fixture-config
 BuildRequires:  python3-pytest-virtualenv
+BuildRequires:  python3-jaraco-envs
 %endif # with tests
 %if %{without bootstrap}
 BuildRequires:  python3-pip
@@ -62,7 +66,7 @@ execute the software that requires pkg_resources.
 # %%{_rpmconfigdir}/pythonbundles.py pkg_resources/_vendor/vendored.txt
 %global bundled %{expand:
 Provides: bundled(python3dist(appdirs)) = 1.4.3
-Provides: bundled(python3dist(packaging)) = 19.2
+Provides: bundled(python3dist(packaging)) = 20.4
 Provides: bundled(python3dist(pyparsing)) = 2.2.1
 Provides: bundled(python3dist(six)) = 1.10
 }
@@ -166,6 +170,8 @@ PYTHONPATH=$(pwd) %pytest --ignore=pavement.py
 %{python3_sitelib}/easy_install.py
 %{python3_sitelib}/pkg_resources/
 %{python3_sitelib}/setuptools*/
+%{python3_sitelib}/_distutils_hack/
+%{python3_sitelib}/distutils-precedence.pth
 %{python3_sitelib}/__pycache__/*
 %{_bindir}/easy_install
 %{_bindir}/easy_install-3.*
@@ -180,6 +186,9 @@ PYTHONPATH=$(pwd) %pytest --ignore=pavement.py
 
 
 %changelog
+* Fri Aug 21 2020 Petr Viktorin <pviktori@redhat.com> - 49.6.0-1
+- Update to 49.6.0 (#1862791)
+
 * Wed Jul 29 2020 Miro Hrončok <mhroncok@redhat.com> - 49.1.3-1
 - Update to 49.1.3 (#1853597)
 - https://setuptools.readthedocs.io/en/latest/history.html#v49-1-3
