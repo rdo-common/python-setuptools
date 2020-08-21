@@ -28,9 +28,6 @@ License:        MIT and (BSD or ASL 2.0)
 URL:            https://pypi.python.org/pypi/%{srcname}
 Source0:        %{pypi_source %{srcname} %{version} zip}
 
-# Do not run coverage and lint as part of the test suite
-Patch0:         pytest-no-cov.patch
-
 BuildArch:      noarch
 
 BuildRequires:  gcc
