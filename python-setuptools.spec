@@ -4,6 +4,10 @@
 #           because tests need pip.
 %bcond_with bootstrap
 %bcond_without tests
+# Similar to what we have in pythonX.Y.spec files.
+# If enabled, provides unversioned executables and other stuff.
+# Disable it if you build this package in an alternative stack.
+%bcond_without main_python
 
 %if %{without bootstrap}
 %global python_wheelname %{srcname}-%{version}-py3-none-any.whl
@@ -148,6 +152,9 @@ mkdir -p %{buildroot}%{python_wheeldir}
 install -p dist/%{python_wheelname} -t %{buildroot}%{python_wheeldir}
 %endif
 
+%if %{without main_python}
+rm %{buildroot}%{_bindir}/easy_install
+%endif
 
 %if %{with tests}
 %check
@@ -170,7 +177,9 @@ PYTHONPATH=$(pwd) %pytest --ignore=pavement.py
 %{python3_sitelib}/_distutils_hack/
 %{python3_sitelib}/distutils-precedence.pth
 %{python3_sitelib}/__pycache__/*
+%if %{with main_python}
 %{_bindir}/easy_install
+%endif
 %{_bindir}/easy_install-3.*
 
 %if %{without bootstrap}
