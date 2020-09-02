@@ -32,18 +32,18 @@ BuildArch:      noarch
 
 BuildRequires:  gcc
 
-BuildRequires:  python3-devel
+BuildRequires:  python%{python3_pkgversion}-devel
 %if %{with tests}
-BuildRequires:  python3-pip
-BuildRequires:  python3-pytest
-BuildRequires:  python3-mock
-BuildRequires:  python3-pytest-fixture-config
-BuildRequires:  python3-pytest-virtualenv
-BuildRequires:  python3-jaraco-envs
+BuildRequires:  python%{python3_pkgversion}-pip
+BuildRequires:  python%{python3_pkgversion}-pytest
+BuildRequires:  python%{python3_pkgversion}-mock
+BuildRequires:  python%{python3_pkgversion}-pytest-fixture-config
+BuildRequires:  python%{python3_pkgversion}-pytest-virtualenv
+BuildRequires:  python%{python3_pkgversion}-jaraco-envs
 %endif # with tests
 %if %{without bootstrap}
-BuildRequires:  python3-pip
-BuildRequires:  python3-wheel
+BuildRequires:  python%{python3_pkgversion}-pip
+BuildRequires:  python%{python3_pkgversion}-wheel
 # python3 bootstrap: this is built before the final build of python3, which
 # adds the dependency on python3-rpm-generators, so we require it manually
 # The minimal version is for bundled provides verification script
@@ -60,15 +60,15 @@ execute the software that requires pkg_resources.
 
 # Virtual provides for the packages bundled by setuptools.
 # You can generate it with:
-# %%{_rpmconfigdir}/pythonbundles.py pkg_resources/_vendor/vendored.txt
+# %%{_rpmconfigdir}/pythonbundles.py --namespace 'python%%{python3_pkgversion}dist' pkg_resources/_vendor/vendored.txt
 %global bundled %{expand:
-Provides: bundled(python3dist(appdirs)) = 1.4.3
-Provides: bundled(python3dist(packaging)) = 20.4
-Provides: bundled(python3dist(pyparsing)) = 2.2.1
-Provides: bundled(python3dist(six)) = 1.10
+Provides: bundled(python%{python3_pkgversion}dist(appdirs)) = 1.4.3
+Provides: bundled(python%{python3_pkgversion}dist(packaging)) = 20.4
+Provides: bundled(python%{python3_pkgversion}dist(pyparsing)) = 2.2.1
+Provides: bundled(python%{python3_pkgversion}dist(six)) = 1.10
 }
 
-%package -n python3-setuptools
+%package -n python%{python3_pkgversion}-setuptools
 Summary:        Easily build and distribute Python 3 packages
 Conflicts:      python-setuptools < %{version}-%{release}
 %{bundled}
@@ -79,7 +79,7 @@ Provides:       python%{python3_version}dist(setuptools) = %{version}
 %endif
 
 
-%description -n python3-setuptools
+%description -n python%{python3_pkgversion}-setuptools
 Setuptools is a collection of enhancements to the Python 3 distutils that allow
 you to more easily build and distribute Python 3 packages, especially ones that
 have dependencies on other packages.
@@ -161,7 +161,7 @@ PYTHONPATH=$(pwd) %pytest --ignore=pavement.py
 %endif # with tests
 
 
-%files -n python3-setuptools
+%files -n python%{python3_pkgversion}-setuptools
 %license LICENSE
 %doc docs/* CHANGES.rst README.rst
 %{python3_sitelib}/easy_install.py
