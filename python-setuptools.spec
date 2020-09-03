@@ -74,7 +74,6 @@ Provides: bundled(python%{python3_pkgversion}dist(six)) = 1.10
 
 %package -n python%{python3_pkgversion}-setuptools
 Summary:        Easily build and distribute Python 3 packages
-Conflicts:      python-setuptools < %{version}-%{release}
 %{bundled}
 
 %if %{with bootstrap}
