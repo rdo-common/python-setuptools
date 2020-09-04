@@ -17,14 +17,13 @@
 
 Name:           python-setuptools
 # When updating, update the bundled libraries versions bellow!
-Version:        49.6.0
+Version:        50.1.0
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 # setuptools is MIT
 # appdirs is MIT
 # packaging is BSD or ASL 2.0
 # pyparsing is MIT
-# six is MIT
 # the setuptools logo has unknown license and possible TM problems,
 # but the sdist **does not** contain it,
 # see https://github.com/pypa/setuptools/issues/2227
@@ -69,7 +68,6 @@ execute the software that requires pkg_resources.
 Provides: bundled(python%{python3_pkgversion}dist(appdirs)) = 1.4.3
 Provides: bundled(python%{python3_pkgversion}dist(packaging)) = 20.4
 Provides: bundled(python%{python3_pkgversion}dist(pyparsing)) = 2.2.1
-Provides: bundled(python%{python3_pkgversion}dist(six)) = 1.10
 }
 
 %package -n python%{python3_pkgversion}-setuptools
@@ -191,6 +189,9 @@ PYTHONPATH=$(pwd) %pytest --ignore=pavement.py
 
 
 %changelog
+* Fri Sep 04 2020 Tomas Hrnciar <thrnciar@redhat.com> - 50.1.0-1
+- Update to 50.1.0 (#1873889)
+
 * Fri Aug 21 2020 Petr Viktorin <pviktori@redhat.com> - 49.6.0-1
 - Update to 49.6.0 (#1862791)
 
