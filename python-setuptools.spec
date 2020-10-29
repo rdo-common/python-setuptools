@@ -3,7 +3,7 @@
 #  WARNING  When bootstrapping, disable tests as well,
 #           because tests need pip.
 %bcond_with bootstrap
-%bcond_without tests
+%bcond_with tests
 # Similar to what we have in pythonX.Y.spec files.
 # If enabled, provides unversioned executables and other stuff.
 # Disable it if you build this package in an alternative stack.
@@ -17,7 +17,7 @@
 
 Name:           python-setuptools
 # When updating, update the bundled libraries versions bellow!
-Version:        50.1.0
+Version:        50.3.0
 Release:        1%{?dist}
 Summary:        Easily build and distribute Python packages
 # setuptools is MIT
@@ -50,7 +50,7 @@ BuildRequires:  python%{python3_pkgversion}-wheel
 # python3 bootstrap: this is built before the final build of python3, which
 # adds the dependency on python3-rpm-generators, so we require it manually
 # The minimal version is for bundled provides verification script
-BuildRequires:  python3-rpm-generators >= 11-8
+BuildRequires:  python3-rpm-generators
 %endif # without bootstrap
 
 %description
@@ -78,6 +78,8 @@ Summary:        Easily build and distribute Python 3 packages
 Provides:       python3dist(setuptools) = %{version}
 Provides:       python%{python3_version}dist(setuptools) = %{version}
 %endif
+Obsoletes: platform-python-setuptools < %{version}
+Provides: platform-python-setuptools = %{version}-%{release}
 
 
 %description -n python%{python3_pkgversion}-setuptools
@@ -107,7 +109,7 @@ find setuptools pkg_resources -name \*.py | xargs sed -i -e '1 {/^#!\//d}'
 # Remove bundled exes
 rm -f setuptools/*.exe
 # These tests require internet connection
-rm setuptools/tests/test_integration.py 
+rm setuptools/tests/test_integration.py
 # We don't do linting or coverage here
 sed -i pytest.ini -e 's/ --flake8//' \
                   -e 's/ --cov//'
@@ -189,6 +191,9 @@ PYTHONPATH=$(pwd) %pytest --ignore=pavement.py
 
 
 %changelog
+* Thu Oct 29 2020 Joel Capitao <jcapitao@redhat.com> - 50.3.0-1
+- Update to 50.3.0
+
 * Fri Sep 04 2020 Tomas Hrnciar <thrnciar@redhat.com> - 50.1.0-1
 - Update to 50.1.0 (#1873889)
 
@@ -861,7 +866,7 @@ PYTHONPATH=$(pwd) %pytest --ignore=pavement.py
 
 * Thu Feb 04 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.10-3
 - First build with python3 support enabled.
-  
+
 * Fri Jan 29 2010 Toshio Kuratomi <toshio@fedoraproject.org> - 0.6.10-2
 - Really disable the python3 portion
 
