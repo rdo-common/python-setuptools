@@ -18,7 +18,7 @@
 Name:           python-setuptools
 # When updating, update the bundled libraries versions bellow!
 Version:        50.3.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Easily build and distribute Python packages
 # setuptools is MIT
 # appdirs is MIT
@@ -91,11 +91,13 @@ This package also contains the runtime components of setuptools, necessary to
 execute the software that requires pkg_resources.
 
 %if %{without bootstrap}
-%package wheel
+%package -n python%{python3_pkgversion}-setuptools-wheel
 Summary:        The setuptools wheel
 %{bundled}
 
-%description wheel
+Provides: python-setuptools-wheel = %{version}-%{release}
+
+%description -n python%{python3_pkgversion}-setuptools-wheel
 A Python wheel of setuptools to use with venv.
 %endif
 
@@ -182,7 +184,7 @@ PYTHONPATH=$(pwd) %pytest --ignore=pavement.py
 %{_bindir}/easy_install-3.*
 
 %if %{without bootstrap}
-%files wheel
+%files -n python%{python3_pkgversion}-setuptools-wheel
 %license LICENSE
 # we own the dir for simplicity
 %dir %{python_wheeldir}/
@@ -191,6 +193,9 @@ PYTHONPATH=$(pwd) %pytest --ignore=pavement.py
 
 
 %changelog
+* Thu Jul 21 2022 Miguel Garcia <mgarciac@redhat.com> - 50.3.2-2
+- Rename python-setuptools-wheel to python3-setuptools-wheel
+
 * Thu Nov 05 2020 Joel Capitao <jcapitao@redhat.com> - 50.3.2-1
 - Update to 50.3.2
 
